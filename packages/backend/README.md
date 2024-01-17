@@ -117,24 +117,23 @@ with year_income as (
 
 CREATE OR REPLACE VIEW transactions_view AS
 	with all_income_and_spend as (
-		SELECT income._id,
+		SELECT  income._id,
 			income.notes,
 			income.account_id,
 			income.record_date::timestamp without time zone AT TIME ZONE 'UTC' AS record_date,
 			income.amount_of_money::numeric,
-			income_category.title as category,
+			json_build_object('_id', income_category._id, 'title', income_category.title)::text AS category,
 			'income' AS type
 		FROM income
 		JOIN income_category ON income_category._id = income.category_id
 		where income.account_id = account_id
 		UNION
-		SELECT
-			spend._id,
+		SELECT	spend._id,
 			spend.notes,
 			spend.account_id,
 			spend.record_date::timestamp without time zone AT TIME ZONE 'UTC' AS record_date,
 			0 - spend.amount_of_money::numeric as amount_of_money,
-			spend_category.title as category,
+			json_build_object('_id', spend_category._id, 'title', spend_category.title)::text AS category,
 			'spend' AS type
 		FROM spend
 		JOIN spend_category ON spend_category._id = spend.category_id
@@ -142,10 +141,10 @@ CREATE OR REPLACE VIEW transactions_view AS
 	)	select
 		all_income_and_spend._id,
 		all_income_and_spend.notes,
-		all_income_and_spend.category,
 		all_income_and_spend.account_id,
 		all_income_and_spend.record_date,
 		all_income_and_spend.amount_of_money::numeric,
+		all_income_and_spend.category::json,
 		all_income_and_spend.type
 	from all_income_and_spend
 	join account ON account._id = all_income_and_spend.account_id
@@ -302,7 +301,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION transactions_by_account_id (accountId INTEGER)
-RETURNS TABLE(_id integer, notes text, account_id integer, record_date timestamp with time zone, amount_of_money numeric, category text, type text) AS $$
+RETURNS TABLE(_id integer, notes text, account_id integer, record_date timestamp with time zone, amount_of_money numeric, category json, type text) AS $$
 BEGIN
 	RETURN QUERY
 	SELECT * FROM transactions_view
