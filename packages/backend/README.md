@@ -299,20 +299,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION get_parent()
-    RETURNS TABLE(user_name name) AS $$
-BEGIN
-    RETURN QUERY
-		SELECT r.rolname AS user_name
-		FROM pg_roles r
-		JOIN pg_auth_members m ON r.oid = m.member
-		JOIN pg_roles p ON m.roleid = p.oid
-		WHERE p.rolname = 'parent';
-END;
-$$ LANGUAGE plpgsql;
-
-
-
 CREATE OR REPLACE FUNCTION transactions_by_account_id (accountId text)
 RETURNS TABLE(id UUID, notes text, account_id UUID, record_date timestamp with time zone, amount_of_money numeric, category json, type text) AS $$
 BEGIN

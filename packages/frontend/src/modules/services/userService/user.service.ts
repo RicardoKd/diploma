@@ -22,19 +22,9 @@ class UserService extends HttpService {
   }
 
   async createParent({ user, password }: IUserDataBody) {
-    // TODO: is the checking needed or is it redundant ???
-    const { rowCount } = await this.post<{ rowCount: number }>(API_KEYS.QUERY, {
-      ...getUserData(),
-      query: 'select * from get_parent();',
-    });
-
-    if (rowCount !== 0) {
-      throw new Error('Parent already exists');
-    }
-
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select create_parent ('$1, $2);`,
+      query: `select create_parent ($1, $2);`,
       variables: [user, password],
     });
   }
