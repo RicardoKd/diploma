@@ -23,7 +23,7 @@ app.post('/login', async ({ body }: ILoginRequest, res: Response) => {
 
     client.end();
 
-    return res.json({ role: 'test' });
+    return res.json({ role: role });
   } catch (error: any) {
     console.error(error.message);
 
