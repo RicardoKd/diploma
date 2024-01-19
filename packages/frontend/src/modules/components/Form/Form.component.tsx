@@ -7,9 +7,7 @@ import { MenuItem, TextField, Typography } from '@mui/material';
 
 import { AppButton } from '../../UI';
 import { MUI, SPACES } from '../../theme';
-import { IAlertState } from '../../types';
-import { QUERY_KEYS } from '../../constants';
-import queryClient from '../../app/queryClient';
+import { showError, showSuccess } from '../../utils';
 import { FormStyled, FormButtons } from './Form.styled';
 
 interface FormProps {
@@ -39,7 +37,7 @@ export const Form: React.FC<FormProps> = ({
   validationSchema,
   serviceMethodArgs,
   successMessage = 'Success',
-  errorMessage = 'Unknown error occurred'
+  errorMessage = 'Unknown error occurred',
 }) => {
   const navigate = useNavigate();
 
@@ -47,11 +45,7 @@ export const Form: React.FC<FormProps> = ({
 
   const createMutation = useMutation(serviceMethod, {
     onSuccess: (data) => {
-      queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-        isOpen: true,
-        severity: 'success',
-        message: successMessage
-      });
+      showSuccess(successMessage);
 
       if (successCallback) {
         successCallback(data);
@@ -60,22 +54,19 @@ export const Form: React.FC<FormProps> = ({
       formik.resetForm();
     },
     onError: (error: any) => {
-      queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-        isOpen: true,
-        severity: 'error',
-        message: `${errorMessage}: ${error.message}`
-      });
+      showError(`${errorMessage}: ${error.message}`);
 
       if (errorCallback) {
         errorCallback(error);
       }
-    }
+    },
   });
 
   formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => createMutation.mutate({ ...values, ...serviceMethodArgs })
+    onSubmit: (values) =>
+      createMutation.mutate({ ...values, ...serviceMethodArgs }),
   });
 
   return (
@@ -100,7 +91,10 @@ export const Form: React.FC<FormProps> = ({
               onChange={formik.handleChange}
               value={formik.values[formItem]}
               error={formik.touched[formItem] && !!formik.errors[formItem]}
-              helperText={(formik.touched[formItem] && formik.errors[formItem]) as React.ReactNode}
+              helperText={
+                (formik.touched[formItem] &&
+                  formik.errors[formItem]) as React.ReactNode
+              }
             >
               {options &&
                 options.map(({ label, value }, key) => (

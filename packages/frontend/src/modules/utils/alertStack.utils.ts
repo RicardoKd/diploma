@@ -1,11 +1,19 @@
-import { IAlertState } from "../types";
-import { QUERY_KEYS } from "../constants";
-import queryClient from "../app/queryClient";
+import { IAlertState } from '../types';
+import { QUERY_KEYS } from '../constants';
+import queryClient from '../app/queryClient';
 
-export const showError = (errorMessage: string) => {
+export const showError = (message: string) => {
   queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
     isOpen: true,
     severity: 'error',
-    message: errorMessage,
+    message: message,
   });
-}
+};
+
+export const showSuccess = (message: string) => {
+  queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
+    isOpen: true,
+    severity: 'success',
+    message: message,
+  });
+};
