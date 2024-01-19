@@ -1,39 +1,42 @@
-import { Response } from 'express';
+import { Application, Response } from 'express';
 
-import server from './server';
 import connectDB from './db';
 import { ILoginRequest, IQueryRequest } from './types';
 
-server.post('/login', async ({ body }: ILoginRequest, res: Response) => {
-  try {
-    const client = await connectDB(body.user, body.password);
+const appRouter = (app: Application) => {
+  app.post('/login', async ({ body }: ILoginRequest, res: Response) => {
+    try {
+      const client = await connectDB(body.user, body.password);
 
-    let result = await client.query('select get_my_role()');
+      let result = await client.query('select get_my_role()');
 
-    const role = result.rows[0].get_my_role;
+      const role = result.rows[0].get_my_role;
 
-    client.end();
+      client.end();
 
-    return res.json({ role: role });
-  } catch (error: any) {
-    console.error(error.message);
+      return res.json({ role: role });
+    } catch (error: any) {
+      console.error(error.message);
 
-    return res.status(401).json({ error: error.message });
-  }
-});
+      return res.status(401).json({ error: error.message });
+    }
+  });
 
-server.post('/query', async ({ body }: IQueryRequest, res: Response) => {
-  try {
-    const client = await connectDB(body.user, body.password);
+  app.post('/query', async ({ body }: IQueryRequest, res: Response) => {
+    try {
+      const client = await connectDB(body.user, body.password);
 
-    const result = await client.query(body.query, body.variables);
+      const result = await client.query(body.query, body.variables);
 
-    client.end();
+      client.end();
 
-    return res.json(result);
-  } catch (error: any) {
-    console.error(error.message);
+      return res.json(result);
+    } catch (error: any) {
+      console.error(error.message);
 
-    return res.status(500).json({ error: error.message });
-  }
-});
+      return res.status(500).json({ error: error.message });
+    }
+  });
+};
+
+export default appRouter;

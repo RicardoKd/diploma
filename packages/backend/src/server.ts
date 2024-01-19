@@ -4,13 +4,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import { PORT } from './const';
+import appRouter from './routes';
 
-const server = express();
+const app = express();
 
-server.use(bodyParser.urlencoded({ extended: false }));
-server.use(bodyParser.json());
-server.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+appRouter(app);
 
-server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-export default server;
+export default app;
