@@ -22,7 +22,7 @@ export const TransactionsTable = () => {
     QUERY_KEYS.INCOME_CATEGORIES,
   ]);
 
-  // TODO: why set accountId here if it is in the params? 
+  // TODO: why set accountId here if it is in the params?
   // TODO: Maybe use account name in the params?
   queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, accountId);
 
@@ -104,7 +104,12 @@ export const TransactionsTable = () => {
       headerName: 'Category',
       getOptionValue: (value: any) => value.id,
       getOptionLabel: (value: any) => value.title,
-      valueGetter: (tableRow) => tableRow.row.category.id,
+      valueGetter: ({ row }) => row.category.id,
+      valueSetter: ({ row, value }) => {
+        row.category.id = value;
+
+        return row;
+      },
       // eslint-disable-next-line no-confusing-arrow
       valueOptions: ({ row }) =>
         row && row.type === 'income' ? incomeCategories! : spendCategories!,
