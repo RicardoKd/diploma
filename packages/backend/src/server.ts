@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import cors from 'cors';
-import { Client } from 'pg';
 import bodyParser from 'body-parser';
 import express, { Response } from 'express';
 
+import connectDB from './db';
 import { PORT, PG_CONF, ROLES } from './const';
 import { ILoginRequest, IQueryRequest } from './types';
 
@@ -34,9 +34,9 @@ app.post('/login', async ({ body }: ILoginRequest, res: Response) => {
 app.post('/query', async ({ body }: IQueryRequest, res: Response) => {
   try {
     const client = await connectDB(body.user, body.password);
-
-    const result = await client.query(body.query);
-
+    
+    const result = await client.query(body.query, body.variables);
+    
     client.end();
 
     return res.json(result);
@@ -46,26 +46,6 @@ app.post('/query', async ({ body }: IQueryRequest, res: Response) => {
     return res.status(500).json({ error: error.message });
   }
 });
-
-async function connectDB(user: string, password: string): Promise<Client> {
-  if (!user || !password) {
-    throw new Error('User and password must be provided');
-  }
-
-  const client = new Client({ user, password, ...PG_CONF });
-
-  await client.connect();
-
-  let result = await client.query('select get_my_role()');
-
-  const role = result.rows[0].get_my_role;
-
-  if (!ROLES.includes(role)) {
-    throw new Error('Cannot login');
-  }
-
-  return client;
-}
 
 const server = app.listen(PORT, () =>
   console.log(`Server started on port ${PORT}`)

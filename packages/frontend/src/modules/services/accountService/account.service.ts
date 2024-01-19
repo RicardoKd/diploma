@@ -8,7 +8,7 @@ class AccountService extends HttpService {
   async getAccounts(): Promise<IAccount[]> {
     const result = await this.post<IQueryResponse<IAccount>>(API_KEYS.QUERY, {
       ...getUserData(),
-      query: 'select * from account_view'
+      query: 'select * from account_view',
     });
 
     return result.rows;
@@ -17,7 +17,8 @@ class AccountService extends HttpService {
   async createAccount({ title }: { title: string }) {
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `SELECT create_account('${title}');`
+      query: `SELECT create_account($1);`,
+      variables: [title]
     });
   }
 }

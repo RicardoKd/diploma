@@ -5,5 +5,6 @@ export interface IQueryRequest extends Request {
     user: string;
     query: string;
     password: string;
+    variables?: any[];
   };
 }

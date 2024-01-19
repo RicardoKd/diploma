@@ -16,14 +16,16 @@ class UserService extends HttpService {
   async createChild({ user, password }: IUserDataBody) {
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select create_child ('${user}', '${password}');`
+      query: `select create_child ($1, $2);`,
+      variables: [user, password],
     });
   }
 
   async createParent({ user, password }: IUserDataBody) {
+    // TODO: is the checking needed or is it redundant ???
     const { rowCount } = await this.post<{ rowCount: number }>(API_KEYS.QUERY, {
       ...getUserData(),
-      query: 'select * from get_parent();'
+      query: 'select * from get_parent();',
     });
 
     if (rowCount !== 0) {
@@ -32,14 +34,15 @@ class UserService extends HttpService {
 
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select create_parent ('${user}', '${password}');`
+      query: `select create_parent ('$1, $2);`,
+      variables: [user, password],
     });
   }
 
   async getChildren() {
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: 'select * from get_children();'
+      query: 'select * from get_children();',
     });
   }
 }

@@ -18,7 +18,8 @@ class TransactionService extends HttpService {
       API_KEYS.QUERY,
       {
         ...getUserData(),
-        query: `select * from transactions_by_account_id('${accountId}')`,
+        query: `select * from transactions_by_account_id($1)`,
+        variables: [accountId],
       }
     );
 
@@ -36,10 +37,15 @@ class TransactionService extends HttpService {
       ...getUserData(),
       query: `INSERT INTO ${tr.type} 
         (notes, record_date, amount_of_money, account_id, category_id) VALUES 
-        ('${tr.notes}', '${tr.record_date}', ${Math.abs(
-          tr.amount_of_money
-      )}, '${tr.accountId!}', '${tr.category}')
+        ($1, $2, $3::MONEY, $4, $5)
       `,
+      variables: [
+        tr.notes,
+        tr.record_date,
+        Math.abs(tr.amount_of_money),
+        tr.accountId,
+        tr.category,
+      ],
     });
   }
 
@@ -48,12 +54,19 @@ class TransactionService extends HttpService {
       ...getUserData(),
       query: `UPDATE ${tr.type} 
         SET 
-          notes = '${tr.notes}',
-          category_id = '${tr.category.id}',
-          record_date = '${getPostgresDate(tr.record_date)}',
-          amount_of_money = ${Math.abs(tr.amount_of_money)}
-        WHERE id = '${tr.id}';
+          notes = $1,
+          category_id = $2,
+          record_date = $3,
+          amount_of_money = $4
+        WHERE id = $5;
       `,
+      variables: [
+        tr.notes,
+        tr.category.id,
+        getPostgresDate(tr.record_date),
+        Math.abs(tr.amount_of_money),
+        tr.id,
+      ],
     });
   }
 
@@ -132,8 +145,8 @@ class TransactionService extends HttpService {
   }): Promise<void> {
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `DELETE FROM ${table} WHERE id = '${id}';
-      `,
+      query: `DELETE FROM ${table} WHERE id = $1;`,
+      variables: [id],
     });
   }
 
@@ -163,8 +176,8 @@ class TransactionService extends HttpService {
       API_KEYS.QUERY,
       {
         ...userData,
-        query: `SELECT * FROM category_percentage
-        ('${type}', 1, '${beforeDate}', ${accountId});`,
+        query: `SELECT * FROM category_percentage($1, 1, $2, $3);`,
+        variables: [type, beforeDate, accountId],
       }
     );
 
@@ -172,8 +185,8 @@ class TransactionService extends HttpService {
       API_KEYS.QUERY,
       {
         ...userData,
-        query: `SELECT * FROM category_percentage
-        ('${type}', 3, '${beforeDate}', ${accountId});`,
+        query: `SELECT * FROM category_percentage($1, 3, $2, $3);`,
+        variables: [type, beforeDate, accountId],
       }
     );
 
@@ -181,8 +194,8 @@ class TransactionService extends HttpService {
       API_KEYS.QUERY,
       {
         ...userData,
-        query: `SELECT * FROM category_percentage
-        ('${type}', 12, '${beforeDate}', ${accountId});`,
+        query: `SELECT * FROM category_percentage($1, 12, $2, $3);`,
+        variables: [type, beforeDate, accountId],
       }
     );
 
