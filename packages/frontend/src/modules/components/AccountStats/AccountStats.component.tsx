@@ -31,18 +31,18 @@ import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const AccountStats = () => {
-  const accountId = +useParams().accountId!;
+  const accountId = useParams().accountId!;
   const [spendRange, setSpendRange] = useState<IRange>(RANGE_INITIAL_STATE);
   const [incomeRange, setIncomeRange] = useState<IRange>(RANGE_INITIAL_STATE);
 
   const { isSuccess: incomeIsSuccess, data: incomeStats } = useQuery<IAccountStatsRange>({
     queryKey: [QUERY_KEYS.INCOME_STATS, accountId],
-    queryFn: () => transactionService.getCategoryStats({ type: 'income', accountId: +accountId! })
+    queryFn: () => transactionService.getCategoryStats({ type: 'income', accountId: accountId! })
   });
 
   const { isSuccess: spendIsSuccess, data: spendStats } = useQuery<IAccountStatsRange>({
     queryKey: [QUERY_KEYS.SPEND_STATS, accountId],
-    queryFn: () => transactionService.getCategoryStats({ type: 'spend', accountId: +accountId! })
+    queryFn: () => transactionService.getCategoryStats({ type: 'spend', accountId: accountId! })
   });
 
   if (!incomeIsSuccess || !spendIsSuccess) {

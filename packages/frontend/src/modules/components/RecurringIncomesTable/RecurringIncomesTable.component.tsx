@@ -12,7 +12,7 @@ import { IAlertState, ICategory, IRecurringTransaction } from '../../types';
 import { SPACES } from '../../theme';
 
 interface IRecurringIncomesTableProps {
-  accountId: number;
+  accountId: string;
 }
 
 export const RecurringIncomesTable: React.FC<IRecurringIncomesTableProps> = ({ accountId }) => {
@@ -74,10 +74,9 @@ export const RecurringIncomesTable: React.FC<IRecurringIncomesTableProps> = ({ a
 
   if (isSuccess) {
     rows = reccuringIncomes.map((transaction, id) => ({
-      id,
       ...transaction,
-      category: transaction.category._id,
-      time_gap_type: transaction.time_gap_type._id
+      category: transaction.category.id,
+      time_gap_type: transaction.time_gap_type.id
     }));
   }
 

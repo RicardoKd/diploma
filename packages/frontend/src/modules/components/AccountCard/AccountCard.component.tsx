@@ -28,7 +28,7 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
   const [range, setRange] = useState<IRange>(RANGE_INITIAL_STATE);
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { _id, title, income, spend } = account;
+  const { id, title, income, spend } = account;
   const rangedSpend = spend[range] ? spend[range] : 0;
   const rangedIncome = income[range] ? income[range] : 0;
 
@@ -66,10 +66,10 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
           <Typography variant="body1">{rangedIncome}</Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-          <RouterLink text="View" to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}/${_id}`} />
+          <RouterLink text="View" to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}/${id}`} />
           <RouterLink
             text="Statistics"
-            to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.ACCOUNT_STATS}/${_id}`}
+            to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
           />
           <FormControl>
             <InputLabel id="range-select-label">Range</InputLabel>

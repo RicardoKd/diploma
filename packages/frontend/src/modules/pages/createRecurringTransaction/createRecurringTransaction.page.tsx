@@ -37,9 +37,9 @@ export const CreateRecurringTransactionPage: React.FC<CreateRecurringTransaction
     },
     {
       formItem: CreateRecurringIncomeFormItems.CATEGORY,
-      options: (type === 'income' ? incomeCategories! : spendCategories!).map(({ _id, title }) => ({
+      options: (type === 'income' ? incomeCategories! : spendCategories!).map(({ id, title }) => ({
         label: title,
-        value: `${_id}`
+        value: id
       }))
     }
   ];

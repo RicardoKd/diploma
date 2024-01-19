@@ -8,118 +8,22 @@ import { Table } from '../../UI/Table';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
+import { ICategory, ITransaction } from '../../types';
+import { currencyFormatter, showError } from '../../utils';
 import { RecurringSpendsTable } from '../RecurringSpendsTable';
 import { RecurringIncomesTable } from '../RecurringIncomesTable';
-import { IAlertState, ICategory, ITransaction } from '../../types';
 
 export const TransactionsTable = () => {
-  let rows: any = [];
-  const accountId = +useParams().accountId!;
+  const accountId = useParams().accountId!;
   const spendCategories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.SPEND_CATEGORIES,
   ]);
-  //   {
-  //     value: '1',
-  //     label: 'Food',
-  //   },
-  //   {
-  //     value: '2',
-  //     label: 'Health',
-  //   },
-  //   {
-  //     value: '3',
-  //     label: 'Entertainment',
-  //   },
-  //   {
-  //     value: '4',
-  //     label: 'Travel',
-  //   },
-  //   {
-  //     value: '5',
-  //     label: 'Vehicle',
-  //   },
-  //   {
-  //     value: '6',
-  //     label: 'Online subscription',
-  //   },
-  //   {
-  //     value: '7',
-  //     label: 'House',
-  //   },
-  //   {
-  //     value: '8',
-  //     label: 'Taxes',
-  //   },
-  //   {
-  //     value: '9',
-  //     label: 'Utilities',
-  //   },
-  //   {
-  //     value: '10',
-  //     label: 'Legal documents',
-  //   },
-  //   {
-  //     value: '11',
-  //     label: 'One-time',
-  //   },
-  //   {
-  //     value: '12',
-  //     label: 'Unexpected',
-  //   },
-  //   {
-  //     value: '13',
-  //     label: 'Personal',
-  //   },
-  //   {
-  //     value: '14',
-  //     label: 'Other',
-  //   },
-  // ];
   const incomeCategories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.INCOME_CATEGORIES,
   ]);
-  //   {
-  //     value: '1',
-  //     label: 'Salary',
-  //   },
-  //   {
-  //     value: '2',
-  //     label: 'Bonus',
-  //   },
-  //   {
-  //     value: '3',
-  //     label: 'Interest',
-  //   },
-  //   {
-  //     value: '4',
-  //     label: 'Dividends',
-  //   },
-  //   {
-  //     value: '5',
-  //     label: 'Rental Income',
-  //   },
-  //   {
-  //     value: '6',
-  //     label: 'Gifts',
-  //   },
-  //   {
-  //     value: '7',
-  //     label: 'Capital Gains',
-  //   },
-  //   {
-  //     value: '8',
-  //     label: 'Self-Employment Income',
-  //   },
-  //   {
-  //     value: '9',
-  //     label: 'Other',
-  //   },
-  //   {
-  //     value: '10',
-  //     label: 'Social Security',
-  //   },
-  // ];
 
+  // TODO: why set accountId here if it is in the params? 
+  // TODO: Maybe use account name in the params?
   queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, accountId);
 
   const {
@@ -143,50 +47,34 @@ export const TransactionsTable = () => {
     transactionService.updateTransaction.bind(transactionService),
     {
       onSuccess: () => onChangeSuccess(),
-      onError: () => {
-        queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-          isOpen: true,
-          severity: 'error',
-          message: 'Failed to update transaction',
-        });
-      },
+      onError: () => showError('Failed to update transaction'),
     }
   );
 
-  const handleUpdate = useCallback((newRow: any) => {
-    updateMutation.mutate(newRow);
+  const handleUpdate = useCallback(
+    (newRow: ITransaction, _oldRow: ITransaction) => {
+      // TODO: handle failure and return oldRow
+      updateMutation.mutate(newRow);
 
-    return newRow;
-  }, []);
+      return newRow;
+    },
+    []
+  );
 
   const deleteMutation = useMutation(
     transactionService.deleteById.bind(transactionService),
     {
       onSuccess: () => onChangeSuccess(),
-      onError: () => {
-        queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-          isOpen: true,
-          severity: 'error',
-          message: 'Failed to delete transaction',
-        });
-      },
+      onError: () => showError('Failed to delete transaction'),
     }
   );
 
   const handleDelete = useCallback(
-    ({ type, _id }: any) =>
+    ({ type, id }: ITransaction) =>
       () =>
-        deleteMutation.mutate({ table: type, id: _id }),
+        deleteMutation.mutate({ table: type, id }),
     []
   );
-
-  if (transactionsLoaded) {
-    rows = transactions.map((transaction, id) => ({
-      id: ++id, // IMPORTANT: transaction._id is not used here because spends and incomes might have the same _id
-      ...transaction,
-      category: transaction.category._id,
-    }));
-  }
 
   const columns: GridColDef[] = [
     {
@@ -199,6 +87,7 @@ export const TransactionsTable = () => {
       editable: true,
       field: 'amount_of_money',
       headerName: 'Amount of money',
+      valueFormatter: ({ value }) => currencyFormatter.format(value),
     },
     {
       flex: 0.5,
@@ -213,8 +102,9 @@ export const TransactionsTable = () => {
       field: 'category',
       type: 'singleSelect',
       headerName: 'Category',
-      getOptionValue: (value: any) => value._id,
+      getOptionValue: (value: any) => value.id,
       getOptionLabel: (value: any) => value.title,
+      valueGetter: (tableRow) => tableRow.row.category.id,
       // eslint-disable-next-line no-confusing-arrow
       valueOptions: ({ row }) =>
         row && row.type === 'income' ? incomeCategories! : spendCategories!,
@@ -241,9 +131,9 @@ export const TransactionsTable = () => {
   return (
     <>
       <Table
-        rows={rows}
-        isLoading={isLoading}
+        rows={transactionsLoaded ? transactions : []}
         columns={columns}
+        isLoading={isLoading}
         handleUpdate={handleUpdate}
       />
       <RecurringIncomesTable accountId={accountId} />

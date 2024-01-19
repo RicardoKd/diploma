@@ -1,7 +1,7 @@
 import { ITimeGapType } from './ITimeGapType';
 
 export interface IRecurringTransaction {
-  _id: number;
+  id: string;
   notes: string;
   end_date: Date;
   start_date: Date;
@@ -9,11 +9,11 @@ export interface IRecurringTransaction {
   amount_of_money: number;
   time_gap_type_value: number;
   category: {
-    _id: number;
+    id: string;
     title: string;
   };
   time_gap_type: {
-    _id: number;
+    id: string;
     title: ITimeGapType;
   };
 }

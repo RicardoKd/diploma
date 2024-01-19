@@ -40,7 +40,7 @@ export const HomePage = () => {
           element={
             <AccountCardsContainer>
               {accounts.map((account) => (
-                <AccountCard key={account._id} account={account} />
+                <AccountCard key={account.id} account={account} />
               ))}
             </AccountCardsContainer>
           }

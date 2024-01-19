@@ -1,5 +1,5 @@
 export interface IAccount {
-  _id: number;
+  id: string;
   title: string;
   income: {
     year: number;

@@ -1,4 +1,4 @@
 export interface ICategory {
-  _id: number;
+  id: string;
   title: string;
 }

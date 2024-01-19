@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { QueryClientProvider } from 'react-query';
-// import { ReactQueryDevtools } from 'react-query/devtools';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import '../../style.css';
 import { App } from './app';
@@ -16,7 +16,7 @@ const AppContainer = () => (
       <Styled.GlobalStyles />
       <QueryClientProvider client={queryClient}>
         <App />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </BrowserRouter>
   </ThemeProvider>

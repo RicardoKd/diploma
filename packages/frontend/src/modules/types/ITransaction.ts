@@ -1,10 +1,10 @@
 import { ITransactionType } from './ITransactionType';
 
 export interface ITransaction {
-  _id: number;
+  id: string;
   notes: string;
   category: {
-    _id: number;
+    id: string;
     title: string;
   };
   account_id: number;

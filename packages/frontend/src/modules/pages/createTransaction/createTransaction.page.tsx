@@ -18,15 +18,16 @@ export const CreateTransactionPage: React.FC<CreateTransactionPageProps> = ({ ty
   const accountId = queryClient.getQueryData<number>(QUERY_KEYS.CURRENT_ACCOUNT);
   const spendCategories = queryClient.getQueryData<ICategory[]>(QUERY_KEYS.SPEND_CATEGORIES);
   const incomeCategories = queryClient.getQueryData<ICategory[]>(QUERY_KEYS.INCOME_CATEGORIES);
+  console.log('incomeCategories :>> ', incomeCategories);
   const fields = [
     { formItem: CreateTransactionFormItems.NOTES },
     { formItem: CreateTransactionFormItems.RECORD_DATE, type: 'date' },
     { formItem: CreateTransactionFormItems.AMOUNT_OF_MONEY, type: 'number' },
     {
       formItem: CreateTransactionFormItems.CATEGORY,
-      options: (type === 'income' ? incomeCategories! : spendCategories!).map(({ _id, title }) => ({
+      options: (type === 'income' ? incomeCategories! : spendCategories!).map(({ id, title }) => ({
         label: title,
-        value: `${_id}`
+        value: id
       }))
     }
   ];
