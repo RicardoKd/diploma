@@ -13,11 +13,7 @@ export const AddChildForm = () => {
 
   return (
     <>
-      <AppButton
-        text={`Add Child`}
-        onClick={() => setOpen(true)}
-        style={{ marginRight: SPACES.m }}
-      />
+      <AppButton text={`Add Child`} onClick={() => setOpen(true)} />
       <DialogForm
         isOpen={isOpen}
         formName="Add child"

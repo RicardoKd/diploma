@@ -16,7 +16,6 @@ export const AddParentForm = () => {
       <AppButton
         text="Add 2nd parent"
         onClick={() => setOpen(true)}
-        style={{ marginRight: SPACES.m }}
       />
       <DialogForm
         isOpen={isOpen}

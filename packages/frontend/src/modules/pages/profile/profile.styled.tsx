@@ -22,6 +22,6 @@ export const ButtonContainer = styled('div')`
   justify-content: space-between;
 
   & > * {
-    margin-bottom: ${SPACES.xxl};
+    margin-bottom: ${SPACES.xxl} !important;
   }
 `;
