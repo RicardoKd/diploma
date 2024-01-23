@@ -7,7 +7,7 @@ import { WelcomeStyled } from './welcome.page.styled';
 
 export const WelcomePage = () => (
   <WelcomeStyled>
-    <Typography variant="h2">Budget App</Typography>
+    <Typography variant="h2">Budgeting App</Typography>
     <RouterLink to={ROUTER_KEYS.LOGIN} text="Login" />
   </WelcomeStyled>
 );

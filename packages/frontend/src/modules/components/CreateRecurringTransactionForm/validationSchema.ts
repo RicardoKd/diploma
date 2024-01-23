@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { CreateRecurringIncomeFormItems } from './CreateRecurringTransactionFormItems';
 
 export const validationSchema = Yup.object({
-  [CreateRecurringIncomeFormItems.NOTES]: Yup.string().required('Required'),
+  [CreateRecurringIncomeFormItems.NOTES]: Yup.string(),
   [CreateRecurringIncomeFormItems.END_DATE]: Yup.date().required('Required'),
   [CreateRecurringIncomeFormItems.CATEGORY]: Yup.string().required('Required'),
   [CreateRecurringIncomeFormItems.START_DATE]: Yup.date().required('Required'),
