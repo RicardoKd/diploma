@@ -193,11 +193,12 @@ CREATE OR REPLACE VIEW recurring_income_view AS
 	ORDER BY start_date;
 
 
+
 --
 -- FUNCTIONS AND TRIGGERS
 --
 
-CREATE OR REPLACE FUNCTION check_spend_limit()
+CREATE OR REPLACE FUNCTION check_spend_limit_on_insert()
 RETURNS TRIGGER AS $$
 DECLARE
     total_income MONEY;
@@ -217,13 +218,39 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Trigger event
+CREATE TRIGGER block_exceeding_spend_limit_on_insert
+BEFORE INSERT ON Spend
+FOR EACH ROW
+EXECUTE FUNCTION check_spend_limit_on_insert();
 
+
+
+CREATE OR REPLACE FUNCTION check_spend_limit_on_update()
+RETURNS TRIGGER AS $$
+DECLARE
+    total_income MONEY;
+    total_spend MONEY;
+BEGIN
+    SELECT COALESCE(SUM(i.amount_of_money), 0::Money) INTO total_income
+    FROM income i WHERE i.account_id = NEW.account_id;
+
+    SELECT COALESCE(SUM(s.amount_of_money), 0::Money) INTO total_spend
+    FROM spend s WHERE s.account_id = NEW.account_id AND s.id <> NEW.id;
+
+    IF total_income < total_spend + NEW.amount_of_money THEN
+        RAISE EXCEPTION 'Spend amount exceeds income for this account.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 -- Trigger event
-CREATE TRIGGER block_exceeding_spend_limit
-BEFORE INSERT OR UPDATE ON Spend
+CREATE TRIGGER block_exceeding_spend_limit_on_update
+BEFORE UPDATE ON Spend
 FOR EACH ROW
-EXECUTE FUNCTION check_spend_limit();
+EXECUTE FUNCTION check_spend_limit_on_update();
 
 
 
