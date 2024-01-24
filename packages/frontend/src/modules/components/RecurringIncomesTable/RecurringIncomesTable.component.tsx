@@ -12,15 +12,12 @@ import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, IRecurringTransaction } from '../../types';
 
-interface IRecurringIncomesTableProps {
-  accountId: string;
-}
-
-export const RecurringIncomesTable: React.FC<IRecurringIncomesTableProps> = ({
-  accountId,
-}) => {
+export const RecurringIncomesTable = () => {
   let rows: any = [];
 
+  const accountId = queryClient.getQueryData<string>(
+    QUERY_KEYS.CURRENT_ACCOUNT
+  )!;
   const categories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.INCOME_CATEGORIES,
   ]);

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
@@ -13,7 +12,6 @@ import { RecurringIncomesTable, RecurringSpendsTable } from '../';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
 
 export const TransactionsTable = () => {
-  const accountId = useParams().accountId!;
   const spendCategories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.SPEND_CATEGORIES,
   ]);
@@ -21,9 +19,9 @@ export const TransactionsTable = () => {
     QUERY_KEYS.INCOME_CATEGORIES,
   ]);
 
-  // TODO: why set accountId here if it is in the params?
-  // TODO: Maybe use account name in the params?
-  queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, accountId);
+  const accountId = queryClient.getQueryData<string>(
+    QUERY_KEYS.CURRENT_ACCOUNT
+  )!;
 
   const {
     isLoading,
@@ -54,7 +52,7 @@ export const TransactionsTable = () => {
 
   const handleUpdate = useCallback(
     async (newRow: ITransaction, oldRow: ITransaction) => {
-      // FIXME: when the mutateFn fails, the cell that is being updated remains in the editing state 
+      // FIXME: when the mutateFn fails, the cell that is being updated remains in the editing state
       const isSuccess = await updateMutation.mutateAsync(newRow);
 
       return isSuccess ? newRow : oldRow;
@@ -112,7 +110,6 @@ export const TransactionsTable = () => {
 
         return row;
       },
-      // eslint-disable-next-line no-confusing-arrow
       valueOptions: ({ row }) =>
         row && row.type === 'income' ? incomeCategories! : spendCategories!,
     },
@@ -136,15 +133,11 @@ export const TransactionsTable = () => {
   ];
 
   return (
-    <>
-      <Table
-        rows={transactionsLoaded ? transactions : []}
-        columns={columns}
-        isLoading={isLoading}
-        handleUpdate={handleUpdate}
-      />
-      <RecurringIncomesTable accountId={accountId} />
-      <RecurringSpendsTable accountId={accountId} />
-    </>
+    <Table
+      rows={transactionsLoaded ? transactions : []}
+      columns={columns}
+      isLoading={isLoading}
+      handleUpdate={handleUpdate}
+    />
   );
 };

@@ -2,17 +2,13 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Routes, Route } from 'react-router-dom';
 
+import { AccountPage } from '../';
 import { AppLoader } from '../../UI';
 import { IAccount } from '../../types';
 import { QUERY_KEYS, ROUTER_KEYS } from '../../constants';
 import { AccountCardsContainer } from './home.page.styled';
 import { accountService, transactionService } from '../../services';
-import {
-  Header,
-  AccountCard,
-  AccountStats,
-  TransactionsTable,
-} from '../../components';
+import { Header, AccountCard, AccountStats } from '../../components';
 
 export const HomePage = () => {
   const { isSuccess, data: accounts } = useQuery<IAccount[]>({
@@ -34,7 +30,7 @@ export const HomePage = () => {
   });
 
   return isSuccess ? (
-    <div>
+    <>
       <Header />
 
       <Routes>
@@ -55,13 +51,13 @@ export const HomePage = () => {
               path={`${ROUTER_KEYS.ACCOUNT_STATS}/:accountId`}
             />
             <Route
-              element={<TransactionsTable />}
-              path={`${ROUTER_KEYS.VIEW_ACCOUNT}/:accountId`}
+              element={<AccountPage />}
+              path={`${ROUTER_KEYS.VIEW_ACCOUNT}/:accountTitle`}
             />
           </>
         )}
       </Routes>
-    </div>
+    </>
   ) : (
     <AppLoader />
   );

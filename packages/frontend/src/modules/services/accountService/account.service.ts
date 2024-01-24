@@ -18,7 +18,15 @@ class AccountService extends HttpService {
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
       query: `SELECT create_account($1);`,
-      variables: [title]
+      variables: [title],
+    });
+  }
+
+  async deleteById({ id }: { id: string }): Promise<void> {
+    await this.post(API_KEYS.QUERY, {
+      ...getUserData(),
+      query: `DELETE FROM account WHERE id = $1;`,
+      variables: [id],
     });
   }
 }

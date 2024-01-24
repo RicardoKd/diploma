@@ -27,8 +27,8 @@ export const ROUTER_KEYS = Object.freeze({
   HOME: '/home',
   LOGIN: '/login',
   PROFILE: '/profile',
-  VIEW_ACCOUNT: '/accounts/view',
-  ACCOUNT_STATS: '/accounts/stats',
+  VIEW_ACCOUNT: '/account',
+  ACCOUNT_STATS: '/account/stats',
 });
 
 // API keys

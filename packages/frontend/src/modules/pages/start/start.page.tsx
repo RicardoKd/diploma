@@ -1,12 +1,12 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import { logOut } from '../utils';
-import { WelcomePage } from './';
-import { MainStyled } from '../UI';
-import { LoginForm } from '../components';
-import { ROUTER_KEYS } from '../constants';
-import queryClient from '../app/queryClient';
+import { logOut } from '../../utils';
+import { WelcomePage } from '..';
+import { MainStyled } from '../../UI';
+import { LoginForm } from '../../components';
+import { ROUTER_KEYS } from '../../constants';
+import queryClient from '../../app/queryClient';
 
 export const StartPage = () => {
   logOut();

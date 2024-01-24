@@ -369,9 +369,9 @@ CREATE ROLE super_parent WITH CREATEROLE;
 
 GRANT INSERT ON person TO super_parent;
 GRANT INSERT ON person TO parent;
-GRANT INSERT, SELECT ON TABLE account TO child;
-GRANT INSERT, SELECT ON TABLE account TO parent;
-GRANT INSERT, SELECT ON TABLE account TO super_parent;
+GRANT INSERT, SELECT, DELETE ON TABLE account TO child;
+GRANT INSERT, SELECT, DELETE ON TABLE account TO parent;
+GRANT INSERT, SELECT, DELETE ON TABLE account TO super_parent;
 
 GRANT SELECT ON TABLE income_category TO child;
 GRANT SELECT ON TABLE income_category TO parent;

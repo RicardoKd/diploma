@@ -4,11 +4,11 @@ import { AppButtonStyled } from './AppButton.styled';
 import { MUI } from '../../theme';
 
 interface AppButtonProps extends ButtonProps {
-  text: string;
+  text?: string;
 }
 
-export const AppButton: React.FC<AppButtonProps> = ({ text, ...props }) => (
+export const AppButton: React.FC<AppButtonProps> = ({ text, children, ...props }) => (
   <AppButtonStyled variant={MUI.variant} {...props}>
-    {text}
+    {text || children}
   </AppButtonStyled>
 );

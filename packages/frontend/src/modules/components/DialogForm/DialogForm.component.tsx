@@ -11,7 +11,7 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import { MUI } from '../../theme';
+import { COLORS, MUI } from '../../theme';
 import { AppButton } from '../../UI';
 import { formatLabel, showError, showSuccess } from '../../utils';
 
@@ -89,9 +89,11 @@ export const DialogForm: React.FC<FormProps> = ({
       PaperProps={{
         component: 'form',
         onSubmit: formik.handleSubmit,
+        sx: { backgroundColor: COLORS.darkPurple, color: COLORS.white},
       }}
     >
       <DialogTitle>{formName}</DialogTitle>
+
       <DialogContent>
         {fields.map(({ formItem, type, options }, i) => (
           <TextField
