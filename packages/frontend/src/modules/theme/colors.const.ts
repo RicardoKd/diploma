@@ -1,4 +1,5 @@
 export const COLORS = Object.freeze({
+  purple: '#6b5b95',
   grey: '#7f8fa6',
   white: '#ffffff',
   black: '#2B2B2B',

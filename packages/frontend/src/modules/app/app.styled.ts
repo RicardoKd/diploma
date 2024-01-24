@@ -1,12 +1,50 @@
 import { createGlobalStyle } from 'styled-components';
 import { COLORS } from '../theme';
 
-// eslint-disable-next-line import/prefer-default-export
 export const GlobalStyles = createGlobalStyle`
   *,
   *::before,
   *::after {
     box-sizing: border-box;
+  }
+
+  html {
+    overflow: scroll;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+  }
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  
+  body {
+    font-family: Poppins, sans-serif;
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+    background-color: ${COLORS.purple};
+  }
+
+  iframe {
+    display: none;
+  }
+  
+  .swiper {
+    left: 125px;
+    overflow: visible;
+  }
+  
+  button {
+    border-radius: 0 !important;
+    border-color: black !important;
+    color: black !important;
   }
 
   ul[class],
@@ -29,15 +67,6 @@ export const GlobalStyles = createGlobalStyle`
   dl,
   dd {
     margin: 0;
-  }
-
-  body {
-    font-family: Poppins, sans-serif;
-    min-height: 100vh;
-    scroll-behavior: smooth;
-    text-rendering: optimizeSpeed;
-    line-height: 1.5;
-    background-color: ${COLORS.grey};
   }
 
   ul[class],

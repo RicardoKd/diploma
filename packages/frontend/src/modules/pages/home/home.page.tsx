@@ -6,11 +6,11 @@ import { AppLoader } from '../../UI';
 import { IAccount } from '../../types';
 import { Header } from '../../components/Header';
 import { QUERY_KEYS, ROUTER_KEYS } from '../../constants';
-import { AccountCard } from '../../components/AccountCard';
 import { AccountCardsContainer } from './home.page.styled';
-import { AccountStats } from '../../components/AccountStats';
 import { accountService, transactionService } from '../../services';
 import { TransactionsTable } from '../../components/TransactionsTable';
+import { AccountCard } from '../../components/AccountCard/AccountCard.component';
+import { AccountStats } from '../../components/AccountStats/AccountStats.component';
 
 export const HomePage = () => {
   const { isSuccess, data: accounts } = useQuery<IAccount[]>({

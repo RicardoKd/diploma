@@ -4,7 +4,6 @@ import { ThemeProvider } from 'styled-components';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-import '../../style.css';
 import { App } from './app';
 import * as theme from '../theme';
 import * as Styled from './app.styled';

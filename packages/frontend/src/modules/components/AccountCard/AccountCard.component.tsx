@@ -10,7 +10,7 @@ import {
   Typography,
   FormControl,
   CardContent,
-  SelectChangeEvent
+  SelectChangeEvent,
 } from '@mui/material';
 
 import { MUI } from '../../theme';
@@ -27,7 +27,6 @@ interface AccountsCardProps {
 export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
   const [range, setRange] = useState<IRange>(RANGE_INITIAL_STATE);
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const { id, title, income, spend } = account;
   const rangedSpend = spend[range] ? spend[range] : 0;
   const rangedIncome = income[range] ? income[range] : 0;
@@ -37,15 +36,22 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
     datasets: [
       {
         data: [rangedSpend, rangedIncome],
-        backgroundColor: ['#FF6384', '#36A2EB']
-      }
-    ]
+        backgroundColor: ['#FF6384', '#36A2EB'],
+      },
+    ],
   };
 
-  const handleRangeChange = (event: SelectChangeEvent) => setRange(event.target.value as IRange);
+  const handleRangeChange = (event: SelectChangeEvent) =>
+    setRange(event.target.value as IRange);
 
   return (
-    <Card sx={{ maxWidth: 400, height: 500, margin: '20px' }}>
+    <Card
+      sx={{
+        maxWidth: 400,
+        height: 500,
+        margin: '20px',
+      }}
+    >
       <CardContent>
         <Typography variant="h5" component="div">
           {title}
@@ -53,20 +59,38 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
         <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
           <Pie data={data} />
         </Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
-          <Typography variant="body1" color="textSecondary">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mt={2}
+        >
+          <Typography variant="body1" >
             Spend:
           </Typography>
           <Typography variant="body1">{rangedSpend}</Typography>
         </Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-          <Typography variant="body1" color="textSecondary">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mt={1}
+        >
+          <Typography variant="body1">
             Income:
           </Typography>
           <Typography variant="body1">{rangedIncome}</Typography>
         </Box>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-          <RouterLink text="View" to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}/${id}`} />
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mt={1}
+        >
+          <RouterLink
+            text="View"
+            to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}/${id}`}
+          />
           <RouterLink
             text="Statistics"
             to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
