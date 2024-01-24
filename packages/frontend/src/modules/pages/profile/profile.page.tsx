@@ -4,9 +4,8 @@ import { Typography } from '@mui/material';
 import { ROUTER_KEYS } from '../../constants';
 import { getRole, logOut } from '../../utils';
 import { MainStyled, RouterLink } from '../../UI';
+import { AddChildForm, AddParentForm } from '../../components';
 import { ProfileStyled, ButtonContainer } from './profile.styled';
-import { AddChildForm } from '../../components/AddChildForm/AddChildForm.component';
-import { AddParentForm } from '../../components/AddParentForm/AddParentForm.component';
 
 export const ProfilePage = () => {
   const role = getRole();

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ADAPTIVE, COLORS, SPACES } from '../theme';
+import { ADAPTIVE, COLORS, SPACES } from '../../theme';
 
 export const TableContainer = styled('div')`
   margin: auto;

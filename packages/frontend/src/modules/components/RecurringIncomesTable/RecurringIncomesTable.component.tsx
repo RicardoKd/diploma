@@ -4,8 +4,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
+import { Table } from '../../UI';
 import { SPACES } from '../../theme';
-import { Table } from '../../UI/Table';
 import { showError } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';

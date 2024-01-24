@@ -2,10 +2,10 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import { logOut } from '../utils';
+import { WelcomePage } from './';
 import { MainStyled } from '../UI';
+import { LoginForm } from '../components';
 import { ROUTER_KEYS } from '../constants';
-import { WelcomePage } from './welcome/welcome.page';
-import { LoginForm } from '../components/LoginForm/LoginForm';
 import queryClient from '../app/queryClient';
 
 export const StartPage = () => {

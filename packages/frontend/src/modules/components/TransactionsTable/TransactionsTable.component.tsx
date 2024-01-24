@@ -4,14 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
-import { Table } from '../../UI/Table';
+import { Table } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, ITransaction } from '../../types';
 import { currencyFormatter, showError } from '../../utils';
-import { RecurringSpendsTable } from '../RecurringSpendsTable';
-import { RecurringIncomesTable } from '../RecurringIncomesTable';
+import { RecurringIncomesTable, RecurringSpendsTable } from '../';
 
 export const TransactionsTable = () => {
   const accountId = useParams().accountId!;

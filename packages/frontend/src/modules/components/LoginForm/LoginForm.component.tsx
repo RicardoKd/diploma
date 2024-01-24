@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Form } from '../';
 import { userService } from '../../services';
-import { Form } from '../Form/Form.component';
 import { ROUTER_KEYS } from '../../constants';
 import { LoginFormItems } from './LoginFormItems';
 import { FormikLoginForm } from './FormikLoginForm';
@@ -23,7 +23,7 @@ export const LoginForm = () => {
       serviceMethod={userService.login.bind(userService)}
       fields={[
         { formItem: LoginFormItems.USER },
-        { formItem: LoginFormItems.PASSWORD, type: 'password' }
+        { formItem: LoginFormItems.PASSWORD, type: 'password' },
       ]}
     />
   );

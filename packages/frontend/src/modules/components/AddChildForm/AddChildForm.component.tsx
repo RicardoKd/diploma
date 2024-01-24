@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { SPACES } from '../../theme';
+import { DialogForm } from '../';
 import { AppButton } from '../../UI';
 import { userService } from '../../services';
 import { validationSchema } from './validationSchema';
 import { AddChildFormItems } from './AddChildFormItems';
 import { FormikAddChildForm } from './FormikAddChildForm';
-import { DialogForm } from '../DialogForm/DialogForm.component';
 
 export const AddChildForm = () => {
   const [isOpen, setOpen] = React.useState(false);

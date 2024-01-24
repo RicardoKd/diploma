@@ -1,11 +1,11 @@
 import React from 'react';
 
+import { DialogForm } from '../';
 import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
 import queryClient from '../../app/queryClient';
-import { DialogForm } from '../DialogForm/DialogForm.component';
 import { validationSchema } from './validationSchema';
 import { CreateAccountFormItems } from './CreateAccountFormItems';
 import { FormikCreateAccountForm } from './FormikCreateAccountForm';

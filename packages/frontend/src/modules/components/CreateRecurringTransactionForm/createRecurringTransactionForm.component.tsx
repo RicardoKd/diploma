@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { DialogForm } from '../';
 import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
@@ -7,7 +8,6 @@ import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
 import { ICategory, ITransactionType } from '../../types';
-import { DialogForm } from '../DialogForm/DialogForm.component';
 import { CreateRecurringIncomeFormItems } from './CreateRecurringTransactionFormItems';
 import { FormikCreateRecurringTransactionForm } from './FormikCreateRecurringTransactionForm';
 

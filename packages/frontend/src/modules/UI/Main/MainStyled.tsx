@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ADAPTIVE } from '../theme';
+import { ADAPTIVE } from '../../theme';
 
 export const MainStyled = styled('main')`
   margin: auto;

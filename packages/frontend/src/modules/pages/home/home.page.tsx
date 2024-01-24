@@ -4,31 +4,33 @@ import { Routes, Route } from 'react-router-dom';
 
 import { AppLoader } from '../../UI';
 import { IAccount } from '../../types';
-import { Header } from '../../components/Header';
 import { QUERY_KEYS, ROUTER_KEYS } from '../../constants';
 import { AccountCardsContainer } from './home.page.styled';
 import { accountService, transactionService } from '../../services';
-import { TransactionsTable } from '../../components/TransactionsTable';
-import { AccountCard } from '../../components/AccountCard/AccountCard.component';
-import { AccountStats } from '../../components/AccountStats/AccountStats.component';
+import {
+  Header,
+  AccountCard,
+  AccountStats,
+  TransactionsTable,
+} from '../../components';
 
 export const HomePage = () => {
   const { isSuccess, data: accounts } = useQuery<IAccount[]>({
     keepPreviousData: true,
     queryKey: [QUERY_KEYS.ACCOUNTS],
-    queryFn: () => accountService.getAccounts()
+    queryFn: () => accountService.getAccounts(),
   });
 
   const { isSuccess: incomeCategoriesLoaded } = useQuery({
     keepPreviousData: true,
     queryKey: [QUERY_KEYS.INCOME_CATEGORIES],
-    queryFn: () => transactionService.getCategories('income')
+    queryFn: () => transactionService.getCategories('income'),
   });
 
   const { isSuccess: spendCategoriesLoaded } = useQuery({
     keepPreviousData: true,
     queryKey: [QUERY_KEYS.SPEND_CATEGORIES],
-    queryFn: () => transactionService.getCategories('spend')
+    queryFn: () => transactionService.getCategories('spend'),
   });
 
   return isSuccess ? (
@@ -48,7 +50,10 @@ export const HomePage = () => {
         />
         {incomeCategoriesLoaded && spendCategoriesLoaded && (
           <>
-            <Route element={<AccountStats />} path={`${ROUTER_KEYS.ACCOUNT_STATS}/:accountId`} />
+            <Route
+              element={<AccountStats />}
+              path={`${ROUTER_KEYS.ACCOUNT_STATS}/:accountId`}
+            />
             <Route
               element={<TransactionsTable />}
               path={`${ROUTER_KEYS.VIEW_ACCOUNT}/:accountId`}
