@@ -8,5 +8,7 @@ export const validationSchema = Yup.object({
   [CreateTransactionFormItems.RECORD_DATE]: Yup.date()
     .max(new Date(Date.now()), 'Date cannot be in the future')
     .required('Required'),
-  [CreateTransactionFormItems.AMOUNT_OF_MONEY]: Yup.number().required('Required')
+  [CreateTransactionFormItems.AMOUNT_OF_MONEY]: Yup.number()
+    .positive('Must be greater than 0')
+    .required('Required'),
 });
