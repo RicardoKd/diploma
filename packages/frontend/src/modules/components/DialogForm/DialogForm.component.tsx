@@ -13,7 +13,7 @@ import {
 
 import { MUI } from '../../theme';
 import { AppButton } from '../../UI';
-import { showError, showSuccess } from '../../utils';
+import { formatLabel, showError, showSuccess } from '../../utils';
 
 interface FormProps {
   isOpen: boolean;
@@ -76,13 +76,6 @@ export const DialogForm: React.FC<FormProps> = ({
     onSubmit: (values) =>
       createMutation.mutate({ ...values, ...serviceMethodArgs }),
   });
-
-  const formatLabel = (label: string): string => {
-    let formattedLabel = label.charAt(0).toUpperCase() + label.slice(1);
-    formattedLabel = formattedLabel.replaceAll('_', ' ');
-
-    return formattedLabel;
-  };
 
   const onClose = () => {
     handleClose();

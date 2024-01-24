@@ -9,8 +9,8 @@ import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, ITransaction } from '../../types';
-import { currencyFormatter, showError } from '../../utils';
 import { RecurringIncomesTable, RecurringSpendsTable } from '../';
+import { currencyFormatter, showError, showSuccess } from '../../utils';
 
 export const TransactionsTable = () => {
   const accountId = useParams().accountId!;
@@ -35,9 +35,10 @@ export const TransactionsTable = () => {
     queryFn: () => transactionService.getTransactions(accountId),
   });
 
-  const onChangeSuccess = () => {
-    queryClient.invalidateQueries(QUERY_KEYS.ACCOUNTS);
-    queryClient.invalidateQueries(QUERY_KEYS.TRANSACTIONS);
+  const onChangeSuccess = (message: string) => {
+    showSuccess(message);
+    queryClient.refetchQueries(QUERY_KEYS.ACCOUNTS);
+    queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
     queryClient.refetchQueries([QUERY_KEYS.SPEND_STATS, accountId]);
     queryClient.refetchQueries([QUERY_KEYS.INCOME_STATS, accountId]);
   };
@@ -45,17 +46,18 @@ export const TransactionsTable = () => {
   const updateMutation = useMutation(
     transactionService.updateTransaction.bind(transactionService),
     {
-      onSuccess: () => onChangeSuccess(),
+      onSuccess: (_data, vars) =>
+        onChangeSuccess(`${vars.type} succesfully updated`),
       onError: () => showError('Failed to update transaction'),
     }
   );
 
   const handleUpdate = useCallback(
-    (newRow: ITransaction, _oldRow: ITransaction) => {
-      // TODO: handle failure and return oldRow
-      updateMutation.mutate(newRow);
+    async (newRow: ITransaction, oldRow: ITransaction) => {
+      // FIXME: when the mutateFn fails, the cell that is being updated remains in the editing state 
+      const isSuccess = await updateMutation.mutateAsync(newRow);
 
-      return newRow;
+      return isSuccess ? newRow : oldRow;
     },
     []
   );
@@ -63,7 +65,8 @@ export const TransactionsTable = () => {
   const deleteMutation = useMutation(
     transactionService.deleteById.bind(transactionService),
     {
-      onSuccess: () => onChangeSuccess(),
+      onSuccess: (_data, vars) =>
+        onChangeSuccess(`${vars.table} succesfully deleted`),
       onError: () => showError('Failed to delete transaction'),
     }
   );

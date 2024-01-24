@@ -26,7 +26,7 @@ export const CreateAccountForm = () => {
         handleClose={() => setOpen(false)}
         validationSchema={validationSchema}
         errorMessage="Failed to create account"
-        successMessage="Account create successfully"
+        successMessage="Account created successfully"
         initialValues={new FormikCreateAccountForm()}
         fields={[{ formItem: CreateAccountFormItems.TITLE }]}
         serviceMethod={accountService.createAccount.bind(accountService)}

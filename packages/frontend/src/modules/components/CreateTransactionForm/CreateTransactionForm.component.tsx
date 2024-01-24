@@ -3,6 +3,7 @@ import React from 'react';
 import { DialogForm } from '../';
 import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
+import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
@@ -58,7 +59,7 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
         validationSchema={validationSchema}
         serviceMethodArgs={{ accountId, type }}
         errorMessage={`Failed to create ${type}`}
-        successMessage={`${type} created successfully`}
+        successMessage={`${formatLabel(type)} created successfully`}
         initialValues={new FormikCreateTransactionForm()}
         serviceMethod={transactionService.createTransaction.bind(
           transactionService

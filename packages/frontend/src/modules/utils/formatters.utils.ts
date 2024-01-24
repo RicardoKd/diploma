@@ -14,3 +14,10 @@ export const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
+
+export const formatLabel = (label: string): string => {
+  let formattedLabel = label.charAt(0).toUpperCase() + label.slice(1);
+  formattedLabel = formattedLabel.replaceAll('_', ' ');
+
+  return formattedLabel;
+};

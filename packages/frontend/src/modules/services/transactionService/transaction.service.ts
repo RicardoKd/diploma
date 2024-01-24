@@ -49,8 +49,8 @@ class TransactionService extends HttpService {
     });
   }
 
-  async updateTransaction(tr: ITransaction): Promise<void> {
-    await this.post(API_KEYS.QUERY, {
+  async updateTransaction(tr: ITransaction): Promise<boolean> {
+    const result = await this.post<{ rowCount: number }>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `UPDATE ${tr.type} 
         SET 
@@ -68,6 +68,8 @@ class TransactionService extends HttpService {
         tr.id,
       ],
     });
+
+    return !!result.rowCount;
   }
 
   async updateRecurringTransaction(): Promise<void> {
@@ -100,8 +102,8 @@ class TransactionService extends HttpService {
     const rows = result.rows.map((transaction) => ({
       ...transaction,
       amount_of_money: +transaction.amount_of_money,
-      end_date: new Date(new Date(transaction.end_date).toUTCString()),
-      start_date: new Date(new Date(transaction.start_date).toUTCString()),
+      end_date: new Date(transaction.end_date),
+      start_date: new Date(transaction.start_date),
     }));
 
     return rows;

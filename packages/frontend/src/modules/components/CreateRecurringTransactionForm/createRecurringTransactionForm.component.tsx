@@ -3,6 +3,7 @@ import React from 'react';
 import { DialogForm } from '../';
 import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
+import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
@@ -75,7 +76,7 @@ export const CreateRecurringTransactionForm: React.FC<
         formName={`Create recurring ${type}`}
         serviceMethodArgs={{ accountId, type }}
         errorMessage={`Failed to create recurring ${type}`}
-        successMessage={`Recurring ${type} created successfully`}
+        successMessage={`Recurring ${formatLabel(type)} created successfully`}
         initialValues={new FormikCreateRecurringTransactionForm()}
         serviceMethod={transactionService.createRecurringTransaction.bind(
           transactionService
