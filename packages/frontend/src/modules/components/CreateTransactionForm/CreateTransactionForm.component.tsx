@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { DialogForm } from '../';
-import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
@@ -46,11 +45,7 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
 
   return (
     <>
-      <AppButton
-        text={`Create ${type}`}
-        onClick={() => setOpen(true)}
-        style={{ marginRight: SPACES.m }}
-      />
+      <AppButton text={`Create ${type}`} onClick={() => setOpen(true)} />
       <DialogForm
         isOpen={isOpen}
         fields={fields}

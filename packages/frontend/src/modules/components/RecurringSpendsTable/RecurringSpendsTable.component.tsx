@@ -1,11 +1,9 @@
-import React, { useCallback } from 'react';
-import { Typography } from '@mui/material';
+import { useCallback } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 import { Table } from '../../UI';
-import { SPACES } from '../../theme';
 import { showError } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
@@ -146,17 +144,11 @@ export const RecurringSpendsTable = () => {
   ];
 
   return (
-    <>
-      <Typography variant="h6" component="h4" sx={{ marginBottom: SPACES.l }}>
-        Recurring spends
-      </Typography>
-      <Table
-        rows={rows}
-        isLoading={isLoading}
-        columns={columns}
-        handleUpdate={handleUpdate}
-      />
-      ;
-    </>
+    <Table
+      rows={rows}
+      isLoading={isLoading}
+      columns={columns}
+      handleUpdate={handleUpdate}
+    />
   );
 };

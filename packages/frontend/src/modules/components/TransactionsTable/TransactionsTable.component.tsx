@@ -8,7 +8,6 @@ import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, ITransaction } from '../../types';
-import { RecurringIncomesTable, RecurringSpendsTable } from '../';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
 
 export const TransactionsTable = () => {

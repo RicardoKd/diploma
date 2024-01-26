@@ -2,10 +2,8 @@ import styled from 'styled-components';
 import { ADAPTIVE, COLORS, SPACES } from '../../theme';
 
 export const TableContainer = styled('div')`
-  margin: auto;
+  width: 100%;
   height: 454px;
-  padding-left: ${SPACES.m};
-  padding-right: ${SPACES.m};
   max-width: ${ADAPTIVE.max};
   margin-bottom: ${SPACES.xxl};
 
@@ -30,10 +28,6 @@ export const TableContainer = styled('div')`
     background-color: unset !important;
   }
 
-  /* .MuiDataGrid-row:nth-child(2n + 1):hover {
-    background-color: ${COLORS.secondary} !important;
-  } */
-
   .MuiDataGrid-cell:focus,
   .MuiDataGrid-cell:focus-within,
   .MuiDataGrid-columnHeader:focus {
@@ -42,5 +36,17 @@ export const TableContainer = styled('div')`
 
   .actionCell {
     justify-content: space-between !important;
+  }
+`;
+
+export const TableActionsContainer = styled('div')`
+  width: 100%;
+  display: flex;
+  max-width: ${ADAPTIVE.max};
+  margin-bottom: ${SPACES.s};
+  justify-content: space-between;
+
+  > div > * {
+    margin-left: ${SPACES.m};
   }
 `;

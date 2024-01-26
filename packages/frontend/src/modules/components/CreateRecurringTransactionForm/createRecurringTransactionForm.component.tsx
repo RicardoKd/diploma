@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { DialogForm } from '../';
-import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
@@ -66,7 +65,6 @@ export const CreateRecurringTransactionForm: React.FC<
       <AppButton
         text={`Create recurring ${type}`}
         onClick={() => setOpen(true)}
-        style={{ marginRight: SPACES.m }}
       />
       <DialogForm
         isOpen={isOpen}
