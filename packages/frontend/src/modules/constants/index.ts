@@ -15,9 +15,9 @@ export const QUERY_CLIENT_CONFIG = {
       refetchOnMount: false,
       keepPreviousData: true,
       refetchOnReconnect: true,
-      refetchOnWindowFocus: false
-    }
-  }
+      refetchOnWindowFocus: false,
+    },
+  },
 };
 
 export const RANGE_INITIAL_STATE: IRange = 'month';
@@ -25,5 +25,12 @@ export const RANGE_INITIAL_STATE: IRange = 'month';
 export const ALERT_INITIAL_STATE: IAlertState = Object.freeze({
   message: '',
   isOpen: false,
-  severity: 'error'
+  severity: 'error',
 });
+
+export const TIME_GAP_TYPES_OPTIONS = [
+  { label: 'Day', value: 1 },
+  { label: 'Week', value: 2 },
+  { label: 'Month', value: 3 },
+  { label: 'Year', value:  4 },
+];

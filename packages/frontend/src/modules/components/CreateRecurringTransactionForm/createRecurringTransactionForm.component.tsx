@@ -3,11 +3,11 @@ import React from 'react';
 import { DialogForm } from '../';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
-import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
 import { ICategory, ITransactionType } from '../../types';
+import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
 import { CreateRecurringIncomeFormItems } from './CreateRecurringTransactionFormItems';
 import { FormikCreateRecurringTransactionForm } from './FormikCreateRecurringTransactionForm';
 
@@ -42,12 +42,7 @@ export const CreateRecurringTransactionForm: React.FC<
     },
     {
       formItem: CreateRecurringIncomeFormItems.TIME_GAP_TYPE,
-      options: [
-        { label: 'Day', value: '1' },
-        { label: 'Week', value: '2' },
-        { label: 'Month', value: '3' },
-        { label: 'Year', value: '4' },
-      ],
+      options: TIME_GAP_TYPES_OPTIONS,
     },
     {
       formItem: CreateRecurringIncomeFormItems.CATEGORY,
@@ -80,8 +75,10 @@ export const CreateRecurringTransactionForm: React.FC<
           transactionService
         )}
         successCallback={() => {
-          queryClient.refetchQueries([QUERY_KEYS.RECURRING_SPENDS, accountId]);
-          queryClient.refetchQueries([QUERY_KEYS.RECURRING_INCOMES, accountId]);
+          queryClient.refetchQueries([
+            QUERY_KEYS.RECURRING_TRANSACTIONS,
+            accountId,
+          ]);
         }}
       />
     </>

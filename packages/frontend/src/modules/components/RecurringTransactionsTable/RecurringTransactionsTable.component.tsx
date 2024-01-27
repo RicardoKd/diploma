@@ -1,85 +1,94 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 import { Table } from '../../UI';
-import { showError } from '../../utils';
-import { QUERY_KEYS } from '../../constants';
+import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, IRecurringTransaction } from '../../types';
+import { currencyFormatter, showError, showSuccess } from '../../utils';
 
-export const RecurringSpendsTable = () => {
-  let rows: any = [];
-
+export const RecurringTransactionsTable = () => {
   const accountId = queryClient.getQueryData<string>(
     QUERY_KEYS.CURRENT_ACCOUNT
   )!;
-  const categories = queryClient.getQueryData<ICategory[]>([
+  const spendCategories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.SPEND_CATEGORIES,
+  ]);
+  const incomeCategories = queryClient.getQueryData<ICategory[]>([
+    QUERY_KEYS.INCOME_CATEGORIES,
   ]);
 
   const {
-    isSuccess,
     isLoading,
-    data: reccuringIncomes,
+    data: transactions,
+    isSuccess: transactionsLoaded,
   } = useQuery<IRecurringTransaction[]>({
     keepPreviousData: true,
-    queryKey: [QUERY_KEYS.RECURRING_SPENDS, accountId],
-    queryFn: () =>
-      transactionService.getRecurringTransactions('spend', accountId),
+    queryKey: [QUERY_KEYS.RECURRING_TRANSACTIONS, accountId],
+    queryFn: () => transactionService.getRecurringTransactions(accountId),
   });
 
-  const onChangeSuccess = () => {
-    queryClient.invalidateQueries([QUERY_KEYS.RECURRING_SPENDS, accountId]);
+  if (transactionsLoaded) {
+    console.log('transactions :>> ', transactions);
+  }
+
+  const onChangeSuccess = (message: string) => {
+    showSuccess(message);
+    queryClient.invalidateQueries([
+      QUERY_KEYS.RECURRING_TRANSACTIONS,
+      accountId,
+    ]);
   };
 
   const updateMutation = useMutation(
     transactionService.updateRecurringTransaction.bind(transactionService),
     {
-      onSuccess: () => onChangeSuccess(),
-      onError: () => showError('Failed to update recurring spend'),
+      onSuccess: () =>
+        onChangeSuccess('Recurring transaction succesfully updated'),
+      onError: () => showError('Failed to update recurring transaction'),
     }
   );
 
-  const handleUpdate = useCallback((newRow: any) => {
-    updateMutation.mutate(newRow);
-    queryClient.invalidateQueries(QUERY_KEYS.ACCOUNTS);
+  const handleUpdate = useCallback(
+    async (newRow: IRecurringTransaction, oldRow: IRecurringTransaction) => {
+      const isSuccess = await updateMutation.mutateAsync(newRow);
 
-    return newRow;
-  }, []);
+      return isSuccess ? newRow : oldRow;
+    },
+    []
+  );
 
   const deleteMutation = useMutation(
     transactionService.deleteById.bind(transactionService),
     {
-      onSuccess: () => onChangeSuccess(),
-      onError: () => showError('Failed to delete recurring spend'),
+      onSuccess: () =>
+        onChangeSuccess('Recurring transaction succesfully deleted'),
+      onError: () => showError('Failed to delete recurring income'),
     }
   );
 
   const handleDelete = useCallback(
-    ({ _id }: any) =>
+    ({ type, id }: IRecurringTransaction) =>
       () =>
-        deleteMutation.mutate({ table: 'recurring_spend', id: _id }),
+        deleteMutation.mutate({ table: `recurring_${type}`, id }),
     []
   );
 
-  if (isSuccess) {
-    rows = reccuringIncomes.map((transaction, id) => ({
-      ...transaction,
-      category: transaction.category.id,
-      time_gap_type: transaction.time_gap_type.id,
-    }));
-  }
-
   const columns: GridColDef[] = [
+    {
+      field: 'type',
+      headerName: 'Type',
+    },
     {
       flex: 0.6,
       type: 'number',
       editable: true,
       field: 'amount_of_money',
       headerName: 'Amount of money',
+      valueFormatter: ({ value }) => currencyFormatter.format(value),
     },
     {
       flex: 0.5,
@@ -101,9 +110,16 @@ export const RecurringSpendsTable = () => {
       field: 'category',
       type: 'singleSelect',
       headerName: 'Category',
-      valueOptions: categories!,
-      getOptionValue: (value: any) => value._id,
+      getOptionValue: (value: any) => value.id,
       getOptionLabel: (value: any) => value.title,
+      valueGetter: ({ row }) => row.category.id,
+      valueSetter: ({ row, value }) => {
+        row.category.id = value;
+
+        return row;
+      },
+      valueOptions: ({ row }) =>
+        row && row.type === 'income' ? incomeCategories! : spendCategories!,
     },
     {
       flex: 1,
@@ -112,7 +128,7 @@ export const RecurringSpendsTable = () => {
       headerName: 'Notes',
     },
     {
-      flex: 1,
+      flex: 0.7,
       editable: true,
       field: 'time_gap_type_value',
       headerName: 'Time gap type value',
@@ -123,12 +139,13 @@ export const RecurringSpendsTable = () => {
       type: 'singleSelect',
       field: 'time_gap_type',
       headerName: 'Time gap type',
-      valueOptions: [
-        { label: 'day', value: 1 },
-        { label: 'week', value: 2 },
-        { label: 'month', value: 3 },
-        { label: 'year', value: 4 },
-      ],
+      valueOptions: TIME_GAP_TYPES_OPTIONS,
+      valueGetter: ({ row }) => row.time_gap_type.id,
+      valueSetter: ({ row, value }) => {
+        row.time_gap_type.id = value;
+
+        return row;
+      },
     },
     {
       type: 'actions',
@@ -145,7 +162,7 @@ export const RecurringSpendsTable = () => {
 
   return (
     <Table
-      rows={rows}
+      rows={transactionsLoaded ? transactions : []}
       isLoading={isLoading}
       columns={columns}
       handleUpdate={handleUpdate}

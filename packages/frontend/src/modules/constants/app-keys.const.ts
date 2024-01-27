@@ -16,9 +16,8 @@ export const QUERY_KEYS = Object.freeze({
   TRANSACTIONS: 'transactions',
   CURRENT_ACCOUNT: 'currentAccount',
   SPEND_CATEGORIES: 'spendCategories',
-  RECURRING_SPENDS: 'recurringSpends',
   INCOME_CATEGORIES: 'incomeCatogories',
-  RECURRING_INCOMES: 'recurringIncomes',
+  RECURRING_TRANSACTIONS: 'recurringTransactions',
 });
 
 export const ROUTER_KEYS = Object.freeze({

@@ -1,4 +1,4 @@
-import { ITimeGapType } from './ITimeGapType';
+import { ITimeGapType, ITransactionType } from './';
 
 export interface IRecurringTransaction {
   id: string;
@@ -6,6 +6,7 @@ export interface IRecurringTransaction {
   end_date: Date;
   start_date: Date;
   account_id: number;
+  type: ITransactionType;
   amount_of_money: number;
   time_gap_type_value: number;
   category: {

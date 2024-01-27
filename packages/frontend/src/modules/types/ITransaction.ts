@@ -1,4 +1,4 @@
-import { ITransactionType } from './ITransactionType';
+import { ITransactionType } from './';
 
 export interface ITransaction {
   id: string;

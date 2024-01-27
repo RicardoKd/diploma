@@ -4,13 +4,18 @@ import { SPACES } from '../../theme';
 import { MainStyled, TableActionsContainer } from '../../UI';
 import {
   TransactionsTable,
-  RecurringSpendsTable,
-  RecurringIncomesTable,
+  RecurringTransactionsTable,
   CreateTransactionForm,
   CreateRecurringTransactionForm,
 } from '../../components';
+import { useParams } from 'react-router-dom';
+import queryClient from '../../app/queryClient';
+import { QUERY_KEYS } from '../../constants';
 
 export const AccountPage = () => {
+  const accountId = useParams().accountId!;
+  queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, accountId);
+
   return (
     <MainStyled>
       <TableActionsContainer>
@@ -33,16 +38,7 @@ export const AccountPage = () => {
           <CreateRecurringTransactionForm type="spend" />
         </div>
       </TableActionsContainer>
-      <RecurringIncomesTable />
-
-      <Typography
-        variant="h6"
-        component="h4"
-        sx={{ marginBottom: SPACES.l, width: '100%' }}
-      >
-        Recurring spends
-      </Typography>
-      <RecurringSpendsTable />
+      <RecurringTransactionsTable />
     </MainStyled>
   );
 };

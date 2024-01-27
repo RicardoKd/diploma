@@ -11,16 +11,15 @@ import { ICategory, ITransaction } from '../../types';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
 
 export const TransactionsTable = () => {
+  const accountId = queryClient.getQueryData<string>(
+    QUERY_KEYS.CURRENT_ACCOUNT
+  )!;
   const spendCategories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.SPEND_CATEGORIES,
   ]);
   const incomeCategories = queryClient.getQueryData<ICategory[]>([
     QUERY_KEYS.INCOME_CATEGORIES,
   ]);
-
-  const accountId = queryClient.getQueryData<string>(
-    QUERY_KEYS.CURRENT_ACCOUNT
-  )!;
 
   const {
     isLoading,
@@ -43,8 +42,7 @@ export const TransactionsTable = () => {
   const updateMutation = useMutation(
     transactionService.updateTransaction.bind(transactionService),
     {
-      onSuccess: (_data, vars) =>
-        onChangeSuccess(`${vars.type} succesfully updated`),
+      onSuccess: () => onChangeSuccess('Transaction succesfully updated'),
       onError: () => showError('Failed to update transaction'),
     }
   );
@@ -62,8 +60,7 @@ export const TransactionsTable = () => {
   const deleteMutation = useMutation(
     transactionService.deleteById.bind(transactionService),
     {
-      onSuccess: (_data, vars) =>
-        onChangeSuccess(`${vars.table} succesfully deleted`),
+      onSuccess: () => onChangeSuccess('Transaction succesfully deleted'),
       onError: () => showError('Failed to delete transaction'),
     }
   );

@@ -52,7 +52,7 @@ export const HomePage = () => {
             />
             <Route
               element={<AccountPage />}
-              path={`${ROUTER_KEYS.VIEW_ACCOUNT}/:accountTitle`}
+              path={`${ROUTER_KEYS.VIEW_ACCOUNT}/:accountId`}
             />
           </>
         )}

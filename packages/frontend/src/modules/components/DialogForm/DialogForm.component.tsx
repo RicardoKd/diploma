@@ -29,7 +29,7 @@ interface FormProps {
   fields: {
     type?: string;
     formItem: string;
-    options?: { label: string; value: string }[];
+    options?: { label: string; value: string | number }[];
   }[];
   serviceMethod(data: FormikValues): Promise<unknown>;
 }

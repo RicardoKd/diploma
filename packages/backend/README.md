@@ -17,10 +17,10 @@ CREATE TABLE account (
 	username Text NOT NULL REFERENCES person(username) ON DELETE Cascade);
 
 CREATE TABLE time_gap_type (
-	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+	id SERIAL PRIMARY KEY,
 	title Text NOT NULL UNIQUE );
 
-CREATE TABLE income_category ( 	
+CREATE TABLE income_category (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 	title Text NOT NULL UNIQUE );
 
@@ -39,7 +39,7 @@ CREATE TABLE recurring_income (
 	start_date Date NOT NULL,
 	amount_of_money Money NOT NULL CHECK (amount_of_money::Numeric > 0),
 	time_gap_type_value Integer NOT NULL CHECK (time_gap_type_value::Numeric > 0),
-	time_gap_type_id UUID NOT NULL REFERENCES time_gap_type(id) ON DELETE Cascade,
+	time_gap_type_id NUMBER NOT NULL REFERENCES time_gap_type(id) ON DELETE Cascade,
 	category_id UUID NOT NULL REFERENCES income_category(id) ON DELETE Cascade,
 	account_id UUID NOT NULL REFERENCES account(id) ON DELETE Cascade );
 
@@ -62,7 +62,7 @@ CREATE TABLE recurring_spend (
 	start_date Date NOT NULL,
 	amount_of_money Money NOT NULL CHECK (amount_of_money::Numeric > 0),
 	time_gap_type_value Integer NOT NULL CHECK (time_gap_type_value::Numeric > 0),
-	time_gap_type_id UUID NOT NULL REFERENCES time_gap_type(id) ON DELETE Cascade,
+	time_gap_type_id NUMBER NOT NULL REFERENCES time_gap_type(id) ON DELETE Cascade,
 	category_id UUID NOT NULL REFERENCES spend_category(id) ON DELETE Cascade,
 	account_id UUID NOT NULL REFERENCES account(id) ON DELETE Cascade );
 
@@ -127,7 +127,7 @@ CREATE OR REPLACE VIEW transactions_view AS
 			'income' AS type
 		FROM income
 		JOIN income_category ON income_category.id = income.category_id
-		where income.account_id = account_id
+		WHERE income.account_id = account_id
 		UNION
 		SELECT	spend.id,
 			spend.notes,
@@ -138,8 +138,8 @@ CREATE OR REPLACE VIEW transactions_view AS
 			'spend' AS type
 		FROM spend
 		JOIN spend_category ON spend_category.id = spend.category_id
-		where spend.account_id = account_id
-	)	select
+		WHERE spend.account_id = account_id
+	)	SELECT
 		all_income_and_spend.id,
 		all_income_and_spend.notes,
 		all_income_and_spend.account_id,
@@ -154,43 +154,55 @@ CREATE OR REPLACE VIEW transactions_view AS
 
 
 
-CREATE OR REPLACE VIEW recurring_spend_view AS
-	SELECT
-		recurring_spend.id,
-		notes,
-		end_date,
-		start_date,
-		amount_of_money::numeric,
-		time_gap_type_value,
-		json_build_object('id', spend_category.id, 'title', spend_category.title) AS category,
-		json_build_object('id', time_gap_type.id, 'title', time_gap_type.title) AS time_gap_type,
-		account_id
-	from recurring_spend
-	JOIN account ON account.id = recurring_spend.account_id
-	JOIN spend_category ON spend_category.id = recurring_spend.category_id
-	JOIN time_gap_type ON time_gap_type.id = recurring_spend.time_gap_type_id
-	WHERE account.username = current_user
-	ORDER BY start_date;
-
-
-
-CREATE OR REPLACE VIEW recurring_income_view AS
-	SELECT
-		recurring_income.id,
-		notes,
-		end_date,
-		start_date,
-		amount_of_money::numeric,
-		time_gap_type_value,
-		json_build_object('id', income_category.id, 'title', income_category.title) AS category,
-		json_build_object('id', time_gap_type.id, 'title', time_gap_type.title) AS time_gap_type,
-		account_id
-	from recurring_income
-	JOIN account ON account.id = recurring_income.account_id
-	JOIN income_category ON income_category.id = recurring_income.category_id
-	JOIN time_gap_type ON time_gap_type.id = recurring_income.time_gap_type_id
-	WHERE account.username = current_user
-	ORDER BY start_date;
+CREATE OR REPLACE VIEW recurring_transactions_view AS
+	WITH transactions AS (
+		SELECT
+			ri.id,
+			notes,
+			end_date::timestamp without time zone AT TIME ZONE 'UTC' AS end_date,
+			start_date::timestamp without time zone AT TIME ZONE 'UTC' AS start_date,
+			account_id,
+			amount_of_money::numeric,
+			time_gap_type_value,
+			json_build_object('id', income_category.id, 'title', income_category.title)::text AS category,
+			json_build_object('id', time_gap_type.id, 'title', time_gap_type.title)::text AS time_gap_type,
+			'income' AS type
+		FROM recurring_income ri
+		JOIN account ON account.id = ri.account_id
+		JOIN income_category ON income_category.id = ri.category_id
+		JOIN time_gap_type ON time_gap_type.id = ri.time_gap_type_id
+		WHERE account.username = CURRENT_USER
+		UNION
+		SELECT
+			rs.id,
+			notes,
+			end_date::timestamp without time zone AT TIME ZONE 'UTC' AS end_date,
+			start_date::timestamp without time zone AT TIME ZONE 'UTC' AS start_date,
+			account_id,
+			0 - rs.amount_of_money::numeric AS amount_of_money,
+			time_gap_type_value,
+			json_build_object('id', spend_category.id, 'title', spend_category.title)::text AS category,
+			json_build_object('id', time_gap_type.id, 'title', time_gap_type.title)::text AS time_gap_type,
+			'spend' AS type
+		FROM recurring_spend rs
+		JOIN account ON account.id = rs.account_id
+		JOIN spend_category ON spend_category.id = rs.category_id
+		JOIN time_gap_type ON time_gap_type.id = rs.time_gap_type_id
+		WHERE account.username = CURRENT_USER
+		) SELECT
+			transactions.id,
+			transactions.notes,
+			transactions.end_date,
+			transactions.start_date,
+			transactions.account_id,
+			transactions.amount_of_money,
+			transactions.category::json,
+			transactions.time_gap_type_value,
+			transactions.time_gap_type::json,
+			transactions.type
+		FROM transactions
+		ORDER BY start_date DESC,
+			end_date DESC;
 
 
 
@@ -300,11 +312,46 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION create_account(title_name TEXT)
-RETURNS void AS $$
+CREATE OR REPLACE FUNCTION transactions_by_account_id (accountId text)
+RETURNS TABLE(
+	id UUID,
+	notes text,
+	account_id UUID,
+	record_date timestamp with time zone,
+	amount_of_money numeric,
+	category json,
+	type text
+) AS $$
 BEGIN
-  INSERT INTO account (title, username)
-  VALUES (title_name, current_user);
+	RETURN QUERY
+	SELECT * FROM transactions_view
+	WHERE transactions_view.account_id = accountId::UUID
+	ORDER BY record_date DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION recurring_transactions_by_account_id
+(accountId text)
+RETURNS TABLE (
+	id UUID,
+	notes text,
+	end_date timestamp with time zone,
+	start_date timestamp with time zone,
+	account_id UUID,
+	amount_of_money numeric,
+	category json,
+	time_gap_type_value integer,
+	time_gap_type json,
+	type text
+) AS $$
+BEGIN
+	RETURN QUERY
+	SELECT * FROM recurring_transactions_view
+	WHERE recurring_transactions_view.account_id = accountId::UUID
+	ORDER BY start_date DESC,
+		end_date DESC;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -321,18 +368,6 @@ BEGIN
 	JOIN pg_roles p ON m.roleid = p.oid
 	WHERE r.rolname = current_user;
 RETURN role_name;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE OR REPLACE FUNCTION transactions_by_account_id (accountId text)
-RETURNS TABLE(id UUID, notes text, account_id UUID, record_date timestamp with time zone, amount_of_money numeric, category json, type text) AS $$
-BEGIN
-	RETURN QUERY
-	SELECT * FROM transactions_view
-	WHERE transactions_view.account_id = accountId::UUID
-	ORDER BY record_date DESC;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -358,6 +393,18 @@ $$ BEGIN
 		EXECUTE 'GRANT child TO ' || quote_ident(username);
 END; $$
 LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION create_account(title_name TEXT)
+RETURNS void AS $$
+BEGIN
+  INSERT INTO account (title, username)
+  VALUES (title_name, current_user);
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 --
 -- ROLES AND RIGHTS
@@ -401,13 +448,9 @@ GRANT SELECT ON TABLE transactions_view TO super_parent;
 GRANT SELECT ON TABLE transactions_view TO child;
 GRANT SELECT ON TABLE transactions_view TO parent;
 
-GRANT SELECT ON TABLE recurring_spend_view TO super_parent;
-GRANT SELECT ON TABLE recurring_spend_view TO child;
-GRANT SELECT ON TABLE recurring_spend_view TO parent;
-
-GRANT SELECT ON TABLE recurring_income_view TO super_parent;
-GRANT SELECT ON TABLE recurring_income_view TO child;
-GRANT SELECT ON TABLE recurring_income_view TO parent;
+GRANT SELECT ON TABLE recurring_transactions_view TO super_parent;
+GRANT SELECT ON TABLE recurring_transactions_view TO child;
+GRANT SELECT ON TABLE recurring_transactions_view TO parent;
 
 GRANT EXECUTE ON FUNCTION create_account(text) TO child;
 GRANT EXECUTE ON FUNCTION create_account(text) TO parent;
@@ -426,8 +469,8 @@ GRANT EXECUTE ON FUNCTION transactions_by_account_id (accountId UUID) TO super_p
 GRANT EXECUTE ON FUNCTION transactions_by_account_id (accountId UUID) TO parent;
 GRANT EXECUTE ON FUNCTION transactions_by_account_id (accountId UUID) TO child;
 
-INSERT INTO Income_Category (title) 
-	VALUES 
+INSERT INTO Income_Category (title)
+	VALUES
 	('Salary'),
 	('Bonus'),
 	('Interest'),
@@ -455,7 +498,7 @@ INSERT INTO spend_category (title)
 	('Unexpected'),
 	('Personal'),
 	('Other');
-	
+
 INSERT INTO time_gap_type (title)
 	VALUES
 	('Day'),

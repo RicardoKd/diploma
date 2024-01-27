@@ -9,6 +9,5 @@ export * from './DialogForm/DialogForm.component';
 export * from './Form/Form.component';
 export * from './Header/Header.component';
 export * from './LoginForm/LoginForm.component';
-export * from './RecurringIncomesTable/RecurringIncomesTable.component';
-export * from './RecurringSpendsTable/RecurringSpendsTable.component';
+export * from './RecurringTransactionsTable/RecurringTransactionsTable.component';
 export * from './TransactionsTable/TransactionsTable.component';

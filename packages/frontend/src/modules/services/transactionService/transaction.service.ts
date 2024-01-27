@@ -72,7 +72,9 @@ class TransactionService extends HttpService {
     return !!result.rowCount;
   }
 
-  async updateRecurringTransaction(): Promise<void> {
+  async updateRecurringTransaction(
+    tr: IRecurringTransaction
+  ): Promise<boolean> {
     throw new Error('NOT IMPLEMENTED');
     // await this.post(API_KEYS.QUERY, {
     //   ...getUserData(),
@@ -88,53 +90,45 @@ class TransactionService extends HttpService {
   }
 
   async getRecurringTransactions(
-    type: ITransactionType,
     accountId: string
   ): Promise<IRecurringTransaction[]> {
     const result = await this.post<IQueryResponse<IRecurringTransaction>>(
       API_KEYS.QUERY,
       {
         ...getUserData(),
-        query: `select * from recurring_${type}_view where account_id = '${accountId}'`,
+        query: `select * from recurring_transactions_by_account_id($1)`,
+        variables: [accountId],
       }
     );
 
     const rows = result.rows.map((transaction) => ({
       ...transaction,
-      amount_of_money: +transaction.amount_of_money,
       end_date: new Date(transaction.end_date),
       start_date: new Date(transaction.start_date),
+      amount_of_money: +transaction.amount_of_money,
     }));
 
     return rows;
   }
 
-  async createRecurringTransaction({
-    type,
-    notes,
-    category,
-    end_date,
-    accountId,
-    start_date,
-    time_gap_type,
-    amount_of_money,
-    time_gap_type_value,
-  }: any): Promise<void> {
+  async createRecurringTransaction(tr: any): Promise<void> {
+    console.log('tr :>> ', tr);
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `INSERT INTO recurring_${type} 
-        (notes, end_date, start_date, amount_of_money, time_gap_type_value, time_gap_type_id, category_id, account_id) VALUES
-        (
-        '${notes}', 
-        '${end_date}', 
-        '${start_date}', 
-        ${Math.abs(amount_of_money)}, 
-        '${time_gap_type_value}', 
-        ${time_gap_type}, 
-        ${category},
-        ${accountId}
-        )
+      query: `INSERT INTO recurring_${tr.type} 
+        (notes, end_date, start_date, amount_of_money, time_gap_type_value, time_gap_type_id, category_id, account_id)
+        VALUES ($1, $2, $3, $4::MONEY, $5, $6, $7, $8)
       `,
+      variables: [
+        tr.notes,
+        tr.end_date,
+        tr.start_date,
+        tr.amount_of_money,
+        tr.time_gap_type_value,
+        tr.time_gap_type,
+        tr.category,
+        tr.accountId,
+      ],
     });
   }
 
