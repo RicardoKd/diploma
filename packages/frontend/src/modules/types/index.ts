@@ -8,6 +8,7 @@ export * from './ITimeGapType';
 export * from './ITransaction';
 export * from './IAccountStats';
 export * from './IQueryResponse';
+export * from './IServiceResponse';
 export * from './ITransactionType';
 export * from './IAccountStatsRange';
 export * from './IRecurringTransaction';

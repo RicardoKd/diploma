@@ -19,7 +19,6 @@ export const LoginForm = () => {
       initialValues={new FormikLoginForm()}
       successMessage="Succesfully logged in"
       successCallback={() => navigate(ROUTER_KEYS.HOME)}
-      // eslint-disable-next-line react/jsx-no-bind
       serviceMethod={userService.login.bind(userService)}
       fields={[
         { formItem: LoginFormItems.USER },

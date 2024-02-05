@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
 import { SERVER_URL } from '../constants';
+import { IQueryResponse, IServiceResponse } from '../types';
 
 export default class HttpService {
   constructor(private baseUrl = SERVER_URL) {}
@@ -9,7 +10,11 @@ export default class HttpService {
     return `${this.baseUrl}/${url}`;
   }
 
-  protected async handleResponse<T>({ status, statusText, data }: AxiosResponse<T>): Promise<T> {
+  protected async handleResponse<T>({
+    data,
+    status,
+    statusText,
+  }: AxiosResponse<T>): Promise<T> {
     if (status !== 200) {
       throw new Error(statusText);
     }
@@ -39,5 +44,25 @@ export default class HttpService {
     const response = await axios.delete<T>(this.getFullApiUrl(url), { data });
 
     return this.handleResponse<T>(response);
+  }
+
+  protected async handleResponse_test<T>(
+    asyncFunction: () => Promise<AxiosResponse<IQueryResponse<T>>>
+  ): Promise<IServiceResponse<T>> {
+    try {
+      const res = await asyncFunction();
+      return { res, err: null };
+    } catch (err: any) {
+      console.error('Error in service occured', err);
+      return { res: null, err };
+    }
+  }
+
+  async post_test<T>(url: string, data?: {}): Promise<IServiceResponse<T>> {
+    const response = await this.handleResponse_test(async () =>
+      axios.post<IQueryResponse<T>>(this.getFullApiUrl(url), data)
+    );
+
+    return response;
   }
 }

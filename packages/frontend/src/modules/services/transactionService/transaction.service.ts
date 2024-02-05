@@ -10,6 +10,7 @@ import {
   ITransactionType,
   IAccountStatsRange,
   IRecurringTransaction,
+  IServiceResponse,
 } from '../../types';
 
 class TransactionService extends HttpService {
@@ -75,18 +76,32 @@ class TransactionService extends HttpService {
   async updateRecurringTransaction(
     tr: IRecurringTransaction
   ): Promise<boolean> {
-    throw new Error('NOT IMPLEMENTED');
-    // await this.post(API_KEYS.QUERY, {
-    //   ...getUserData(),
-    //   query: `UPDATE ${type}
-    //     SET
-    //       notes = '${notes}',
-    //       category_id = ${category},
-    //       record_date = '${getPostgresDate(record_date)}',
-    //       amount_of_money = ${Math.abs(amount_of_money)}
-    //     WHERE _id = ${_id};
-    //   `
-    // });
+    const result = await this.post<{ rowCount: number }>(API_KEYS.QUERY, {
+      ...getUserData(),
+      query: `UPDATE recurring_${tr.type}
+        SET
+          notes = $1,
+          end_date = $2,
+          start_date = $3,
+          amount_of_money = $4,
+          time_gap_type_value = $5,
+          time_gap_type = $6,
+          category_id = $7,
+        WHERE id = $8;
+      `,
+      variables: [
+        tr.notes,
+        getPostgresDate(tr.end_date),
+        getPostgresDate(tr.start_date),
+        Math.abs(tr.amount_of_money),
+        tr.time_gap_type_value,
+        tr.time_gap_type,
+        tr.category,
+        tr.id,
+      ],
+    });
+
+    return !!result.rowCount;
   }
 
   async getRecurringTransactions(

@@ -49,7 +49,6 @@ export const TransactionsTable = () => {
 
   const handleUpdate = useCallback(
     async (newRow: ITransaction, oldRow: ITransaction) => {
-      // FIXME: when the mutateFn fails, the cell that is being updated remains in the editing state
       const isSuccess = await updateMutation.mutateAsync(newRow);
 
       return isSuccess ? newRow : oldRow;

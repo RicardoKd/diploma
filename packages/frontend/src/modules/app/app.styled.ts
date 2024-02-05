@@ -40,12 +40,6 @@ export const GlobalStyles = createGlobalStyle`
     left: 125px;
     overflow: visible;
   }
-  
-  button {
-    border-radius: 0 !important;
-    border-color: black !important;
-    color: black !important;
-  }
 
   ul[class],
   ol[class] {

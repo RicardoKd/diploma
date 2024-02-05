@@ -31,10 +31,6 @@ export const RecurringTransactionsTable = () => {
     queryFn: () => transactionService.getRecurringTransactions(accountId),
   });
 
-  if (transactionsLoaded) {
-    console.log('transactions :>> ', transactions);
-  }
-
   const onChangeSuccess = (message: string) => {
     showSuccess(message);
     queryClient.invalidateQueries([

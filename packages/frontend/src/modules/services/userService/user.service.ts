@@ -1,8 +1,8 @@
-import { getUserData, logIn } from '../../utils';
+import { IRole } from '../../types';
 import HttpService from '../http.service';
 import { API_KEYS } from '../../constants';
 import { IUserDataBody } from './IUserDataBody';
-import { IRole } from '../../types';
+import { getUserData, logIn } from '../../utils';
 
 class UserService extends HttpService {
   async login(data: IUserDataBody): Promise<IRole> {
