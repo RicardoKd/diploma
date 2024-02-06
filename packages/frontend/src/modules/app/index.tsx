@@ -5,9 +5,21 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { App } from './app';
-import * as theme from '../theme';
+// import * as theme from '../theme';
 import * as Styled from './app.styled';
 import queryClient from './queryClient';
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  palette: {
+    ochre: {
+      main: '#E3D026',
+      light: '#E9DB5D',
+      dark: '#A29415',
+      contrastText: '#242105',
+    },
+  },
+});
 
 const AppContainer = () => (
   <ThemeProvider theme={theme}>

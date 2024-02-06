@@ -11,9 +11,18 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import { COLORS, MUI } from '../../theme';
 import { AppButton } from '../../UI';
+import { COLORS, MUI } from '../../theme';
 import { formatLabel, showError, showSuccess } from '../../utils';
+
+const dialogFormButtonStyle = {
+  ':hover': {
+    borderWidth: '2px',
+    padding: '4.6px 11px',
+    borderColor: COLORS.black,
+    backgroundColor: COLORS.black,
+  },
+};
 
 interface FormProps {
   isOpen: boolean;
@@ -89,7 +98,7 @@ export const DialogForm: React.FC<FormProps> = ({
       PaperProps={{
         component: 'form',
         onSubmit: formik.handleSubmit,
-        sx: { backgroundColor: COLORS.darkPurple, color: COLORS.white},
+        sx: { backgroundColor: COLORS.lightPurple, color: COLORS.white },
       }}
     >
       <DialogTitle>{formName}</DialogTitle>
@@ -126,8 +135,8 @@ export const DialogForm: React.FC<FormProps> = ({
         ))}
       </DialogContent>
       <DialogActions>
-        <AppButton onClick={onClose} text="Cancel" />
-        <AppButton text="Submit" type="submit" />
+        <AppButton sx={dialogFormButtonStyle} onClick={onClose} text="Cancel" />
+        <AppButton sx={dialogFormButtonStyle} text="Submit" type="submit" />
       </DialogActions>
     </Dialog>
   );

@@ -7,6 +7,7 @@ interface AppButtonProps extends ButtonProps {
 }
 
 export const AppButton: React.FC<AppButtonProps> = ({
+  sx,
   text,
   children,
   ...props
@@ -15,14 +16,14 @@ export const AppButton: React.FC<AppButtonProps> = ({
     sx={{
       color: COLORS.white,
       borderRadius: '5px',
-      bgcolor: COLORS.black,
       borderColor: COLORS.white,
       textTransform: 'capitalize',
       padding: `${SPACES.xs} ${SPACES.sm}`,
       ':hover': {
-        color: COLORS.black,
-        bgcolor: COLORS.white,
+        bgcolor: COLORS.lightPurple, 
+        borderColor: COLORS.lightPurple,
       },
+      ...sx,
     }}
     variant={MUI.variant}
     {...props}

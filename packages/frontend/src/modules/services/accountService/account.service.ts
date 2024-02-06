@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import HttpService from '../http.service';
 import { getUserData } from '../../utils';
 import { API_KEYS } from '../../constants';
