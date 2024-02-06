@@ -72,6 +72,19 @@ CREATE TABLE recurring_spend (
 --
 
 CREATE OR REPLACE VIEW account_view AS
+SELECT
+  account.id,
+  account.title,
+  COALESCE(SUM(income.amount_of_money::numeric) - SUM(spend.amount_of_money::numeric), 0)::money AS balance
+FROM account
+FULL OUTER JOIN income ON income.account_id = account.id
+FULL OUTER JOIN spend ON spend.account_id = account.id
+WHERE account.username = current_user
+GROUP BY account.id;
+
+
+
+CREATE OR REPLACE VIEW account_stats_view AS
 with year_income as (
 	select account_id, SUM(amount_of_money)::numeric as year
 	from income
