@@ -1,156 +1,127 @@
-import { Bar } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-} from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import {
   Box,
   Card,
   Select,
   MenuItem,
   InputLabel,
+  Typography,
   FormControl,
   CardContent,
-  SelectChangeEvent
+  CardActions,
+  SelectChangeEvent,
 } from '@mui/material';
 
+import { IRange } from '../../types';
 import { AppLoader } from '../../UI';
-import { ADAPTIVE, MUI } from '../../theme';
-import { transactionService } from '../../services';
-import { IAccountStatsRange, IRange } from '../../types';
+import { COLORS, MUI } from '../../theme';
+import { accountService } from '../../services';
 import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const AccountStats = () => {
-  const accountId = useParams().accountId!;
-  const [spendRange, setSpendRange] = useState<IRange>(RANGE_INITIAL_STATE);
-  const [incomeRange, setIncomeRange] = useState<IRange>(RANGE_INITIAL_STATE);
+export interface IAccountStats {
+  id: string;
+  income: {
+    year: number;
+    quarter: number;
+    month: number;
+  };
+  spend: {
+    year: number;
+    quarter: number;
+    month: number;
+  };
+}
 
-  const { isSuccess: incomeIsSuccess, data: incomeStats } = useQuery<IAccountStatsRange>({
-    queryKey: [QUERY_KEYS.INCOME_STATS, accountId],
-    queryFn: () => transactionService.getCategoryStats({ type: 'income', accountId: accountId! })
+interface AccountsCardProps {
+  accountId: string;
+}
+
+export const AccountStats: React.FC<AccountsCardProps> = ({ accountId }) => {
+  const [range, setRange] = useState<IRange>(RANGE_INITIAL_STATE);
+
+  const { isSuccess, data: account } = useQuery<IAccountStats>({
+    keepPreviousData: true,
+    queryKey: [QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS],
+    queryFn: () => accountService.getAccountTransactionsStatsById({ accountId }),
   });
-
-  const { isSuccess: spendIsSuccess, data: spendStats } = useQuery<IAccountStatsRange>({
-    queryKey: [QUERY_KEYS.SPEND_STATS, accountId],
-    queryFn: () => transactionService.getCategoryStats({ type: 'spend', accountId: accountId! })
-  });
-
-  if (!incomeIsSuccess || !spendIsSuccess) {
+  
+  console.log('account :>> ', account);
+  if (!isSuccess) {
     return <AppLoader />;
   }
 
   const data = {
-    income: {
-      labels: incomeStats[incomeRange].map((stat) => stat.category),
-      datasets: [
-        {
-          backgroundColor: '#36A2EB',
-          data: incomeStats[incomeRange].map((stat) => stat.percentage)
-        }
-      ]
-    },
-    spend: {
-      labels: spendStats[spendRange].map((stat) => stat.category),
-      datasets: [
-        {
-          backgroundColor: '#36A2EB',
-          data: spendStats[spendRange].map((stat) => stat.percentage)
-        }
-      ]
-    }
+    labels: ['Spend', 'Income'],
+    datasets: [
+      {
+        data: [account.spend[range], account.income[range]],
+        backgroundColor: ['#FF6384', '#36A2EB'],
+      },
+    ],
   };
 
-  const options = {
-    income: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'Income categories statistics'
-        },
-        legend: {
-          display: false
-        }
-      }
-    },
-    spend: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'Spend categories statistics'
-        },
-        legend: {
-          display: false
-        }
-      }
-    }
-  };
-
-  const handleIncomeRangeChange = (event: SelectChangeEvent) =>
-    setIncomeRange(event.target.value as IRange);
-
-  const handleSpendRangeChange = (event: SelectChangeEvent) =>
-    setSpendRange(event.target.value as IRange);
+  const handleRangeChange = (event: SelectChangeEvent) =>
+    setRange(event.target.value as IRange);
 
   return (
-    <>
-      <Card sx={{ margin: '20px', maxWidth: ADAPTIVE.max, marginX: 'auto' }}>
-        <CardContent>
-          <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-            <Bar options={options.income} data={data.income} />
-          </Box>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-            <FormControl>
-              <InputLabel id="range-select-label">Range</InputLabel>
-              <Select
-                value={incomeRange}
-                label="Range"
-                size={MUI.size}
-                variant={MUI.variant}
-                labelId="range-select-label"
-                onChange={handleIncomeRangeChange}
-              >
-                <MenuItem value="month">Month</MenuItem>
-                <MenuItem value="quarter">Quarter</MenuItem>
-                <MenuItem value="year">Year</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </CardContent>
-      </Card>
-      <Card sx={{ margin: '20px', maxWidth: ADAPTIVE.max, marginX: 'auto' }}>
-        <CardContent>
-          <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
-            <Bar options={options.spend} data={data.spend} />
-          </Box>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-            <FormControl>
-              <InputLabel id="range-select2-label">Range</InputLabel>
-              <Select
-                value={spendRange}
-                label="Range"
-                size={MUI.size}
-                variant={MUI.variant}
-                labelId="range-select2-label"
-                onChange={handleSpendRangeChange}
-              >
-                <MenuItem value="month">Month</MenuItem>
-                <MenuItem value="quarter">Quarter</MenuItem>
-                <MenuItem value="year">Year</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </CardContent>
-      </Card>
-    </>
+    <Card
+      sx={{
+        maxWidth: 400,
+        minWidth: 300,
+        margin: '20px',
+        padding: '5px',
+        color: COLORS.white,
+        background: COLORS.black,
+      }}
+    >
+      <CardContent>
+        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+          <Pie data={data} />
+        </Box>
+
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mt={2}
+        >
+          <Typography variant="body1">Spend:</Typography>
+          <Typography variant="body1">{account.spend[range]}</Typography>
+        </Box>
+
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mt={1}
+        >
+          <Typography variant="body1">Income:</Typography>
+          <Typography variant="body1">{account.income[range]}</Typography>
+        </Box>
+      </CardContent>
+
+      <CardActions>
+        <FormControl>
+          <InputLabel id="range-select-label">Range</InputLabel>
+          <Select
+            value={range}
+            label="Range"
+            size={MUI.size}
+            variant={MUI.variant}
+            labelId="range-select-label"
+            onChange={handleRangeChange}
+          >
+            <MenuItem value="month">Month</MenuItem>
+            <MenuItem value="quarter">Quarter</MenuItem>
+            <MenuItem value="year">Year</MenuItem>
+          </Select>
+        </FormControl>
+      </CardActions>
+    </Card>
   );
 };

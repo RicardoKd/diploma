@@ -10,7 +10,7 @@ import {
   CardActions,
 } from '@mui/material';
 
-import { COLORS } from '../../theme';
+import { COLORS, SPACES } from '../../theme';
 import { IAccount } from '../../types';
 import queryClient from '../../app/queryClient';
 import { accountService } from '../../services';
@@ -51,9 +51,9 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
     <Card
       sx={{
         maxWidth: 400,
-        minWidth: 300,
-        margin: '20px',
-        padding: '5px',
+        minWidth: 320,
+        margin: SPACES.m,
+        padding: SPACES.sm,
         color: COLORS.white,
         background: COLORS.black,
       }}
@@ -62,13 +62,8 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
         <Typography variant="h5" component="div">
           {title}
         </Typography>
-        <Divider sx={{ borderColor: COLORS.purple }} />
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mt={2}
-        >
+        <Divider sx={{ borderColor: COLORS.purple, marginBottom: SPACES.m }} />
+        <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="body1">Balance:</Typography>
           <Typography variant="body1">
             {currencyFormatter.format(balance)}
@@ -77,16 +72,16 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
       </CardContent>
       <CardActions>
         <RouterLink
-          sx={accountCardButtonStyle}
           text="View"
+          sx={accountCardButtonStyle}
           onClick={() =>
             queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, id)
           }
           to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}/${id}`}
         />
         <RouterLink
-          sx={accountCardButtonStyle}
           text="Statistics"
+          sx={accountCardButtonStyle}
           to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
         />
         <AppButton

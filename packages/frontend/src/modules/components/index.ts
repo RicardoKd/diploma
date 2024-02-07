@@ -1,7 +1,7 @@
 export * from './AccountCard/AccountCard.component';
-export * from './AccountStats/AccountStats.component';
 export * from './AddChildForm/AddChildForm.component';
 export * from './AddParentForm/AddParentForm.component';
+export * from './CategoriesStats/CategoriesStats.components';
 export * from './CreateAccountForm/CreateAccountForm.component';
 export * from './CreateRecurringTransactionForm/CreateRecurringTransactionForm.component';
 export * from './CreateTransactionForm/CreateTransactionForm.component';
@@ -10,4 +10,5 @@ export * from './Form/Form.component';
 export * from './Header/Header.component';
 export * from './LoginForm/LoginForm.component';
 export * from './RecurringTransactionsTable/RecurringTransactionsTable.component';
+export * from './AccountStats/AccountStats.component';
 export * from './TransactionsTable/TransactionsTable.component';

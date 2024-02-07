@@ -1,6 +1,8 @@
 import { Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
-import { SPACES } from '../../theme';
+import { QUERY_KEYS } from '../../constants';
+import queryClient from '../../app/queryClient';
 import { MainStyled, TableActionsContainer } from '../../UI';
 import {
   TransactionsTable,
@@ -8,9 +10,6 @@ import {
   CreateTransactionForm,
   CreateRecurringTransactionForm,
 } from '../../components';
-import { useParams } from 'react-router-dom';
-import queryClient from '../../app/queryClient';
-import { QUERY_KEYS } from '../../constants';
 
 export const AccountPage = () => {
   const accountId = useParams().accountId!;

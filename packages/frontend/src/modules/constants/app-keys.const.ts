@@ -18,6 +18,7 @@ export const QUERY_KEYS = Object.freeze({
   SPEND_CATEGORIES: 'spendCategories',
   INCOME_CATEGORIES: 'incomeCatogories',
   RECURRING_TRANSACTIONS: 'recurringTransactions',
+  ACCOUNT_TRANSACTIONS_STATS: 'accountTransactionsStats',
 });
 
 export const ROUTER_KEYS = Object.freeze({
@@ -27,7 +28,7 @@ export const ROUTER_KEYS = Object.freeze({
   LOGIN: '/login',
   PROFILE: '/profile',
   VIEW_ACCOUNT: '/account',
-  ACCOUNT_STATS: '/account/stats',
+  ACCOUNT_STATS: '/account/statistics',
 });
 
 // API keys

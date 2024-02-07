@@ -84,51 +84,6 @@ GROUP BY account.id;
 
 
 
-CREATE OR REPLACE VIEW account_stats_view AS
-with year_income as (
-	select account_id, SUM(amount_of_money)::numeric as year
-	from income
-	WHERE date_trunc('year', record_date) = date_trunc('year', now())
-	group by account_id
-), quarter_income as (
-	SELECT account_id, SUM(amount_of_money)::numeric as quarter
-	FROM income
-	WHERE date_trunc('quarter', record_date) = date_trunc('quarter', now())
-	GROUP BY account_id
-), month_income as (
-	SELECT account_id, SUM(amount_of_money)::numeric as month
-	FROM income
-	WHERE date_trunc('month', record_date) = date_trunc('month', now())
-	GROUP BY account_id
-), year_spend as (
-	select account_id, SUM(amount_of_money)::numeric as year
-	from spend
-	WHERE date_trunc('year', record_date) = date_trunc('year', now())
-	group by account_id
-), quarter_spend as (
-	SELECT account_id, SUM(amount_of_money)::numeric as quarter
-	FROM spend
-	WHERE date_trunc('quarter', record_date) = date_trunc('quarter', now())
-	GROUP BY account_id
-), month_spend as (
-	SELECT account_id, SUM(amount_of_money)::numeric as month
-	FROM spend
-	WHERE date_trunc('month', record_date) = date_trunc('month', now())
-	GROUP BY account_id
-) select account.id, account.title,
-	json_build_object('year', year_income.year, 'quarter', quarter_income.quarter, 'month', month_income.month) as income,
-	json_build_object('year', year_spend.year, 'quarter', quarter_spend.quarter, 'month', month_spend.month) as spend
-	from account
-	full outer join year_income on account.id = year_income.account_id
-	full outer join quarter_income on account.id = quarter_income.account_id
-	full outer join month_income on account.id = month_income.account_id
-	full outer join year_spend on account.id = year_spend.account_id
-	full outer join quarter_spend on account.id = quarter_spend.account_id
-	full outer join month_spend on account.id = month_spend.account_id
-	WHERE account.username = current_user;
-
-
-
 CREATE OR REPLACE VIEW transactions_view AS
 	with all_income_and_spend as (
 		SELECT  income.id,
@@ -414,6 +369,70 @@ RETURNS void AS $$
 BEGIN
   INSERT INTO account (title, username)
   VALUES (title_name, current_user);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION get_account_transactions_stats_by_account_id (accountId text)
+RETURNS TABLE(
+	id UUID,
+	title text,
+	income json,
+	spend json
+) AS $$
+BEGIN
+        RETURN QUERY
+	with year_income as (
+                select account_id, SUM(amount_of_money)::numeric as year
+                from income
+                WHERE date_trunc('year', record_date) = date_trunc('year', now())
+                group by account_id
+        ), quarter_income as (
+                SELECT account_id, SUM(amount_of_money)::numeric as quarter
+                FROM income
+                WHERE date_trunc('quarter', record_date) = date_trunc('quarter', now())
+                GROUP BY account_id
+        ), month_income as (
+                SELECT account_id, SUM(amount_of_money)::numeric as month
+                FROM income
+                WHERE date_trunc('month', record_date) = date_trunc('month', now())
+                GROUP BY account_id
+        ), year_spend as (
+                select account_id, SUM(amount_of_money)::numeric as year
+                from spend
+                WHERE date_trunc('year', record_date) = date_trunc('year', now())
+                group by account_id
+        ), quarter_spend as (
+                SELECT account_id, SUM(amount_of_money)::numeric as quarter
+                FROM spend
+                WHERE date_trunc('quarter', record_date) = date_trunc('quarter', now())
+                GROUP BY account_id
+        ), month_spend as (
+                SELECT account_id, SUM(amount_of_money)::numeric as month
+                FROM spend
+                WHERE date_trunc('month', record_date) = date_trunc('month', now())
+                GROUP BY account_id
+        ) select account.id, account.title,
+                json_build_object(
+                        'year', COALESCE(year_income.year, 0),
+                        'quarter', COALESCE(quarter_income.quarter, 0),
+                        'month', COALESCE(month_income.month, 0)
+                ) as income,
+                json_build_object(
+                        'year', COALESCE(year_spend.year, 0),
+                        'quarter', COALESCE(quarter_spend.quarter, 0),
+                        'month', COALESCE(month_spend.month, 0)
+                ) as spend
+	from account
+	full outer join year_income on account.id = year_income.account_id
+	full outer join quarter_income on account.id = quarter_income.account_id
+	full outer join month_income on account.id = month_income.account_id
+	full outer join year_spend on account.id = year_spend.account_id
+	full outer join quarter_spend on account.id = quarter_spend.account_id
+	full outer join month_spend on account.id = month_spend.account_id
+	       WHERE account.username = current_user
+	       AND account.id = accountId::UUID;
 END;
 $$ LANGUAGE plpgsql;
 
