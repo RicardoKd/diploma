@@ -85,8 +85,8 @@ class TransactionService extends HttpService {
           start_date = $3,
           amount_of_money = $4,
           time_gap_type_value = $5,
-          time_gap_type = $6,
-          category_id = $7,
+          time_gap_type_id = $6,
+          category_id = $7
         WHERE id = $8;
       `,
       variables: [
@@ -95,8 +95,8 @@ class TransactionService extends HttpService {
         getPostgresDate(tr.start_date),
         Math.abs(tr.amount_of_money),
         tr.time_gap_type_value,
-        tr.time_gap_type,
-        tr.category,
+        tr.time_gap_type.id,
+        tr.category.id,
         tr.id,
       ],
     });
@@ -127,7 +127,6 @@ class TransactionService extends HttpService {
   }
 
   async createRecurringTransaction(tr: any): Promise<void> {
-    console.log('tr :>> ', tr);
     await this.post(API_KEYS.QUERY, {
       ...getUserData(),
       query: `INSERT INTO recurring_${tr.type} 
@@ -166,7 +165,7 @@ class TransactionService extends HttpService {
       API_KEYS.QUERY,
       {
         ...getUserData(),
-        query: `select * from ${type}_category`,
+        query: `SELECT id AS value, title AS label FROM ${type}_category`,
       }
     );
 

@@ -12,3 +12,4 @@ export * from './IServiceResponse';
 export * from './ITransactionType';
 export * from './IAccountStatsRange';
 export * from './IRecurringTransaction';
+export * from './IAccountTransactionsStats';

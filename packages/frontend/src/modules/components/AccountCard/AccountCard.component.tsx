@@ -10,8 +10,8 @@ import {
   CardActions,
 } from '@mui/material';
 
-import { COLORS, SPACES } from '../../theme';
 import { IAccount } from '../../types';
+import { COLORS, SPACES } from '../../theme';
 import queryClient from '../../app/queryClient';
 import { accountService } from '../../services';
 import { AppButton, RouterLink } from '../../UI';
@@ -77,12 +77,12 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
           onClick={() =>
             queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, id)
           }
-          to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}/${id}`}
+          to={`${ROUTER_KEYS.ACCOUNT}/${id}`}
         />
         <RouterLink
           text="Statistics"
           sx={accountCardButtonStyle}
-          to={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
+          to={`${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
         />
         <AppButton
           sx={accountCardButtonStyle}

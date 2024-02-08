@@ -21,7 +21,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-import { MUI } from '../../theme';
+import { MUI, SPACES } from '../../theme';
 import { AppLoader } from '../../UI';
 import { transactionService } from '../../services';
 import { IAccountStatsRange, IRange } from '../../types';
@@ -124,13 +124,12 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
 
   return (
     <div>
-      <Card sx={{ margin: '20px', width: '500px', display: 'inline-block' }}>
+      <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
         <CardContent>
           <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
-            mt={2}
           >
             <Bar options={options.income} data={data.income} />
           </Box>
@@ -158,13 +157,12 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
           </Box>
         </CardContent>
       </Card>
-      <Card sx={{ margin: '20px', width: '500px', display: 'inline-block' }}>
+      <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
         <CardContent>
           <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
-            mt={2}
           >
             <Bar options={options.spend} data={data.spend} />
           </Box>

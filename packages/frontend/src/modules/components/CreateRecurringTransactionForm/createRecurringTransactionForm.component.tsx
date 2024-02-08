@@ -1,12 +1,13 @@
 import React from 'react';
+import { useQuery } from 'react-query';
 
 import { DialogForm } from '../';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
+import { ITransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
-import { ICategory, ITransactionType } from '../../types';
 import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
 import { CreateRecurringIncomeFormItems } from './CreateRecurringTransactionFormItems';
 import { FormikCreateRecurringTransactionForm } from './FormikCreateRecurringTransactionForm';
@@ -18,16 +19,25 @@ interface CreateRecurringTransactionFormPageProps {
 export const CreateRecurringTransactionForm: React.FC<
   CreateRecurringTransactionFormPageProps
 > = ({ type }) => {
+  const { data: incomeCategories, isSuccess: isIncomeCategoriesLoaded } =
+    useQuery({
+      keepPreviousData: true,
+      queryKey: [QUERY_KEYS.INCOME_CATEGORIES],
+      queryFn: () => transactionService.getCategories('income'),
+    });
+
+  const { data: spendCategories, isSuccess: isSpendCategoriesLoaded } =
+    useQuery({
+      keepPreviousData: true,
+      queryKey: [QUERY_KEYS.SPEND_CATEGORIES],
+      queryFn: () => transactionService.getCategories('spend'),
+    });
+
   const [isOpen, setOpen] = React.useState(false);
   const accountId = queryClient.getQueryData<number>(
     QUERY_KEYS.CURRENT_ACCOUNT
   );
-  const incomeCategories = queryClient.getQueryData<ICategory[]>(
-    QUERY_KEYS.INCOME_CATEGORIES
-  );
-  const spendCategories = queryClient.getQueryData<ICategory[]>(
-    QUERY_KEYS.SPEND_CATEGORIES
-  );
+
   const fields = [
     { formItem: CreateRecurringIncomeFormItems.NOTES },
     { formItem: CreateRecurringIncomeFormItems.START_DATE, type: 'date' },
@@ -46,12 +56,8 @@ export const CreateRecurringTransactionForm: React.FC<
     },
     {
       formItem: CreateRecurringIncomeFormItems.CATEGORY,
-      options: (type === 'income' ? incomeCategories! : spendCategories!).map(
-        ({ id, title }) => ({
-          label: title,
-          value: id,
-        })
-      ),
+      options:
+        type === 'income' ? incomeCategories || [] : spendCategories || [],
     },
   ];
 
@@ -60,6 +66,11 @@ export const CreateRecurringTransactionForm: React.FC<
       <AppButton
         text={`Create recurring ${type}`}
         onClick={() => setOpen(true)}
+        disabled={
+          type === 'income'
+            ? !isIncomeCategoriesLoaded
+            : !isSpendCategoriesLoaded
+        }
       />
       <DialogForm
         isOpen={isOpen}

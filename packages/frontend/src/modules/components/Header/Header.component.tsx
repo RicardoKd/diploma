@@ -8,21 +8,17 @@ import { CreateAccountForm } from '../';
 import { HeaderTop } from './Header.styled';
 import { ROUTER_KEYS } from '../../constants';
 
-export const Header = () => {
+interface HeaderProps {
+  title: string;
+}
+
+export const Header: React.FC<HeaderProps> = ({ title }) => {
   const location = useLocation();
 
   return (
     <HeaderTop>
       <Typography variant="h5" component="h1" sx={{ color: COLORS.white }}>
-        {location.pathname.includes(
-          `${ROUTER_KEYS.HOME}${ROUTER_KEYS.ACCOUNT_STATS}`
-        )
-          ? 'Account Statistics'
-          : location.pathname.includes(
-              `${ROUTER_KEYS.HOME}${ROUTER_KEYS.VIEW_ACCOUNT}`
-            )
-          ? 'Account Details'
-          : 'Accounts'}
+        {title}
       </Typography>
       <div>
         {location.pathname === ROUTER_KEYS.HOME && <CreateAccountForm />}

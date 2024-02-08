@@ -4,12 +4,13 @@ import { DialogForm } from '../';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
+import { ITransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
-import { ICategory, ITransactionType } from '../../types';
 import { CreateTransactionFormItems } from './CreateTransactionFormItems';
 import { FormikCreateTransactionForm } from './FormikCreateTransactionForm';
+import { useQuery } from 'react-query';
 
 interface CreateTransactionFormProps {
   type: ITransactionType;
@@ -18,15 +19,23 @@ interface CreateTransactionFormProps {
 export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
   type,
 }) => {
+  const { data: incomeCategories, isSuccess: isIncomeCategoriesLoaded } =
+    useQuery({
+      keepPreviousData: true,
+      queryKey: [QUERY_KEYS.INCOME_CATEGORIES],
+      queryFn: () => transactionService.getCategories('income'),
+    });
+
+  const { data: spendCategories, isSuccess: isSpendCategoriesLoaded } =
+    useQuery({
+      keepPreviousData: true,
+      queryKey: [QUERY_KEYS.SPEND_CATEGORIES],
+      queryFn: () => transactionService.getCategories('spend'),
+    });
+
   const [isOpen, setOpen] = React.useState(false);
   const accountId = queryClient.getQueryData<number>(
     QUERY_KEYS.CURRENT_ACCOUNT
-  );
-  const spendCategories = queryClient.getQueryData<ICategory[]>(
-    QUERY_KEYS.SPEND_CATEGORIES
-  );
-  const incomeCategories = queryClient.getQueryData<ICategory[]>(
-    QUERY_KEYS.INCOME_CATEGORIES
   );
   const fields = [
     { formItem: CreateTransactionFormItems.NOTES },
@@ -34,18 +43,22 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
     { formItem: CreateTransactionFormItems.AMOUNT_OF_MONEY, type: 'number' },
     {
       formItem: CreateTransactionFormItems.CATEGORY,
-      options: (type === 'income' ? incomeCategories! : spendCategories!).map(
-        ({ id, title }) => ({
-          label: title,
-          value: id,
-        })
-      ),
+      options:
+        type === 'income' ? incomeCategories || [] : spendCategories || [],
     },
   ];
 
   return (
     <>
-      <AppButton text={`Create ${type}`} onClick={() => setOpen(true)} />
+      <AppButton
+        text={`Create ${type}`}
+        onClick={() => setOpen(true)}
+        disabled={
+          type === 'income'
+            ? !isIncomeCategoriesLoaded
+            : !isSpendCategoriesLoaded
+        }
+      />
       <DialogForm
         isOpen={isOpen}
         fields={fields}
@@ -64,6 +77,10 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
           queryClient.refetchQueries([QUERY_KEYS.SPEND_STATS, accountId]);
           queryClient.refetchQueries([QUERY_KEYS.INCOME_STATS, accountId]);
           queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
+          queryClient.refetchQueries([
+            QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS,
+            accountId,
+          ]);
         }}
       />
     </>

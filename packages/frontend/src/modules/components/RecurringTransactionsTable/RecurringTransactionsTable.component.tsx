@@ -4,10 +4,10 @@ import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 import { Table } from '../../UI';
-import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, IRecurringTransaction } from '../../types';
+import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
 
 export const RecurringTransactionsTable = () => {
@@ -106,8 +106,6 @@ export const RecurringTransactionsTable = () => {
       field: 'category',
       type: 'singleSelect',
       headerName: 'Category',
-      getOptionValue: (value: any) => value.id,
-      getOptionLabel: (value: any) => value.title,
       valueGetter: ({ row }) => row.category.id,
       valueSetter: ({ row, value }) => {
         row.category.id = value;
@@ -115,7 +113,9 @@ export const RecurringTransactionsTable = () => {
         return row;
       },
       valueOptions: ({ row }) =>
-        row && row.type === 'income' ? incomeCategories! : spendCategories!,
+        row && row.type === 'income'
+          ? incomeCategories || []
+          : spendCategories || [],
     },
     {
       flex: 1,
@@ -148,8 +148,8 @@ export const RecurringTransactionsTable = () => {
       field: 'actions',
       getActions: (params) => [
         <GridActionsCellItem
-          icon={<DeleteIcon />}
           label="Delete"
+          icon={<DeleteIcon />}
           onClick={handleDelete(params.row)}
         />,
       ],

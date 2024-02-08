@@ -34,9 +34,13 @@ export const TransactionsTable = () => {
   const onChangeSuccess = (message: string) => {
     showSuccess(message);
     queryClient.refetchQueries(QUERY_KEYS.ACCOUNTS);
-    queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
     queryClient.refetchQueries([QUERY_KEYS.SPEND_STATS, accountId]);
     queryClient.refetchQueries([QUERY_KEYS.INCOME_STATS, accountId]);
+    queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
+    queryClient.refetchQueries([
+      QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS,
+      accountId,
+    ]);
   };
 
   const updateMutation = useMutation(
@@ -97,8 +101,8 @@ export const TransactionsTable = () => {
       field: 'category',
       type: 'singleSelect',
       headerName: 'Category',
-      getOptionValue: (value: any) => value.id,
-      getOptionLabel: (value: any) => value.title,
+      // getOptionValue: (value: any) => value.id, // left as reminder
+      // getOptionLabel: (value: any) => value.title, // left as reminder
       valueGetter: ({ row }) => row.category.id,
       valueSetter: ({ row, value }) => {
         row.category.id = value;
@@ -106,7 +110,9 @@ export const TransactionsTable = () => {
         return row;
       },
       valueOptions: ({ row }) =>
-        row && row.type === 'income' ? incomeCategories! : spendCategories!,
+        row && row.type === 'income'
+          ? incomeCategories || []
+          : spendCategories || [],
     },
     {
       flex: 1.5,
@@ -119,8 +125,8 @@ export const TransactionsTable = () => {
       field: 'actions',
       getActions: (params) => [
         <GridActionsCellItem
-          icon={<DeleteIcon />}
           label="Delete"
+          icon={<DeleteIcon />}
           onClick={handleDelete(params.row)}
         />,
       ],

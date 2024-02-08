@@ -23,11 +23,11 @@ export const QUERY_KEYS = Object.freeze({
 
 export const ROUTER_KEYS = Object.freeze({
   ANY: '/*',
-  START: '/',
   HOME: '/home',
   LOGIN: '/login',
   PROFILE: '/profile',
-  VIEW_ACCOUNT: '/account',
+  ACCOUNT: '/account',
+  START: '/family-budgeting',
   ACCOUNT_STATS: '/account/statistics',
 });
 
