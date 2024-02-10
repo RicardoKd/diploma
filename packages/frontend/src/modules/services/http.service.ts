@@ -16,7 +16,7 @@ export default class HttpService {
     statusText,
   }: AxiosResponse<T>): Promise<T> {
     if (status !== 200) {
-      throw new Error(statusText);
+      console.error(statusText);
     }
 
     return data;

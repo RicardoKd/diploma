@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import HttpService from '../http.service';
 import { API_KEYS } from '../../constants';
 import { getPostgresDate, getUserData } from '../../utils';
@@ -10,7 +9,6 @@ import {
   ITransactionType,
   IAccountStatsRange,
   IRecurringTransaction,
-  IServiceResponse,
 } from '../../types';
 
 class TransactionService extends HttpService {

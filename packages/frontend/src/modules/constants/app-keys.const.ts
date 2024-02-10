@@ -12,6 +12,7 @@ export const QUERY_KEYS = Object.freeze({
   ACCOUNTS: 'accounts',
   ALERT_STACK: 'alertStack',
   SPEND_STATS: 'spendStats',
+  IS_LOGGED_IN: 'isLoggedIn',
   INCOME_STATS: 'incomeStats',
   TRANSACTIONS: 'transactions',
   CURRENT_ACCOUNT: 'currentAccount',
@@ -22,12 +23,12 @@ export const QUERY_KEYS = Object.freeze({
 });
 
 export const ROUTER_KEYS = Object.freeze({
-  ANY: '/*',
+  ANY: '*',
+  START: '/',
   HOME: '/home',
   LOGIN: '/login',
   PROFILE: '/profile',
   ACCOUNT: '/account',
-  START: '/family-budgeting',
   ACCOUNT_STATS: '/account/statistics',
 });
 

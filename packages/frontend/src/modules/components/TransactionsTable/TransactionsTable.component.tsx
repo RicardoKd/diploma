@@ -9,6 +9,7 @@ import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, ITransaction } from '../../types';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
 export const TransactionsTable = () => {
   const accountId = queryClient.getQueryData<string>(
@@ -43,11 +44,17 @@ export const TransactionsTable = () => {
     ]);
   };
 
+  const navigate = useNavigate();
+
   const updateMutation = useMutation(
     transactionService.updateTransaction.bind(transactionService),
     {
       onSuccess: () => onChangeSuccess('Transaction succesfully updated'),
-      onError: () => showError('Failed to update transaction'),
+      onError: () => {
+        console.log("test");
+        navigate("login")
+        showError('Failed to update transaction');
+      },
     }
   );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 
-import { AppLoader } from '../../UI';
+import { AppLoader, MainStyled } from '../../UI';
 import { IAccount } from '../../types';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
@@ -18,15 +18,15 @@ export const HomePage = () => {
   return isSuccess ? (
     <>
       <Header title="Accounts" />
-      {/* <MainStyled> */}
-        <AccountCardsContainer>
-          {accounts.map((account) => (
-            <AccountCard key={account.id} account={account} />
-          ))}
-        </AccountCardsContainer>
-      {/* </MainStyled> */}
+      <AccountCardsContainer>
+        {accounts.map((account) => (
+          <AccountCard key={account.id} account={account} />
+        ))}
+      </AccountCardsContainer>
     </>
   ) : (
-    <AppLoader />
+    <MainStyled>
+      <AppLoader />
+    </MainStyled>
   );
 };

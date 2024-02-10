@@ -14,8 +14,8 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
+import { AppLoader, MainStyled } from '../../UI';
 import { MUI, SPACES } from '../../theme';
-import { AppLoader } from '../../UI';
 import { accountService } from '../../services';
 import { IAccountTransactionsStats, IRange } from '../../types';
 import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
@@ -38,9 +38,12 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
       accountService.getAccountTransactionsStatsById({ accountId }),
   });
 
-  console.log('account :>> ', account);
   if (!isSuccess) {
-    return <AppLoader />;
+    return (
+      <MainStyled>
+        <AppLoader />
+      </MainStyled>
+    );
   }
 
   const data = {

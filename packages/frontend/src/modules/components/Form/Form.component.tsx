@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Yup from 'yup';
 import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 import { FormikProps, FormikValues, useFormik } from 'formik';
 import { MenuItem, TextField, Typography } from '@mui/material';
 
@@ -17,6 +17,7 @@ interface FormProps {
   successMessage: string;
   initialValues: FormikValues;
   validationSchema: Yup.Schema;
+  backButtonNav?: To;
   errorCallback?: (error: any) => void;
   successCallback?: (data: unknown) => void;
   fields: {
@@ -36,6 +37,7 @@ export const Form: React.FC<FormProps> = ({
   successCallback,
   validationSchema,
   serviceMethodArgs,
+  backButtonNav = '-1',
   successMessage = 'Success',
   errorMessage = 'Unknown error occurred',
 }) => {
@@ -107,7 +109,7 @@ export const Form: React.FC<FormProps> = ({
         ))}
 
         <FormButtons>
-          <AppButton text="Back" onClick={() => navigate(-1)} />
+          <AppButton text="Back" onClick={() => navigate(backButtonNav)} />
           <AppButton text="Submit" type="submit" />
         </FormButtons>
       </FormStyled>

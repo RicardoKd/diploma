@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 
 import { MUI, SPACES } from '../../theme';
-import { AppLoader } from '../../UI';
+import { AppLoader, MainStyled } from '../../UI';
 import { transactionService } from '../../services';
 import { IAccountStatsRange, IRange } from '../../types';
 import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
@@ -67,7 +67,11 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
     });
 
   if (!incomeIsSuccess || !spendIsSuccess) {
-    return <AppLoader />;
+    return (
+      <MainStyled>
+        <AppLoader />
+      </MainStyled>
+    );
   }
 
   const data = {
@@ -126,11 +130,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
     <div>
       <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
         <CardContent>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box display="flex" justifyContent="center" alignItems="center">
             <Bar options={options.income} data={data.income} />
           </Box>
           <Box
@@ -159,11 +159,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
       </Card>
       <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
         <CardContent>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box display="flex" justifyContent="center" alignItems="center">
             <Bar options={options.spend} data={data.spend} />
           </Box>
           <Box

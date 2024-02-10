@@ -2,14 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { logOut } from '../../utils';
+import { MainStyled } from '../../UI';
 import { Form } from '../../components';
 import { userService } from '../../services';
 import { ROUTER_KEYS } from '../../constants';
-import queryClient from '../../app/queryClient';
 import { LoginFormItems } from './LoginFormItems';
 import { FormikLoginForm } from './FormikLoginForm';
 import { validationSchema } from './validationSchema';
-import { MainStyled } from '../../UI';
 
 export const LoginPage = () => {
   logOut();
@@ -20,10 +19,13 @@ export const LoginPage = () => {
       <Form
         formName="Log In"
         errorMessage="Failed to log in"
+        backButtonNav={ROUTER_KEYS.START}
         validationSchema={validationSchema}
         initialValues={new FormikLoginForm()}
         successMessage="Succesfully logged in"
-        successCallback={() => navigate(ROUTER_KEYS.HOME)}
+        successCallback={() => {
+          navigate(ROUTER_KEYS.HOME);
+        }}
         serviceMethod={userService.login.bind(userService)}
         fields={[
           { formItem: LoginFormItems.USER },

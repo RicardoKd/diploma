@@ -8,6 +8,7 @@ export * from './CreateTransactionForm/CreateTransactionForm.component';
 export * from './DialogForm/DialogForm.component';
 export * from './Form/Form.component';
 export * from './Header/Header.component';
+export * from './PrivateRoute/PrivateRoute.component';
 export * from './RecurringTransactionsTable/RecurringTransactionsTable.component';
 export * from './AccountTransactionsStats/AccountTransactionsStats.component';
 export * from './TransactionsTable/TransactionsTable.component';
