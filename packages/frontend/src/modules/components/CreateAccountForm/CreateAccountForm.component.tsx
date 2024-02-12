@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { DialogForm } from '../';
-import { SPACES } from '../../theme';
 import { AppButton } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
@@ -15,11 +14,7 @@ export const CreateAccountForm = () => {
 
   return (
     <>
-      <AppButton
-        text="Create account"
-        onClick={() => setOpen(true)}
-        style={{ marginRight: SPACES.m }}
-      />
+      <AppButton text="Create account" onClick={() => setOpen(true)} />
       <DialogForm
         isOpen={isOpen}
         formName="Create account"

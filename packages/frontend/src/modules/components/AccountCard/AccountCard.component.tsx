@@ -18,15 +18,6 @@ import { AppButton, RouterLink } from '../../UI';
 import { QUERY_KEYS, ROUTER_KEYS } from '../../constants';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
 
-const accountCardButtonStyle = {
-  ':hover': {
-    borderWidth: '2px',
-    padding: '4.6px 11px',
-    color: COLORS.lightPurple,
-    borderColor: COLORS.lightPurple,
-  },
-};
-
 interface AccountsCardProps {
   account: IAccount;
 }
@@ -73,7 +64,6 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
       <CardActions>
         <RouterLink
           text="View"
-          sx={accountCardButtonStyle}
           onClick={() =>
             queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, id)
           }
@@ -81,13 +71,9 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
         />
         <RouterLink
           text="Statistics"
-          sx={accountCardButtonStyle}
           to={`${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
         />
-        <AppButton
-          sx={accountCardButtonStyle}
-          onClick={() => deleteMutation.mutate({ id })}
-        >
+        <AppButton onClick={() => deleteMutation.mutate({ id })}>
           <DeleteIcon />
         </AppButton>
       </CardActions>

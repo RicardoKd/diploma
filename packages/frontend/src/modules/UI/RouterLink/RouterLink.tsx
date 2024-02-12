@@ -1,7 +1,7 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ButtonProps } from '@mui/material/Button';
 
-import React from 'react';
 import { AppButton } from '../AppButton/AppButton';
 
 interface AppButtonProps extends ButtonProps {

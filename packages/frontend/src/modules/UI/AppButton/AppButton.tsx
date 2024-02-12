@@ -1,5 +1,6 @@
 import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
+
 import { COLORS, MUI, SPACES } from '../../theme';
 
 interface AppButtonProps extends ButtonProps {
@@ -20,7 +21,9 @@ export const AppButton: React.FC<AppButtonProps> = ({
       textTransform: 'capitalize',
       padding: `${SPACES.xs} ${SPACES.sm}`,
       ':hover': {
-        bgcolor: COLORS.lightPurple, 
+        borderWidth: '2px',
+        padding: '4.6px 11px',
+        color: COLORS.lightPurple,
         borderColor: COLORS.lightPurple,
       },
       ...sx,
