@@ -1,9 +1,9 @@
 // Local storage keys
-export const STORAGE_KEYS = {
+export const STORAGE_KEYS = Object.freeze({
   USER: 'user',
   ROLE: 'role',
   PASSWORD: 'password',
-};
+});
 
 // React-query keys
 export const QUERY_KEYS = Object.freeze({
