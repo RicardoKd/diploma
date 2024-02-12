@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 
-import { AppLoader, MainStyled } from '../../UI';
 import { IAccount } from '../../types';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
+import { AppLoader, MainStyled } from '../../UI';
 import { Header, AccountCard } from '../../components';
 import { AccountCardsContainer } from './home.page.styled';
 

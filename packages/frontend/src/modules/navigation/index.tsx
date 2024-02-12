@@ -10,6 +10,7 @@ import {
   ProfilePage,
   AccountPage,
   AccountStatsPage,
+  StatsDashboardPage,
 } from '../pages';
 
 export const MainRouter = () => (
@@ -23,6 +24,10 @@ export const MainRouter = () => (
     <Route
       element={<PrivateRoute Component={ProfilePage} />}
       path={ROUTER_KEYS.PROFILE}
+    />
+    <Route
+      element={<PrivateRoute Component={StatsDashboardPage} />}
+      path={ROUTER_KEYS.USER_STATS}
     />
     <Route
       element={<PrivateRoute Component={AccountPage} />}

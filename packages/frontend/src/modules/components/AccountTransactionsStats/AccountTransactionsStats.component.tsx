@@ -1,21 +1,17 @@
+import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
-import React, { useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import {
   Box,
   Card,
-  Select,
-  MenuItem,
-  InputLabel,
   Typography,
-  FormControl,
   CardContent,
   SelectChangeEvent,
 } from '@mui/material';
 
-import { AppLoader, MainStyled } from '../../UI';
-import { MUI, SPACES } from '../../theme';
+import { AppLoader, RangeSelect } from '../../UI';
+import { SPACES } from '../../theme';
 import { accountService } from '../../services';
 import { IAccountTransactionsStats, IRange } from '../../types';
 import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
@@ -29,7 +25,7 @@ interface AccountsCardProps {
 export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   accountId,
 }) => {
-  const [range, setRange] = useState<IRange>(RANGE_INITIAL_STATE);
+  const [range, setRange] = React.useState<IRange>(RANGE_INITIAL_STATE);
 
   const { isSuccess, data: account } = useQuery<IAccountTransactionsStats>({
     keepPreviousData: true,
@@ -39,15 +35,24 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   });
 
   if (!isSuccess) {
-    return (
-      <MainStyled>
-        <AppLoader />
-      </MainStyled>
-    );
+    return <AppLoader />;
   }
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Spends to incomes ratio',
+      },
+    },
+  };
+
   const data = {
-    labels: ['Spend', 'Income'],
+    labels: ['Spends', 'Incomes'],
     datasets: [
       {
         data: [account.spend[range], account.income[range]],
@@ -63,7 +68,7 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     <Card sx={{ maxWidth: 400, minWidth: 300, margin: SPACES.l }}>
       <CardContent>
         <Box>
-          <Pie data={data} />
+          <Pie data={data} options={options} />
         </Box>
 
         <Box
@@ -77,24 +82,7 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
             Income: {account.income[range]}
           </Typography>
         </Box>
-
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <FormControl>
-            <InputLabel id="range-select-label">Range</InputLabel>
-            <Select
-              value={range}
-              label="Range"
-              size={MUI.size}
-              variant={MUI.variant}
-              labelId="range-select-label"
-              onChange={handleRangeChange}
-            >
-              <MenuItem value="month">Month</MenuItem>
-              <MenuItem value="quarter">Quarter</MenuItem>
-              <MenuItem value="year">Year</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+        <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
       </CardContent>
     </Card>
   );

@@ -18,7 +18,7 @@ export const ProfilePage = () => {
         <Typography variant="h2">Profile</Typography>
 
         <ButtonContainer>
-          {(role === 'parent' || role === 'super_parent') && <AddChildForm />}
+          {role?.includes('parent') && <AddChildForm />}
           {role === 'super_parent' && <AddParentForm />}
           <RouterLink to={ROUTER_KEYS.START} text="Log out" onClick={logOut} />
           <AppButton onClick={() => navigate(-1)} text="Back" />

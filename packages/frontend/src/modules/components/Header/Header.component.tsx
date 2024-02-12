@@ -3,6 +3,7 @@ import { Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 
 import { COLORS } from '../../theme';
+import { getRole } from '../../utils';
 import { RouterLink } from '../../UI';
 import { CreateAccountForm } from '../';
 import { ROUTER_KEYS } from '../../constants';
@@ -13,6 +14,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
+  const role = getRole();
   const location = useLocation();
 
   return (
@@ -25,7 +27,12 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
           {location.pathname === ROUTER_KEYS.HOME && (
             <>
               <CreateAccountForm />
-              <RouterLink text="Users Statistics" to={ROUTER_KEYS.USER_STATS} />
+              {role?.includes('parent') && (
+                <RouterLink
+                  text="Statistics Dashboard"
+                  to={ROUTER_KEYS.USER_STATS}
+                />
+              )}
             </>
           )}
           <RouterLink text="My Profile" to={ROUTER_KEYS.PROFILE} />

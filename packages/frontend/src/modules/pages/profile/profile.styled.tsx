@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { SPACES } from '../../theme';
 
 export const ProfileStyled = styled('div')`
-  width: 80%;
+  height: 100vh;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  max-width: 300px;
+  align-items: center;
+  justify-content: center;
 
   & > * {
     margin-bottom: ${SPACES.xxl} !important;

@@ -4,10 +4,8 @@ import { getPostgresDate, getUserData } from '../../utils';
 import {
   ICategory,
   ITransaction,
-  IAccountStats,
   IQueryResponse,
   ITransactionType,
-  IAccountStatsRange,
   IRecurringTransaction,
 } from '../../types';
 
@@ -168,50 +166,6 @@ class TransactionService extends HttpService {
     );
 
     return rows;
-  }
-
-  async getCategoryStats({
-    type,
-    accountId,
-  }: {
-    accountId: string;
-    type: ITransactionType;
-  }): Promise<IAccountStatsRange> {
-    const beforeDate = getPostgresDate(new Date());
-    const userData = getUserData();
-
-    const monthStats = await this.post<IQueryResponse<IAccountStats>>(
-      API_KEYS.QUERY,
-      {
-        ...userData,
-        query: `SELECT * FROM category_percentage($1, 1, $2, $3);`,
-        variables: [type, beforeDate, accountId],
-      }
-    );
-
-    const quarterStats = await this.post<IQueryResponse<IAccountStats>>(
-      API_KEYS.QUERY,
-      {
-        ...userData,
-        query: `SELECT * FROM category_percentage($1, 3, $2, $3);`,
-        variables: [type, beforeDate, accountId],
-      }
-    );
-
-    const yearStats = await this.post<IQueryResponse<IAccountStats>>(
-      API_KEYS.QUERY,
-      {
-        ...userData,
-        query: `SELECT * FROM category_percentage($1, 12, $2, $3);`,
-        variables: [type, beforeDate, accountId],
-      }
-    );
-
-    return {
-      month: monthStats.rows,
-      quarter: quarterStats.rows,
-      year: yearStats.rows,
-    };
   }
 }
 

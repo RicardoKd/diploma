@@ -75,7 +75,7 @@ CREATE OR REPLACE VIEW account_view AS
 SELECT
   account.id,
   account.title,
-  COALESCE(SUM(income.amount_of_money::numeric) - SUM(spend.amount_of_money::numeric), 0)::money AS balance
+  COALESCE(SUM(income.amount_of_money::numeric), 0) - COALESCE(SUM(spend.amount_of_money::numeric), 0) AS balance
 FROM account
 FULL OUTER JOIN income ON income.account_id = account.id
 FULL OUTER JOIN spend ON spend.account_id = account.id
@@ -97,7 +97,7 @@ CREATE OR REPLACE VIEW transactions_view AS
 		JOIN income_category ON income_category.id = income.category_id
 		WHERE income.account_id = account_id
 		UNION
-		SELECT	spend.id,
+		SELECT spend.id,
 			spend.notes,
 			spend.account_id,
 			spend.record_date::timestamp without time zone AT TIME ZONE 'UTC' AS record_date,
@@ -424,15 +424,82 @@ BEGIN
                         'quarter', COALESCE(quarter_spend.quarter, 0),
                         'month', COALESCE(month_spend.month, 0)
                 ) as spend
-	from account
-	full outer join year_income on account.id = year_income.account_id
-	full outer join quarter_income on account.id = quarter_income.account_id
-	full outer join month_income on account.id = month_income.account_id
-	full outer join year_spend on account.id = year_spend.account_id
-	full outer join quarter_spend on account.id = quarter_spend.account_id
-	full outer join month_spend on account.id = month_spend.account_id
-	       WHERE account.username = current_user
-	       AND account.id = accountId::UUID;
+	FROM account
+	FULL OUTER JOIN year_income on account.id = year_income.account_id
+	FULL OUTER JOIN quarter_income on account.id = quarter_income.account_id
+	FULL OUTER JOIN month_income on account.id = month_income.account_id
+	FULL OUTER JOIN year_spend on account.id = year_spend.account_id
+	FULL OUTER JOIN quarter_spend on account.id = quarter_spend.account_id
+	FULL OUTER JOIN month_spend on account.id = month_spend.account_id
+	WHERE account.username = current_user
+		AND account.id = accountId::UUID;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION get_users_stats()
+RETURNS TABLE(
+	username text,
+	income json,
+	spend json
+) AS $$
+BEGIN
+  RETURN QUERY
+		WITH year_income AS (
+                SELECT account.username, COALESCE(SUM(amount_of_money)::numeric, 0) AS year
+                FROM income
+                JOIN account ON account.id = income.account_id
+                WHERE date_trunc('year', record_date) = date_trunc('year', now())
+                GROUP BY account.username
+        ), quarter_income AS (
+                SELECT account.username, SUM(amount_of_money)::numeric AS quarter
+                FROM income
+                JOIN account ON account.id = income.account_id
+                WHERE date_trunc('quarter', record_date) = date_trunc('quarter', now())
+                GROUP BY account.username
+        ), month_income AS (
+                SELECT account.username, SUM(amount_of_money)::numeric AS month
+                FROM income
+                JOIN account ON account.id = income.account_id
+                WHERE date_trunc('month', record_date) = date_trunc('month', now())
+                GROUP BY account.username
+        ), year_spend AS (
+                select account.username, SUM(amount_of_money)::numeric AS year
+                from spend
+                JOIN account ON account.id = spend.account_id
+                WHERE date_trunc('year', record_date) = date_trunc('year', now())
+                group by account.username
+        ), quarter_spend AS (
+                SELECT account.username, SUM(amount_of_money)::numeric AS quarter
+                FROM spend
+                JOIN account ON account.id = spend.account_id
+                WHERE date_trunc('quarter', record_date) = date_trunc('quarter', now())
+                GROUP BY account.username
+        ), month_spend AS (
+                SELECT account.username, SUM(amount_of_money)::numeric AS month
+                FROM spend
+                JOIN account ON account.id = spend.account_id
+                WHERE date_trunc('month', record_date) = date_trunc('month', now())
+                GROUP BY account.username
+        ) SELECT person.username,
+                json_build_object(
+                        'year', COALESCE(year_income.year, 0),
+                        'quarter', COALESCE(quarter_income.quarter, 0),
+                        'month', COALESCE(month_income.month, 0)
+                ) AS income,
+                json_build_object(
+                        'year', COALESCE(year_spend.year, 0),
+                        'quarter', COALESCE(quarter_spend.quarter, 0),
+                        'month', COALESCE(month_spend.month, 0)
+                ) AS spend
+	FROM person
+	FULL OUTER JOIN year_income ON person.username = year_income.username
+	FULL OUTER JOIN quarter_income ON person.username = quarter_income.username
+	FULL OUTER JOIN month_income ON person.username = month_income.username
+	FULL OUTER JOIN year_spend ON person.username = year_spend.username
+	FULL OUTER JOIN quarter_spend ON person.username = quarter_spend.username
+	FULL OUTER JOIN month_spend ON person.username = month_spend.username;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -446,8 +513,9 @@ CREATE ROLE child;
 CREATE ROLE parent WITH CREATEROLE;
 CREATE ROLE super_parent WITH CREATEROLE;
 
-GRANT INSERT ON person TO super_parent;
-GRANT INSERT ON person TO parent;
+GRANT SELECT, INSERT ON person TO super_parent;
+GRANT SELECT, INSERT ON person TO parent;
+GRANT SELECT ON person TO child;
 GRANT INSERT, SELECT, DELETE ON TABLE account TO child;
 GRANT INSERT, SELECT, DELETE ON TABLE account TO parent;
 GRANT INSERT, SELECT, DELETE ON TABLE account TO super_parent;
