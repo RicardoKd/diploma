@@ -64,10 +64,10 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
       <CardActions>
         <RouterLink
           text="View"
+          to={`${ROUTER_KEYS.ACCOUNT}/${id}`}
           onClick={() =>
             queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, id)
           }
-          to={`${ROUTER_KEYS.ACCOUNT}/${id}`}
         />
         <RouterLink
           text="Statistics"
