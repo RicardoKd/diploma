@@ -1,4 +1,5 @@
 import React from 'react';
+import { useQuery } from 'react-query';
 
 import { DialogForm } from '../';
 import { AppButton } from '../../UI';
@@ -10,7 +11,6 @@ import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
 import { CreateTransactionFormItems } from './CreateTransactionFormItems';
 import { FormikCreateTransactionForm } from './FormikCreateTransactionForm';
-import { useQuery } from 'react-query';
 
 interface CreateTransactionFormProps {
   type: ITransactionType;
@@ -67,20 +67,13 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
         validationSchema={validationSchema}
         serviceMethodArgs={{ accountId, type }}
         errorMessage={`Failed to create ${type}`}
-        successMessage={`${formatLabel(type)} created successfully`}
         initialValues={new FormikCreateTransactionForm()}
+        successMessage={`${formatLabel(type)} created successfully`}
         serviceMethod={transactionService.createTransaction.bind(
           transactionService
         )}
         successCallback={() => {
-          queryClient.refetchQueries([QUERY_KEYS.ACCOUNTS]);
-          queryClient.refetchQueries([QUERY_KEYS.SPEND_STATS, accountId]);
-          queryClient.refetchQueries([QUERY_KEYS.INCOME_STATS, accountId]);
           queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
-          queryClient.refetchQueries([
-            QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS,
-            accountId,
-          ]);
         }}
       />
     </>

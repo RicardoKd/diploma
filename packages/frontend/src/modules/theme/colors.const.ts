@@ -1,6 +1,6 @@
 export const COLORS = Object.freeze({
   purple: '#6b5b95',
-  lightPurple: "#a886ff",
+  lightPurple: '#a886ff',
   darkPurple: '#534E61',
   grey: '#7f8fa6',
   white: '#ffffff',
@@ -11,4 +11,5 @@ export const COLORS = Object.freeze({
   lightgrey: '#d3d3d3',
   success: '#65C466',
   greyishwhite: '#E9E9EA',
+  red: '#f95976',
 });

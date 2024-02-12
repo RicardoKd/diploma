@@ -12,11 +12,11 @@ import {
   Legend,
 } from 'chart.js';
 
-import { SPACES } from '../../theme';
+import { COLORS, SPACES } from '../../theme';
 import { statsService } from '../../services';
 import { AppLoader, RangeSelect } from '../../UI';
 import { IAccountStatsRange, IRange } from '../../types';
-import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
+import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(
   CategoryScale,
@@ -40,6 +40,8 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
   const { isSuccess: incomeIsSuccess, data: incomeStats } =
     useQuery<IAccountStatsRange>({
       queryKey: [QUERY_KEYS.INCOME_STATS, accountId],
+      keepPreviousData: true,
+      refetchOnMount: 'always',
       queryFn: () =>
         statsService.getCategoryStats({
           accountId,
@@ -50,6 +52,8 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
   const { isSuccess: spendIsSuccess, data: spendStats } =
     useQuery<IAccountStatsRange>({
       queryKey: [QUERY_KEYS.SPEND_STATS, accountId],
+      keepPreviousData: true,
+      refetchOnMount: 'always',
       queryFn: () =>
         statsService.getCategoryStats({
           accountId,
@@ -61,37 +65,12 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
     return <AppLoader />;
   }
 
-  const options = {
-    income: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'Income categories statistics',
-        },
-        legend: {
-          display: false,
-        },
-      },
-    },
-    spend: {
-      plugins: {
-        title: {
-          display: true,
-          text: 'Spend categories statistics',
-        },
-        legend: {
-          display: false,
-        },
-      },
-    },
-  };
-
   const data = {
     income: {
       labels: incomeStats[incomeRange].map((stat) => stat.category),
       datasets: [
         {
-          backgroundColor: '#36A2EB',
+          backgroundColor: COLORS.purple,
           data: incomeStats[incomeRange].map((stat) => stat.percentage),
         },
       ],
@@ -100,7 +79,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
       labels: spendStats[spendRange].map((stat) => stat.category),
       datasets: [
         {
-          backgroundColor: '#36A2EB',
+          backgroundColor: COLORS.purple,
           data: spendStats[spendRange].map((stat) => stat.percentage),
         },
       ],
@@ -118,7 +97,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
       <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
         <CardContent>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Bar options={options.income} data={data.income} />
+            <Bar options={OPTIONS.CATEGORIES_STATS.income} data={data.income} />
           </Box>
           <RangeSelect
             rangeValue={incomeRange}
@@ -129,7 +108,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
       <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
         <CardContent>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Bar options={options.spend} data={data.spend} />
+            <Bar options={OPTIONS.CATEGORIES_STATS.spend} data={data.spend} />
           </Box>
           <RangeSelect
             rangeValue={spendRange}

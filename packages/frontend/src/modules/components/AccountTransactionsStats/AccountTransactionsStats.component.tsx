@@ -10,11 +10,11 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-import { AppLoader, RangeSelect } from '../../UI';
-import { SPACES } from '../../theme';
+import { COLORS, SPACES } from '../../theme';
 import { accountService } from '../../services';
+import { AppLoader, RangeSelect } from '../../UI';
 import { IAccountTransactionsStats, IRange } from '../../types';
-import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
+import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -28,8 +28,9 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   const [range, setRange] = React.useState<IRange>(RANGE_INITIAL_STATE);
 
   const { isSuccess, data: account } = useQuery<IAccountTransactionsStats>({
-    keepPreviousData: true,
     queryKey: [QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS, accountId],
+    keepPreviousData: true,
+    refetchOnMount: 'always',
     queryFn: () =>
       accountService.getAccountTransactionsStatsById({ accountId }),
   });
@@ -38,25 +39,12 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     return <AppLoader />;
   }
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Spends to incomes ratio',
-      },
-    },
-  };
-
   const data = {
     labels: ['Spends', 'Incomes'],
     datasets: [
       {
         data: [account.spend[range], account.income[range]],
-        backgroundColor: ['#FF6384', '#36A2EB'],
+        backgroundColor: [COLORS.red, COLORS.success],
       },
     ],
   };
@@ -68,7 +56,7 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     <Card sx={{ maxWidth: 400, minWidth: 300, margin: SPACES.l }}>
       <CardContent>
         <Box>
-          <Pie data={data} options={options} />
+          <Pie data={data} options={OPTIONS.ACCOUNT_TRANSACTION_STATS} />
         </Box>
 
         <Box

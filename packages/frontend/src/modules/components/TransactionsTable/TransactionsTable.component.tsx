@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
@@ -9,7 +10,6 @@ import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, ITransaction } from '../../types';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
-import { useNavigate } from 'react-router-dom';
 
 export const TransactionsTable = () => {
   const accountId = queryClient.getQueryData<string>(
@@ -34,14 +34,7 @@ export const TransactionsTable = () => {
 
   const onChangeSuccess = (message: string) => {
     showSuccess(message);
-    queryClient.refetchQueries(QUERY_KEYS.ACCOUNTS);
-    queryClient.refetchQueries([QUERY_KEYS.SPEND_STATS, accountId]);
-    queryClient.refetchQueries([QUERY_KEYS.INCOME_STATS, accountId]);
     queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
-    queryClient.refetchQueries([
-      QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS,
-      accountId,
-    ]);
   };
 
   const navigate = useNavigate();
@@ -51,8 +44,8 @@ export const TransactionsTable = () => {
     {
       onSuccess: () => onChangeSuccess('Transaction succesfully updated'),
       onError: () => {
-        console.log("test");
-        navigate("login")
+        console.log('test');
+        navigate('login');
         showError('Failed to update transaction');
       },
     }
@@ -108,8 +101,8 @@ export const TransactionsTable = () => {
       field: 'category',
       type: 'singleSelect',
       headerName: 'Category',
-      // getOptionValue: (value: any) => value.id, // left as reminder
-      // getOptionLabel: (value: any) => value.title, // left as reminder
+      // getOptionValue: (value: any) => value.id, // left as a reference
+      // getOptionLabel: (value: any) => value.title, // left as a reference
       valueGetter: ({ row }) => row.category.id,
       valueSetter: ({ row, value }) => {
         row.category.id = value;

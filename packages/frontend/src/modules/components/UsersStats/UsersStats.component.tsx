@@ -12,11 +12,11 @@ import {
   Legend,
 } from 'chart.js';
 
-import { SPACES } from '../../theme';
+import { COLORS, SPACES } from '../../theme';
 import { statsService } from '../../services';
 import { IRange, IUserStats } from '../../types';
 import { AppLoader, RangeSelect } from '../../UI';
-import { QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
+import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(
   CategoryScale,
@@ -32,6 +32,8 @@ export const UsersStats = () => {
 
   const { isSuccess, data: stats } = useQuery<IUserStats[]>({
     queryKey: [QUERY_KEYS.USER_STATS],
+    keepPreviousData: true,
+    refetchOnMount: 'always',
     queryFn: () => statsService.getUsersStats(),
   });
 
@@ -39,34 +41,37 @@ export const UsersStats = () => {
     return <AppLoader />;
   }
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Incomes and spends by user',
-      },
-    },
-  };
-
   const data = {
     labels: stats.map((stat) => stat.username),
     datasets: [
       {
         label: 'Incomes',
         data: stats.map((stat) => stat.income[range]),
-        backgroundColor: '#36A2EB',
+        backgroundColor: COLORS.success,
       },
       {
         label: 'Spends',
         data: stats.map((stat) => stat.spend[range]),
-        backgroundColor: '#FF6384',
+        backgroundColor: COLORS.red,
       },
     ],
   };
+
+  // const data = React.useMemo(() => ({
+  //   labels: stats.map((stat) => stat.username),
+  //   datasets: [
+  //     {
+  //       label: 'Incomes',
+  //       data: stats.map((stat) => stat.income[range]),
+  //       backgroundColor: '#36A2EB',
+  //     },
+  //     {
+  //       label: 'Spends',
+  //       data: stats.map((stat) => stat.spend[range]),
+  //       backgroundColor: '#FF6384',
+  //     },
+  //   ],
+  // }), [stats, range]);
 
   const handleRangeChange = (event: SelectChangeEvent) =>
     setRange(event.target.value as IRange);
@@ -75,7 +80,7 @@ export const UsersStats = () => {
     <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
       <CardContent>
         <Box display="flex" justifyContent="center" alignItems="center">
-          <Bar options={options} data={data} />
+          <Bar options={OPTIONS.USERS_STATS} data={data} />
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
       </CardContent>

@@ -11,6 +11,7 @@ import { AccountCardsContainer } from './home.page.styled';
 export const HomePage = () => {
   const { isSuccess, data: accounts } = useQuery<IAccount[]>({
     keepPreviousData: true,
+    refetchOnMount: 'always',
     queryKey: [QUERY_KEYS.ACCOUNTS],
     queryFn: () => accountService.getAccounts(),
   });
@@ -18,11 +19,13 @@ export const HomePage = () => {
   return isSuccess ? (
     <>
       <Header title="Accounts" />
-      <AccountCardsContainer>
-        {accounts.map((account) => (
-          <AccountCard key={account.id} account={account} />
-        ))}
-      </AccountCardsContainer>
+      <MainStyled>
+        <AccountCardsContainer>
+          {accounts.map((account) => (
+            <AccountCard key={account.id} account={account} />
+          ))}
+        </AccountCardsContainer>
+      </MainStyled>
     </>
   ) : (
     <MainStyled>
