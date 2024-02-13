@@ -57,22 +57,6 @@ export const UsersStats = () => {
     ],
   };
 
-  // const data = React.useMemo(() => ({
-  //   labels: stats.map((stat) => stat.username),
-  //   datasets: [
-  //     {
-  //       label: 'Incomes',
-  //       data: stats.map((stat) => stat.income[range]),
-  //       backgroundColor: '#36A2EB',
-  //     },
-  //     {
-  //       label: 'Spends',
-  //       data: stats.map((stat) => stat.spend[range]),
-  //       backgroundColor: '#FF6384',
-  //     },
-  //   ],
-  // }), [stats, range]);
-
   const handleRangeChange = (event: SelectChangeEvent) =>
     setRange(event.target.value as IRange);
 
