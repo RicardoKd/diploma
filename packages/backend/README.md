@@ -75,12 +75,20 @@ CREATE OR REPLACE VIEW account_view AS
 SELECT
   account.id,
   account.title,
-  COALESCE(SUM(income.amount_of_money::numeric), 0) - COALESCE(SUM(spend.amount_of_money::numeric), 0) AS balance
+  COALESCE(sum_income, 0) - COALESCE(sum_spend, 0) AS balance
 FROM account
-FULL OUTER JOIN income ON income.account_id = account.id
-FULL OUTER JOIN spend ON spend.account_id = account.id
+LEFT JOIN (
+  SELECT account_id, SUM(amount_of_money::Numeric) AS sum_income
+  FROM income
+  GROUP BY account_id
+) AS income_sum ON account.id = income_sum.account_id
+LEFT JOIN (
+  SELECT account_id, SUM(amount_of_money::Numeric) AS sum_spend
+  FROM spend
+  GROUP BY account_id
+) AS spend_sum ON account.id = spend_sum.account_id
 WHERE account.username = current_user
-GROUP BY account.id;
+ORDER BY account.title;
 
 
 
