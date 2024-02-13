@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
@@ -72,6 +72,15 @@ export const RecurringTransactionsTable = () => {
         deleteMutation.mutate({ table: `recurring_${type}`, id }),
     []
   );
+
+  useEffect(() => {
+    if (updateMutation.isError) {
+      const errMessage: string = (updateMutation.error as any).response.data.error;
+      if (errMessage.includes('violates check constraint "recurring_income_end_date_check"')) {
+        showError('End date must be greater ');
+      }
+    }
+  }, [updateMutation.isError]);
 
   const columns: GridColDef[] = [
     {

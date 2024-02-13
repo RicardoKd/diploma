@@ -46,18 +46,13 @@ export const TransactionsTable = () => {
 
   useEffect(() => {
     if (updateMutation.isError) {
-      showError(
-        (updateMutation.error as any).response.data.error
-      );
-      console.log(updateMutation.error);
+      showError((updateMutation.error as any).response.data.error);
     }
   }, [updateMutation.isError]);
 
   const handleUpdate = useCallback(
     async (newRow: ITransaction, oldRow: ITransaction) => {
-      console.log('before update transaction');
       const isSuccess = await updateMutation.mutateAsync(newRow);
-      console.log('after update transaction');
 
       return isSuccess ? newRow : oldRow;
     },
@@ -81,6 +76,7 @@ export const TransactionsTable = () => {
 
   const columns: GridColDef[] = [
     {
+      flex: 0.35,
       field: 'type',
       headerName: 'Type',
     },
