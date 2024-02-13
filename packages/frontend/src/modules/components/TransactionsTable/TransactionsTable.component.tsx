@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
@@ -37,23 +36,28 @@ export const TransactionsTable = () => {
     queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
   };
 
-  const navigate = useNavigate();
-
   const updateMutation = useMutation(
     transactionService.updateTransaction.bind(transactionService),
     {
       onSuccess: () => onChangeSuccess('Transaction succesfully updated'),
-      onError: () => {
-        console.log('test');
-        navigate('login');
-        showError('Failed to update transaction');
-      },
+      onError: () => showError('Failed to update transaction'),
     }
   );
 
+  useEffect(() => {
+    if (updateMutation.isError) {
+      showError(
+        (updateMutation.error as any).response.data.error
+      );
+      console.log(updateMutation.error);
+    }
+  }, [updateMutation.isError]);
+
   const handleUpdate = useCallback(
     async (newRow: ITransaction, oldRow: ITransaction) => {
+      console.log('before update transaction');
       const isSuccess = await updateMutation.mutateAsync(newRow);
+      console.log('after update transaction');
 
       return isSuccess ? newRow : oldRow;
     },
