@@ -8,7 +8,7 @@ interface TableProps {
   rows: any[];
   isLoading: boolean;
   columns: GridColDef[];
-  handleUpdate: ((newRow: any, oldRow: any) => any) | undefined;
+  handleUpdate?: ((newRow: any, oldRow: any) => any);
 }
 
 export const Table: React.FC<TableProps> = ({ rows, columns, isLoading, handleUpdate }) => (
