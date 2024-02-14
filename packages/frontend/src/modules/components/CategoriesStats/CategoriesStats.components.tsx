@@ -13,10 +13,9 @@ import {
 } from 'chart.js';
 
 import { COLORS, SPACES } from '../../theme';
-import { statsService } from '../../services';
 import { AppLoader, RangeSelect } from '../../UI';
-import { IAccountStatsRange, IRange } from '../../types';
-import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
+import { ICategoriesStats, IRange } from '../../types';
+import { OPTIONS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(
   CategoryScale,
@@ -28,59 +27,45 @@ ChartJS.register(
 );
 
 interface CategoriesStatsProps {
-  accountId: string;
+  queryKey: any;
+  queryMethod: () => Promise<ICategoriesStats>;
 }
 
 export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
-  accountId,
+  queryKey,
+  queryMethod,
 }) => {
   const [spendRange, setSpendRange] = useState<IRange>(RANGE_INITIAL_STATE);
   const [incomeRange, setIncomeRange] = useState<IRange>(RANGE_INITIAL_STATE);
 
-  const { isSuccess: incomeIsSuccess, data: incomeStats } =
-    useQuery<IAccountStatsRange>({
-      queryKey: [QUERY_KEYS.INCOME_STATS, accountId],
+  const { isSuccess: incomeIsSuccess, data: stats } =
+    useQuery<ICategoriesStats>({
+      queryKey,
       keepPreviousData: true,
       refetchOnMount: 'always',
-      queryFn: () =>
-        statsService.getCategoryStats({
-          accountId,
-          type: 'income',
-        }),
+      queryFn: () => queryMethod(),
     });
 
-  const { isSuccess: spendIsSuccess, data: spendStats } =
-    useQuery<IAccountStatsRange>({
-      queryKey: [QUERY_KEYS.SPEND_STATS, accountId],
-      keepPreviousData: true,
-      refetchOnMount: 'always',
-      queryFn: () =>
-        statsService.getCategoryStats({
-          accountId,
-          type: 'spend',
-        }),
-    });
-
-  if (!incomeIsSuccess || !spendIsSuccess) {
+  if (!incomeIsSuccess) {
     return <AppLoader />;
   }
 
   const data = {
     income: {
-      labels: incomeStats[incomeRange].map((stat) => stat.category),
+      labels: stats.income.map((stat) => stat.category),
       datasets: [
         {
           backgroundColor: COLORS.purple,
-          data: incomeStats[incomeRange].map((stat) => stat.percentage),
+          data: stats.income.map((stat) => stat[incomeRange]),
         },
       ],
     },
     spend: {
-      labels: spendStats[spendRange].map((stat) => stat.category),
+      labels: stats.spend.map((stat) => stat.category),
       datasets: [
         {
           backgroundColor: COLORS.purple,
-          data: spendStats[spendRange].map((stat) => stat.percentage),
+          data: stats.spend.map((stat) => stat[spendRange]),
         },
       ],
     },

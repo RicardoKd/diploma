@@ -1,57 +1,59 @@
 import HttpService from '../http.service';
+import { getUserData } from '../../utils';
 import { API_KEYS } from '../../constants';
-import { getPostgresDate, getUserData } from '../../utils';
 import {
   IUserStats,
-  IAccountStats,
   IQueryResponse,
   ITransactionType,
-  IAccountStatsRange,
+  ICategoryPercentage,
+  ICategoriesStats,
 } from '../../types';
 
 class StatsService extends HttpService {
-  async getCategoryStats({
-    type,
+  async getCategoriesStatsByAccountId({
     accountId,
   }: {
     accountId: string;
-    type: ITransactionType;
-  }): Promise<IAccountStatsRange> {
-    const beforeDate = getPostgresDate(new Date());
-    const userData = getUserData();
-
-    const monthStats = await this.post<IQueryResponse<IAccountStats>>(
+  }): Promise<ICategoriesStats> {
+    const income = await this.post<IQueryResponse<ICategoryPercentage>>(
       API_KEYS.QUERY,
       {
-        ...userData,
-        query: `SELECT * FROM category_percentage($1, 1, $2, $3);`,
-        variables: [type, beforeDate, accountId],
+        ...getUserData(),
+        query: `SELECT * FROM get_ranged_income_categories_percentage_by_account_id($1);`,
+        variables: [accountId],
       }
     );
 
-    const quarterStats = await this.post<IQueryResponse<IAccountStats>>(
+    const spend = await this.post<IQueryResponse<ICategoryPercentage>>(
       API_KEYS.QUERY,
       {
-        ...userData,
-        query: `SELECT * FROM category_percentage($1, 3, $2, $3);`,
-        variables: [type, beforeDate, accountId],
+        ...getUserData(),
+        query: `SELECT * FROM get_ranged_spend_categories_percentage_by_account_id($1);`,
+        variables: [accountId],
       }
     );
 
-    const yearStats = await this.post<IQueryResponse<IAccountStats>>(
+    return { income: income.rows, spend: spend.rows };
+  }
+
+  async getCategoriesStats(): Promise<ICategoriesStats> {
+    const income = await this.post<IQueryResponse<ICategoryPercentage>>(
       API_KEYS.QUERY,
       {
-        ...userData,
-        query: `SELECT * FROM category_percentage($1, 12, $2, $3);`,
-        variables: [type, beforeDate, accountId],
+        ...getUserData(),
+        query: `SELECT * FROM get_ranged_income_categories_percentage();`,
       }
     );
 
-    return {
-      month: monthStats.rows,
-      quarter: quarterStats.rows,
-      year: yearStats.rows,
-    };
+    const spend = await this.post<IQueryResponse<ICategoryPercentage>>(
+      API_KEYS.QUERY,
+      {
+        ...getUserData(),
+        query: `SELECT * FROM get_ranged_income_categories_percentage();`,
+      }
+    );
+
+    return { income: income.rows, spend: spend.rows };
   }
 
   async getUsersStats(): Promise<IUserStats[]> {

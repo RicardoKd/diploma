@@ -34,6 +34,14 @@ export const OPTIONS = Object.freeze({
           display: false,
         },
       },
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: 'Percentage %',
+          },
+        },
+      },
     },
     spend: {
       plugins: {
@@ -43,6 +51,14 @@ export const OPTIONS = Object.freeze({
         },
         legend: {
           display: false,
+        },
+      },
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: 'Percentage %',
+          },
         },
       },
     },
