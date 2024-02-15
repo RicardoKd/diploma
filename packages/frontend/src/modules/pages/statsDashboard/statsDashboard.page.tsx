@@ -1,11 +1,24 @@
 import React from 'react';
+import { useQuery } from 'react-query';
 
-import { MainStyled } from '../../UI';
+import { COLORS } from '../../theme';
+import { IUserStats } from '../../types';
 import { statsService } from '../../services';
-import { QUERY_KEYS } from '../../constants';
-import { CategoriesStats, Header, UsersStats } from '../../components';
+import { AppLoader, MainStyled } from '../../UI';
+import { OPTIONS, QUERY_KEYS } from '../../constants';
+import { BarChart, CategoriesStats, Header } from '../../components';
 
 export const StatsDashboardPage = () => {
+  const { isSuccess, data: userStats } = useQuery<IUserStats[]>({
+    keepPreviousData: true,
+    refetchOnMount: 'always',
+    queryKey: [QUERY_KEYS.USER_STATS],
+    queryFn: () => statsService.getUsersStats(),
+  });
+
+  if (!isSuccess) {
+    return <AppLoader />;
+  }
   return (
     <>
       <Header title="Statistics Dashboard" />
@@ -14,7 +27,22 @@ export const StatsDashboardPage = () => {
           queryKey={[QUERY_KEYS.CATEGORIES_STATS]}
           queryMethod={() => statsService.getCategoriesStats()}
         />
-        <UsersStats />
+        <BarChart
+          options={OPTIONS.USERS_STATS}
+          labels={userStats.map((stat) => stat.username)}
+          preDatasets={[
+            {
+              label: 'Incomes',
+              data: userStats.map((stat) => stat.income),
+              backgroundColor: COLORS.success,
+            },
+            {
+              label: 'Spends',
+              data: userStats.map((stat) => stat.spend),
+              backgroundColor: COLORS.red,
+            },
+          ]}
+        />
       </MainStyled>
     </>
   );
