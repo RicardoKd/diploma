@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { DialogForm } from '../';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
-import { ITransactionType } from '../../types';
+import { TransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
@@ -13,7 +13,7 @@ import { CreateRecurringIncomeFormItems } from './CreateRecurringTransactionForm
 import { FormikCreateRecurringTransactionForm } from './FormikCreateRecurringTransactionForm';
 
 interface CreateRecurringTransactionFormPageProps {
-  type: ITransactionType;
+  type: TransactionType;
 }
 
 export const CreateRecurringTransactionForm: React.FC<

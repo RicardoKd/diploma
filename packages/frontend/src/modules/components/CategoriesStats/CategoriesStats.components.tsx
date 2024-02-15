@@ -5,18 +5,18 @@ import { BarChart } from '../';
 import { COLORS } from '../../theme';
 import { AppLoader } from '../../UI';
 import { OPTIONS } from '../../constants';
-import { ICategoriesStats } from '../../types';
+import { IIncomeSpendCategoriesRangeStats } from '../../types';
 
 interface CategoriesStatsProps {
   queryKey: any;
-  queryMethod: () => Promise<ICategoriesStats>;
+  queryMethod: () => Promise<IIncomeSpendCategoriesRangeStats>;
 }
 
 export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
   queryKey,
   queryMethod,
 }) => {
-  const { isSuccess, data: stats } = useQuery<ICategoriesStats>({
+  const { isSuccess, data: stats } = useQuery({
     queryKey,
     keepPreviousData: true,
     refetchOnMount: 'always',

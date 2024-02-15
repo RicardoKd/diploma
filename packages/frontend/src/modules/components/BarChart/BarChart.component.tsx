@@ -12,7 +12,7 @@ import {
 } from 'chart.js';
 
 import { SPACES } from '../../theme';
-import { IRange } from '../../types';
+import { Range } from '../../types';
 import { RangeSelect } from '../../UI';
 import { RANGE_INITIAL_STATE } from '../../constants';
 
@@ -36,7 +36,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   labels,
   preDatasets,
 }) => {
-  const [range, setRange] = React.useState<IRange>(RANGE_INITIAL_STATE);
+  const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
 
   const data1 = {
     labels,
@@ -47,7 +47,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   };
 
   const handleRangeChange = (event: SelectChangeEvent) =>
-    setRange(event.target.value as IRange);
+    setRange(event.target.value as Range);
 
   return (
     <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>

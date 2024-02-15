@@ -1,4 +1,4 @@
-import { ITransactionType } from './';
+import { TransactionType } from './';
 
 export interface ITransaction {
   id: string;
@@ -10,5 +10,5 @@ export interface ITransaction {
   account_id: number;
   record_date: Date;
   amount_of_money: number;
-  type: ITransactionType;
+  type: TransactionType;
 }

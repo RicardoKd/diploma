@@ -10,10 +10,10 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
+import { Range } from '../../types';
 import { COLORS, SPACES } from '../../theme';
-import { accountService } from '../../services';
+import { statsService } from '../../services';
 import { AppLoader, RangeSelect } from '../../UI';
-import { IAccountTransactionsStats, IRange } from '../../types';
 import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,14 +25,13 @@ interface AccountsCardProps {
 export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   accountId,
 }) => {
-  const [range, setRange] = React.useState<IRange>(RANGE_INITIAL_STATE);
+  const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
 
-  const { isSuccess, data: account } = useQuery<IAccountTransactionsStats>({
+  const { isSuccess, data: account } = useQuery({
     queryKey: [QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS, accountId],
     keepPreviousData: true,
     refetchOnMount: 'always',
-    queryFn: () =>
-      accountService.getAccountTransactionsStatsById({ accountId }),
+    queryFn: () => statsService.getAccountTransactionsStatsById({ accountId }),
   });
 
   if (!isSuccess) {
@@ -50,7 +49,7 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   };
 
   const handleRangeChange = (event: SelectChangeEvent) =>
-    setRange(event.target.value as IRange);
+    setRange(event.target.value as Range);
 
   return (
     <Card sx={{ maxWidth: 400, minWidth: 300, margin: SPACES.l }}>

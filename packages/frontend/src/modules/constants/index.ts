@@ -1,4 +1,4 @@
-import { IAlertState, IRange } from '../types';
+import { IAlertState, Range } from '../types';
 
 export * from './charts.const';
 export * from './app-keys.const';
@@ -21,7 +21,7 @@ export const QUERY_CLIENT_CONFIG = Object.freeze({
   },
 });
 
-export const RANGE_INITIAL_STATE: IRange = 'month';
+export const RANGE_INITIAL_STATE: Range = 'month';
 
 export const ALERT_INITIAL_STATE: IAlertState = Object.freeze({
   message: '',

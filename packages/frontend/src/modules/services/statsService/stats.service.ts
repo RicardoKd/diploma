@@ -2,20 +2,37 @@ import HttpService from '../http.service';
 import { getUserData } from '../../utils';
 import { API_KEYS } from '../../constants';
 import {
-  IUserStats,
+  IUserTransactionsRangeStats,
   IQueryResponse,
-  ITransactionType,
-  ICategoryPercentage,
-  ICategoriesStats,
+  IIncomeSpendCategoriesRangeStats,
+  IIncomeSpendRangeStats,
+  ICategoryRangeStats,
 } from '../../types';
 
 class StatsService extends HttpService {
+  async getAccountTransactionsStatsById({
+    accountId,
+  }: {
+    accountId: string;
+  }): Promise<IIncomeSpendRangeStats> {
+    const result = await this.post<IQueryResponse<IIncomeSpendRangeStats>>(
+      API_KEYS.QUERY,
+      {
+        ...getUserData(),
+        query: 'SELECT * FROM get_account_transactions_stats_by_account_id($1)',
+        variables: [accountId],
+      }
+    );
+
+    return result.rows[0];
+  }
+
   async getCategoriesStatsByAccountId({
     accountId,
   }: {
     accountId: string;
-  }): Promise<ICategoriesStats> {
-    const income = await this.post<IQueryResponse<ICategoryPercentage>>(
+  }): Promise<IIncomeSpendCategoriesRangeStats> {
+    const income = await this.post<IQueryResponse<ICategoryRangeStats>>(
       API_KEYS.QUERY,
       {
         ...getUserData(),
@@ -24,7 +41,7 @@ class StatsService extends HttpService {
       }
     );
 
-    const spend = await this.post<IQueryResponse<ICategoryPercentage>>(
+    const spend = await this.post<IQueryResponse<ICategoryRangeStats>>(
       API_KEYS.QUERY,
       {
         ...getUserData(),
@@ -36,8 +53,8 @@ class StatsService extends HttpService {
     return { income: income.rows, spend: spend.rows };
   }
 
-  async getCategoriesStats(): Promise<ICategoriesStats> {
-    const income = await this.post<IQueryResponse<ICategoryPercentage>>(
+  async getCategoriesStats(): Promise<IIncomeSpendCategoriesRangeStats> {
+    const income = await this.post<IQueryResponse<ICategoryRangeStats>>(
       API_KEYS.QUERY,
       {
         ...getUserData(),
@@ -45,7 +62,7 @@ class StatsService extends HttpService {
       }
     );
 
-    const spend = await this.post<IQueryResponse<ICategoryPercentage>>(
+    const spend = await this.post<IQueryResponse<ICategoryRangeStats>>(
       API_KEYS.QUERY,
       {
         ...getUserData(),
@@ -56,13 +73,34 @@ class StatsService extends HttpService {
     return { income: income.rows, spend: spend.rows };
   }
 
-  async getUsersStats(): Promise<IUserStats[]> {
-    const result = await this.post<IQueryResponse<IUserStats>>(API_KEYS.QUERY, {
-      ...getUserData(),
-      query: `SELECT * FROM get_users_stats();`,
-    });
+  async getUsersRangedTransactionsStats(): Promise<
+    IUserTransactionsRangeStats[]
+  > {
+    const result = await this.post<IQueryResponse<IUserTransactionsRangeStats>>(
+      API_KEYS.QUERY,
+      {
+        ...getUserData(),
+        query: `SELECT * FROM get_ranged_users_transactions_stats();`,
+      }
+    );
 
     return result.rows;
+  }
+
+  async getPopularCategoriesStats(): Promise<{}[]> {
+    throw new Error('NOT IMPLEMENTED');
+
+    const income = await this.post<IQueryResponse<{}>>(API_KEYS.QUERY, {
+      ...getUserData(),
+      query: `select * from popular_income_categories_stats;`,
+    });
+
+    const spend = await this.post<IQueryResponse<{}>>(API_KEYS.QUERY, {
+      ...getUserData(),
+      query: `select * from popular_spend_categories_stats;`,
+    });
+
+    // return { income: income.rows, spend: spend.rows };
   }
 }
 

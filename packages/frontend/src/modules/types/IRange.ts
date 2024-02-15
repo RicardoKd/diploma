@@ -1,1 +1,5 @@
-export type IRange = 'year' | 'quarter' | 'month';
+export interface IRange {
+  month: number;
+  quarter: number;
+  year: number;
+}

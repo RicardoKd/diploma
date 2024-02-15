@@ -28,16 +28,6 @@ class AccountService extends HttpService {
       variables: [id],
     });
   }
-
-  async getAccountTransactionsStatsById({ accountId }: { accountId: string }): Promise<any> {
-    const result = await this.post<IQueryResponse<any>>(API_KEYS.QUERY, {
-      ...getUserData(),
-      query: 'SELECT * FROM get_account_transactions_stats_by_account_id($1)',
-      variables: [accountId],
-    });
-
-    return result.rows[0];
-  }
 }
 
 export const accountService = new AccountService();

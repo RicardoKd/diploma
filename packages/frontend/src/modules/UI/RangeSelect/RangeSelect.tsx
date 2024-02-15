@@ -10,10 +10,10 @@ import {
 } from '@mui/material';
 
 import { MUI } from '../../theme';
-import { IRange } from '../../types';
+import { Range } from '../../types';
 
 interface RangeSelectProps {
-  rangeValue: IRange;
+  rangeValue: Range;
   handleChange: (event: SelectChangeEvent) => void;
 }
 

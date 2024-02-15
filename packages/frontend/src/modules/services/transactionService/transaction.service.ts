@@ -5,7 +5,7 @@ import {
   ICategory,
   ITransaction,
   IQueryResponse,
-  ITransactionType,
+  TransactionType,
   IRecurringTransaction,
 } from '../../types';
 
@@ -156,7 +156,7 @@ class TransactionService extends HttpService {
     });
   }
 
-  async getCategories(type: ITransactionType): Promise<ICategory[]> {
+  async getCategories(type: TransactionType): Promise<ICategory[]> {
     const { rows } = await this.post<IQueryResponse<ICategory>>(
       API_KEYS.QUERY,
       {

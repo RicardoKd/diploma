@@ -5,7 +5,7 @@ import { DialogForm } from '../';
 import { AppButton } from '../../UI';
 import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
-import { ITransactionType } from '../../types';
+import { TransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { validationSchema } from './validationSchema';
@@ -13,7 +13,7 @@ import { CreateTransactionFormItems } from './CreateTransactionFormItems';
 import { FormikCreateTransactionForm } from './FormikCreateTransactionForm';
 
 interface CreateTransactionFormProps {
-  type: ITransactionType;
+  type: TransactionType;
 }
 
 export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({

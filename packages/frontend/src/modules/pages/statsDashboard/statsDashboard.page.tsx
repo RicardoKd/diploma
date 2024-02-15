@@ -2,23 +2,23 @@ import React from 'react';
 import { useQuery } from 'react-query';
 
 import { COLORS } from '../../theme';
-import { IUserStats } from '../../types';
 import { statsService } from '../../services';
 import { AppLoader, MainStyled } from '../../UI';
 import { OPTIONS, QUERY_KEYS } from '../../constants';
 import { BarChart, CategoriesStats, Header } from '../../components';
 
 export const StatsDashboardPage = () => {
-  const { isSuccess, data: userStats } = useQuery<IUserStats[]>({
+  const { isSuccess, data: userStats } = useQuery({
     keepPreviousData: true,
     refetchOnMount: 'always',
     queryKey: [QUERY_KEYS.USER_STATS],
-    queryFn: () => statsService.getUsersStats(),
+    queryFn: () => statsService.getUsersRangedTransactionsStats(),
   });
 
   if (!isSuccess) {
     return <AppLoader />;
   }
+  
   return (
     <>
       <Header title="Statistics Dashboard" />
