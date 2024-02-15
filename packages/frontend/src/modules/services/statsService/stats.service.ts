@@ -49,7 +49,7 @@ class StatsService extends HttpService {
       API_KEYS.QUERY,
       {
         ...getUserData(),
-        query: `SELECT * FROM get_ranged_income_categories_percentage();`,
+        query: `SELECT * FROM get_ranged_spend_categories_percentage();`,
       }
     );
 
