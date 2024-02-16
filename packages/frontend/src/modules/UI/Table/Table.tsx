@@ -1,19 +1,25 @@
 import React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
 
 import { MUI } from '../../theme';
-import { TableContainer } from './Table.styled';
+import { DataGridStyled } from './Table.styled';
 
 interface TableProps {
   rows: any[];
   isLoading: boolean;
   columns: GridColDef[];
-  handleUpdate?: ((newRow: any, oldRow: any) => any);
+  handleUpdate?: (newRow: any, oldRow: any) => any;
 }
 
-export const Table: React.FC<TableProps> = ({ rows, columns, isLoading, handleUpdate }) => (
-  <TableContainer>
-    <DataGrid
+export const Table: React.FC<TableProps> = ({
+  rows,
+  columns,
+  isLoading,
+  handleUpdate,
+}) => {
+  const getRowHeight = React.useCallback(() => 'auto', []);
+  return (
+    <DataGridStyled
       rows={rows}
       autoPageSize
       logLevel="error"
@@ -23,10 +29,11 @@ export const Table: React.FC<TableProps> = ({ rows, columns, isLoading, handleUp
       disableColumnSelector
       hideFooterSelectedRowCount
       disableRowSelectionOnClick
+      getRowHeight={getRowHeight}
       processRowUpdate={handleUpdate}
       onProcessRowUpdateError={(error) => {
         throw new Error(error);
       }}
     />
-  </TableContainer>
-);
+  );
+};

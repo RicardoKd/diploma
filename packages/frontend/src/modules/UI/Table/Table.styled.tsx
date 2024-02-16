@@ -1,12 +1,9 @@
 import styled from 'styled-components';
+import { DataGrid } from '@mui/x-data-grid';
+
 import { ADAPTIVE, COLORS, SPACES } from '../../theme';
 
-export const TableContainer = styled('div')`
-  width: 100%;
-  height: 454px;
-  max-width: ${ADAPTIVE.max};
-  margin-bottom: ${SPACES.xxl};
-
+export const DataGridStyled = styled(DataGrid)`
   .MuiDataGrid-root,
   .MuiDataGrid-columnHeaders {
     border-radius: 0;
@@ -37,6 +34,10 @@ export const TableContainer = styled('div')`
   .actionCell {
     justify-content: space-between !important;
   }
+
+  .MuiDataGrid-cell {
+    min-height: 36px !important;
+  }
 `;
 
 export const TableActionsContainer = styled('div')`
@@ -49,4 +50,11 @@ export const TableActionsContainer = styled('div')`
   > div > * {
     margin-left: ${SPACES.m};
   }
+`;
+
+export const TableContainer = styled('div')`
+  width: 100%;
+  height: 454px;
+  max-width: ${ADAPTIVE.max};
+  margin-bottom: ${SPACES.xxl};
 `;

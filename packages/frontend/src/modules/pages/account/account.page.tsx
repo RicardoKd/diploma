@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
-import { MainStyled, TableActionsContainer } from '../../UI';
+import { MainStyled, TableActionsContainer, TableContainer } from '../../UI';
 import {
   Header,
   TransactionsTable,
@@ -30,7 +30,9 @@ export const AccountPage = () => {
             <CreateTransactionForm type="spend" />
           </div>
         </TableActionsContainer>
-        <TransactionsTable />
+        <TableContainer>
+          <TransactionsTable />
+        </TableContainer>
 
         <TableActionsContainer>
           <Typography variant="h6" component="h4">
@@ -41,7 +43,9 @@ export const AccountPage = () => {
             <CreateRecurringTransactionForm type="spend" />
           </div>
         </TableActionsContainer>
-        <RecurringTransactionsTable />
+        <TableContainer>
+          <RecurringTransactionsTable />
+        </TableContainer>
       </MainStyled>
     </>
   );
