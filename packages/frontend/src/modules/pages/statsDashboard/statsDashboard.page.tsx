@@ -3,12 +3,12 @@ import { useQuery } from 'react-query';
 
 import { COLORS } from '../../theme';
 import { statsService } from '../../services';
-import { AppLoader, MainStyled, StatsContainer } from '../../UI';
 import { OPTIONS, QUERY_KEYS } from '../../constants';
+import { AppLoader, MainStyled, StatsContainer } from '../../UI';
 import {
+  Header,
   BarChart,
   CategoriesStats,
-  Header,
   PopularCategories,
 } from '../../components';
 

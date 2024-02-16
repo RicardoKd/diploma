@@ -2,11 +2,11 @@ import HttpService from '../http.service';
 import { getUserData } from '../../utils';
 import { API_KEYS } from '../../constants';
 import {
-  IUserTransactionsRangeStats,
   IQueryResponse,
-  IIncomeSpendCategoriesRangeStats,
-  IIncomeSpendRangeStats,
   ICategoryRangeStats,
+  IIncomeSpendRangeStats,
+  IUserTransactionsRangeStats,
+  IIncomeSpendCategoriesRangeStats,
   IUserPopularCategoriesRangeStats,
 } from '../../types';
 
