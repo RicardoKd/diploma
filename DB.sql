@@ -808,6 +808,14 @@ GRANT SELECT ON TABLE recurring_transactions_view TO super_parent;
 GRANT SELECT ON TABLE recurring_transactions_view TO child;
 GRANT SELECT ON TABLE recurring_transactions_view TO parent;
 
+GRANT SELECT ON TABLE popular_income_categories_stats TO super_parent;
+GRANT SELECT ON TABLE popular_income_categories_stats TO child;
+GRANT SELECT ON TABLE popular_income_categories_stats TO parent;
+
+GRANT SELECT ON TABLE popular_spend_categories_stats TO super_parent;
+GRANT SELECT ON TABLE popular_spend_categories_stats TO child;
+GRANT SELECT ON TABLE popular_spend_categories_stats TO parent;
+
 GRANT EXECUTE ON FUNCTION create_account(text) TO child;
 GRANT EXECUTE ON FUNCTION create_account(text) TO parent;
 GRANT EXECUTE ON FUNCTION create_account(text) TO super_parent;
