@@ -50,9 +50,9 @@ export const BarChart: React.FC<BarChartProps> = ({
     setRange(event.target.value as Range);
 
   return (
-    <Card sx={{ margin: SPACES.l, width: '500px', display: 'inline-block' }}>
+    <Card sx={{ margin: SPACES.l, width: '530px' }}>
       <CardContent>
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <Box>
           <Bar options={options} data={data1} />
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />

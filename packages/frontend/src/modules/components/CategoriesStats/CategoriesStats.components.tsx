@@ -28,7 +28,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
   }
 
   return (
-    <div>
+    <>
       <BarChart
         options={OPTIONS.CATEGORIES_STATS.income}
         labels={stats.income.map((stat) => stat.category)}
@@ -49,6 +49,6 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
           },
         ]}
       />
-    </div>
+    </>
   );
 };
