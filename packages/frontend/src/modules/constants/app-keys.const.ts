@@ -18,6 +18,7 @@ export const QUERY_KEYS = Object.freeze({
   CATEGORIES_STATS: 'categoriesStats',
   SPEND_CATEGORIES: 'spendCategories',
   INCOME_CATEGORIES: 'incomeCatogories',
+  POPULAR_CATEGORIES: 'popularCatogories',
   RECURRING_TRANSACTIONS: 'recurringTransactions',
   ACCOUNT_TRANSACTIONS_STATS: 'accountTransactionsStats',
   CATEGORIES_BY_ACCOUNT_ID_STATS: 'categoriesByAccountIdStats',

@@ -7,6 +7,7 @@ import {
   IIncomeSpendCategoriesRangeStats,
   IIncomeSpendRangeStats,
   ICategoryRangeStats,
+  IUserPopularCategoriesRangeStats,
 } from '../../types';
 
 class StatsService extends HttpService {
@@ -87,20 +88,17 @@ class StatsService extends HttpService {
     return result.rows;
   }
 
-  async getPopularCategoriesStats(): Promise<{}[]> {
-    throw new Error('NOT IMPLEMENTED');
-
-    const income = await this.post<IQueryResponse<{}>>(API_KEYS.QUERY, {
+  async getPopularCategoriesStats(): Promise<
+    IUserPopularCategoriesRangeStats[]
+  > {
+    const result = await this.post<
+      IQueryResponse<IUserPopularCategoriesRangeStats>
+    >(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select * from popular_income_categories_stats;`,
+      query: `select * from get_popular_categories_stats();`,
     });
 
-    const spend = await this.post<IQueryResponse<{}>>(API_KEYS.QUERY, {
-      ...getUserData(),
-      query: `select * from popular_spend_categories_stats;`,
-    });
-
-    // return { income: income.rows, spend: spend.rows };
+    return result.rows;
   }
 }
 

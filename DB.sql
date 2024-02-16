@@ -177,80 +177,6 @@ CREATE OR REPLACE VIEW recurring_transactions_view AS
 
 
 
-CREATE OR REPLACE VIEW popular_income_categories_stats AS
-SELECT
-  p.username,
-  (SELECT string_agg(ic.title, ', ')
-   FROM income_category ic
-   WHERE ic.id IN (
-     SELECT i.category_id
-     FROM income i
-     JOIN account a ON i.account_id = a.id
-     WHERE a.username = p.username AND date_trunc('month', i.record_date) = date_trunc('month', CURRENT_DATE)
-     GROUP BY i.category_id
-     ORDER BY SUM(i.amount_of_money::Numeric) DESC
-   )) AS month,
-  (SELECT string_agg(ic.title, ', ')
-   FROM income_category ic
-   WHERE ic.id IN (
-     SELECT i.category_id
-     FROM income i
-     JOIN account a ON i.account_id = a.id
-     WHERE a.username = p.username AND date_trunc('quarter', i.record_date) = date_trunc('quarter', CURRENT_DATE)
-     GROUP BY i.category_id
-     ORDER BY SUM(i.amount_of_money::Numeric) DESC
-   )) AS quarter,
-  (SELECT string_agg(ic.title, ', ')
-   FROM income_category ic
-   WHERE ic.id IN (
-     SELECT i.category_id
-     FROM income i
-     JOIN account a ON i.account_id = a.id
-     WHERE a.username = p.username AND date_trunc('year', i.record_date) = date_trunc('year', CURRENT_DATE)
-     GROUP BY i.category_id
-     ORDER BY SUM(i.amount_of_money::Numeric) DESC
-   )) AS year
-FROM person p;
-
-
-
-CREATE OR REPLACE VIEW popular_spend_categories_stats AS
-SELECT
-  p.username,
-  (SELECT string_agg(sc.title, ', ')
-   FROM spend_category sc
-   WHERE sc.id IN (
-     SELECT s.category_id
-     FROM spend s
-     JOIN account a ON s.account_id = a.id
-     WHERE a.username = p.username AND date_trunc('month', s.record_date) = date_trunc('month', CURRENT_DATE)
-     GROUP BY s.category_id
-     ORDER BY SUM(s.amount_of_money::Numeric) DESC
-   )) AS month,
-  (SELECT string_agg(sc.title, ', ')
-   FROM spend_category sc
-   WHERE sc.id IN (
-     SELECT s.category_id
-     FROM spend s
-     JOIN account a ON s.account_id = a.id
-     WHERE a.username = p.username AND date_trunc('quarter', s.record_date) = date_trunc('quarter', CURRENT_DATE)
-     GROUP BY s.category_id
-     ORDER BY SUM(s.amount_of_money::Numeric) DESC
-   )) AS quarter,
-  (SELECT string_agg(sc.title, ', ')
-   FROM spend_category sc
-   WHERE sc.id IN (
-     SELECT s.category_id
-     FROM spend s
-     JOIN account a ON s.account_id = a.id
-     WHERE a.username = p.username AND date_trunc('year', s.record_date) = date_trunc('year', CURRENT_DATE)
-     GROUP BY s.category_id
-     ORDER BY SUM(s.amount_of_money::Numeric) DESC
-   )) AS year
-FROM person p;
-
-
-
 --
 -- FUNCTIONS AND TRIGGERS
 --
@@ -761,6 +687,87 @@ CREATE OR REPLACE FUNCTION get_ranged_spend_categories_percentage_by_account_id(
 
 
 
+CREATE OR REPLACE FUNCTION get_popular_categories_stats()
+  RETURNS TABLE(
+          username TEXT,
+          income json,
+          spend json
+  )
+  AS $$
+  BEGIN
+  RETURN QUERY
+SELECT
+  p.username,
+  json_build_object(
+    'month', (SELECT string_agg(ic.title, ', ')
+              FROM income_category ic
+              WHERE ic.id IN (
+                SELECT i.category_id
+                FROM income i
+                JOIN account a ON i.account_id = a.id
+                WHERE a.username = p.username AND date_trunc('month', i.record_date) = date_trunc('month', CURRENT_DATE)
+                GROUP BY i.category_id
+                ORDER BY SUM(i.amount_of_money::Numeric) DESC
+              )),
+    'quarter', (SELECT string_agg(ic.title, ', ')
+                FROM income_category ic
+                WHERE ic.id IN (
+                  SELECT i.category_id
+                  FROM income i
+                  JOIN account a ON i.account_id = a.id
+                  WHERE a.username = p.username AND date_trunc('quarter', i.record_date) = date_trunc('quarter', CURRENT_DATE)
+                  GROUP BY i.category_id
+                  ORDER BY SUM(i.amount_of_money::Numeric) DESC
+                )),
+    'year', (SELECT string_agg(ic.title, ', ')
+             FROM income_category ic
+             WHERE ic.id IN (
+               SELECT i.category_id
+               FROM income i
+               JOIN account a ON i.account_id = a.id
+               WHERE a.username = p.username AND date_trunc('year', i.record_date) = date_trunc('year', CURRENT_DATE)
+               GROUP BY i.category_id
+               ORDER BY SUM(i.amount_of_money::Numeric) DESC
+             ))
+  ) AS income,
+  json_build_object(
+    'month', (SELECT string_agg(sc.title, ', ')
+              FROM spend_category sc
+              WHERE sc.id IN (
+                SELECT s.category_id
+                FROM spend s
+                JOIN account a ON s.account_id = a.id
+                WHERE a.username = p.username AND date_trunc('month', s.record_date) = date_trunc('month', CURRENT_DATE)
+                GROUP BY s.category_id
+                ORDER BY SUM(s.amount_of_money::Numeric) DESC
+              )),
+    'quarter', (SELECT string_agg(sc.title, ', ')
+                FROM spend_category sc
+                WHERE sc.id IN (
+                  SELECT s.category_id
+                  FROM spend s
+                  JOIN account a ON s.account_id = a.id
+                  WHERE a.username = p.username AND date_trunc('quarter', s.record_date) = date_trunc('quarter', CURRENT_DATE)
+                  GROUP BY s.category_id
+                  ORDER BY SUM(s.amount_of_money::Numeric) DESC
+                )),
+    'year', (SELECT string_agg(sc.title, ', ')
+             FROM spend_category sc
+             WHERE sc.id IN (
+               SELECT s.category_id
+               FROM spend s
+               JOIN account a ON s.account_id = a.id
+               WHERE a.username = p.username AND date_trunc('year', s.record_date) = date_trunc('year', CURRENT_DATE)
+               GROUP BY s.category_id
+               ORDER BY SUM(s.amount_of_money::Numeric) DESC
+             ))
+  ) AS spend
+FROM person p;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 --
 -- ROLES AND RIGHTS
 --
@@ -808,14 +815,6 @@ GRANT SELECT ON TABLE recurring_transactions_view TO super_parent;
 GRANT SELECT ON TABLE recurring_transactions_view TO child;
 GRANT SELECT ON TABLE recurring_transactions_view TO parent;
 
-GRANT SELECT ON TABLE popular_income_categories_stats TO super_parent;
-GRANT SELECT ON TABLE popular_income_categories_stats TO child;
-GRANT SELECT ON TABLE popular_income_categories_stats TO parent;
-
-GRANT SELECT ON TABLE popular_spend_categories_stats TO super_parent;
-GRANT SELECT ON TABLE popular_spend_categories_stats TO child;
-GRANT SELECT ON TABLE popular_spend_categories_stats TO parent;
-
 GRANT EXECUTE ON FUNCTION create_account(text) TO child;
 GRANT EXECUTE ON FUNCTION create_account(text) TO parent;
 GRANT EXECUTE ON FUNCTION create_account(text) TO super_parent;
@@ -842,7 +841,7 @@ INSERT INTO Income_Category (title)
 	('Rental Income'),
 	('Gifts'),
 	('Capital Gains'),
-	('Self-Employment Income'),
+	('Self-Employment'),
 	('Other'),
 	('Social Security');
 

@@ -14,5 +14,5 @@ export * from './IRecurringTransaction';
 export * from './stats/ICategoryRange.stats';
 export * from './stats/IIncomeSpendRange.stats';
 export * from './stats/IUserTransactionsRange.stats';
-export * from './stats/IUserPopularCategoryRange.stats';
+export * from './stats/IUserPopularCategoriesRangeStats.stats';
 export * from './stats/IIncomeSpendCategoriesRange.stats';
