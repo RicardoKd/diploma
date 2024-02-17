@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect } from 'react';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React from 'react';
 import { useMutation, useQuery } from 'react-query';
-import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 import { Table } from '../../UI';
-import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
+import { showError, showSuccess } from '../../utils';
 import { ICategory, ITransaction } from '../../types';
-import { currencyFormatter, showError, showSuccess } from '../../utils';
+import {
+  QUERY_KEYS,
+  GET_TRANSACTIONS_TABLE_COLUMN_DEFINITIONS,
+} from '../../constants';
 
 export const TransactionsTable = () => {
   const accountId = queryClient.getQueryData<string>(
@@ -44,13 +45,13 @@ export const TransactionsTable = () => {
     }
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (updateMutation.isError) {
       showError((updateMutation.error as any).response.data.error);
     }
   }, [updateMutation.isError]);
 
-  const handleUpdate = useCallback(
+  const handleUpdate = React.useCallback(
     async (newRow: ITransaction, oldRow: ITransaction) => {
       const isSuccess = await updateMutation.mutateAsync(newRow);
 
@@ -67,76 +68,19 @@ export const TransactionsTable = () => {
     }
   );
 
-  const handleDelete = useCallback(
-    ({ type, id }: ITransaction) =>
-      () =>
-        deleteMutation.mutate({ table: type, id }),
+  const handleDelete = React.useCallback(
+    ({ type, id }: ITransaction) => deleteMutation.mutate({ table: type, id }),
     []
   );
-
-  const columns: GridColDef[] = [
-    {
-      flex: 0.35,
-      field: 'type',
-      headerName: 'Type',
-    },
-    {
-      flex: 0.5,
-      type: 'number',
-      editable: true,
-      field: 'amount_of_money',
-      headerName: 'Amount of money',
-      valueFormatter: ({ value }) => currencyFormatter.format(value),
-    },
-    {
-      flex: 0.5,
-      type: 'date',
-      editable: true,
-      headerName: 'Date',
-      field: 'record_date',
-    },
-    {
-      flex: 0.5,
-      editable: true,
-      field: 'category',
-      type: 'singleSelect',
-      headerName: 'Category',
-      // getOptionValue: (value: any) => value.id, // left as a reference
-      // getOptionLabel: (value: any) => value.title, // left as a reference
-      valueGetter: ({ row }) => row.category.id,
-      valueSetter: ({ row, value }) => {
-        row.category.id = value;
-
-        return row;
-      },
-      valueOptions: ({ row }) =>
-        row && row.type === 'income'
-          ? incomeCategories || []
-          : spendCategories || [],
-    },
-    {
-      flex: 1.5,
-      field: 'notes',
-      editable: true,
-      headerName: 'Notes',
-    },
-    {
-      type: 'actions',
-      field: 'actions',
-      getActions: (params) => [
-        <GridActionsCellItem
-          label="Delete"
-          icon={<DeleteIcon />}
-          onClick={handleDelete(params.row)}
-        />,
-      ],
-    },
-  ];
 
   return (
     <Table
       rows={transactionsLoaded ? transactions : []}
-      columns={columns}
+      columns={GET_TRANSACTIONS_TABLE_COLUMN_DEFINITIONS({
+        handleDelete,
+        spendCategories,
+        incomeCategories,
+      })}
       isLoading={isLoading}
       handleUpdate={handleUpdate}
     />

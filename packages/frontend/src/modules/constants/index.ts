@@ -2,6 +2,7 @@ import { IAlertState, Range } from '../types';
 
 export * from './charts.const';
 export * from './app-keys.const';
+export * from './tableColumnDefinitions.const';
 
 export const SERVER_URL = 'http://localhost:4200';
 
