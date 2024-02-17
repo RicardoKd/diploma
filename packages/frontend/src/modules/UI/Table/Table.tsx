@@ -18,6 +18,7 @@ export const Table: React.FC<TableProps> = ({
   handleUpdate,
 }) => {
   const getRowHeight = React.useCallback(() => 'auto', []);
+
   return (
     <DataGridStyled
       rows={rows}
