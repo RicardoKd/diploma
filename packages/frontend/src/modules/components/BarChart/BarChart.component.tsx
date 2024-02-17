@@ -50,7 +50,7 @@ export const BarChart: React.FC<BarChartProps> = ({
     setRange(event.target.value as Range);
 
   return (
-    <Card sx={{ margin: SPACES.l, width: '530px' }}>
+    <Card sx={{ margin: SPACES.l, width: 530 }}>
       <CardContent>
         <Box>
           <Bar options={options} data={data} />

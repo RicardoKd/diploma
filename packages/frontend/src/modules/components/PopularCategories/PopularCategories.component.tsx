@@ -51,9 +51,9 @@ export const PopularCategories = () => {
     },
   ];
   return (
-    <Card sx={{ width: 530, minWidth: 300, margin: SPACES.l }}>
+    <Card sx={{ width: 530, margin: SPACES.l }}>
       <CardContent>
-        <Box sx={{ height: '249px' }}>
+        <Box sx={{ height: 249 }}>
           <Table rows={rows} isLoading={false} columns={columns} />
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
