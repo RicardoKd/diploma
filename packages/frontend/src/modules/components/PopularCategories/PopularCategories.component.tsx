@@ -23,8 +23,6 @@ export const PopularCategories = () => {
     return <AppLoader />;
   }
 
-  console.log('stats :>> ', stats);
-
   const handleRangeChange = (event: SelectChangeEvent) =>
     setRange(event.target.value as Range);
 
