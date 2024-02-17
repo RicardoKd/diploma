@@ -20,6 +20,7 @@ export const QUERY_KEYS = Object.freeze({
   INCOME_CATEGORIES: 'incomeCatogories',
   POPULAR_CATEGORIES: 'popularCatogories',
   RECURRING_TRANSACTIONS: 'recurringTransactions',
+  MONTHLY_INCOME_SPEND_STATS: 'monthlyIncomeSpendStats',
   ACCOUNT_TRANSACTIONS_STATS: 'accountTransactionsStats',
   CATEGORIES_BY_ACCOUNT_ID_STATS: 'categoriesByAccountIdStats',
 });

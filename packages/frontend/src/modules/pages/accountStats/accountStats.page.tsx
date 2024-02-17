@@ -7,6 +7,7 @@ import { MainStyled, StatsContainer } from '../../UI';
 import {
   Header,
   CategoriesStats,
+  MonthlyIncomeSpendStats,
   AccountTransactionsStats,
 } from '../../components';
 
@@ -24,6 +25,7 @@ export const AccountStatsPage = () => {
               statsService.getCategoriesStatsByAccountId({ accountId })
             }
           />
+          <MonthlyIncomeSpendStats accountId={accountId} />
           <AccountTransactionsStats accountId={accountId} />
         </StatsContainer>
       </MainStyled>

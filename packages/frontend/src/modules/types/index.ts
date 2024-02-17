@@ -13,6 +13,7 @@ export * from './IServiceResponse';
 export * from './IRecurringTransaction';
 export * from './stats/ICategoryRange.stats';
 export * from './stats/IIncomeSpendRange.stats';
+export * from './stats/IMonthlyIncomeSpendStats';
 export * from './stats/IUserTransactionsRange.stats';
 export * from './stats/IUserPopularCategoriesRangeStats.stats';
 export * from './stats/IIncomeSpendCategoriesRange.stats';

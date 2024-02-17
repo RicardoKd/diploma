@@ -8,6 +8,7 @@ import {
   IUserTransactionsRangeStats,
   IIncomeSpendCategoriesRangeStats,
   IUserPopularCategoriesRangeStats,
+  IMonthlyIncomeSpendStats,
 } from '../../types';
 
 class StatsService extends HttpService {
@@ -95,8 +96,25 @@ class StatsService extends HttpService {
       IQueryResponse<IUserPopularCategoriesRangeStats>
     >(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select * from get_popular_categories_stats();`,
+      query: `SELECT * FROM get_popular_categories_stats();`,
     });
+
+    return result.rows;
+  }
+
+  async getMonthlyIncomeSpendStats({
+    accountId,
+  }: {
+    accountId: string;
+  }): Promise<IMonthlyIncomeSpendStats[]> {
+    const result = await this.post<IQueryResponse<IMonthlyIncomeSpendStats>>(
+      API_KEYS.QUERY,
+      {
+        ...getUserData(),
+        query: `SELECT * FROM get_monthly_income_spend_stats($1);`,
+        variables: [accountId],
+      }
+    );
 
     return result.rows;
   }

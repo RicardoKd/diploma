@@ -768,6 +768,38 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE FUNCTION get_monthly_income_spend_stats(accountId TEXT)
+RETURNS TABLE (month_year TEXT, income NUMERIC, spend NUMERIC) AS $$
+BEGIN
+RETURN QUERY
+WITH months AS (
+    SELECT generate_series(DATE_TRUNC('month', CURRENT_DATE - INTERVAL '1 year'), 
+                           DATE_TRUNC('month', CURRENT_DATE), 
+                           '1 month'::interval)::date AS month_start
+),
+income AS (
+    SELECT DATE_TRUNC('month', record_date)::date AS month, SUM(amount_of_money::NUMERIC) AS total_income
+    FROM income
+    WHERE account_id = accountId::UUID
+    GROUP BY month
+),
+spend AS (
+    SELECT DATE_TRUNC('month', record_date)::date AS month, SUM(amount_of_money::NUMERIC) AS total_spend
+    FROM spend
+    WHERE account_id = accountId::UUID
+    GROUP BY month
+)
+SELECT TO_CHAR(months.month_start, 'Mon YYYY') AS month_year, 
+       COALESCE(income.total_income, 0) AS income, 
+       COALESCE(spend.total_spend, 0) AS spend
+FROM months
+LEFT JOIN income ON months.month_start = income.month
+LEFT JOIN spend ON months.month_start = spend.month
+ORDER BY months.month_start;
+END; $$ LANGUAGE plpgsql;
+
+
+
 --
 -- ROLES AND RIGHTS
 --

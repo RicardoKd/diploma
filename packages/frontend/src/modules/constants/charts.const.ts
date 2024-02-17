@@ -17,7 +17,7 @@ export const OPTIONS = Object.freeze({
           text: 'Amount of money $',
         },
       },
-    }
+    },
   },
   ACCOUNT_TRANSACTION_STATS: {
     responsive: true,
@@ -28,6 +28,26 @@ export const OPTIONS = Object.freeze({
       title: {
         display: true,
         text: 'Spends to incomes ratio',
+      },
+    },
+  },
+  MONTHLY_INCOME_SPEND_STATS: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Incomes and spends fro the last 12 months',
+      },
+    },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: 'Amount of money $',
+        },
       },
     },
   },

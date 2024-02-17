@@ -9,6 +9,7 @@ export * from './CreateTransactionForm/CreateTransactionForm.component';
 export * from './DialogForm/DialogForm.component';
 export * from './Form/Form.component';
 export * from './Header/Header.component';
+export * from './MonthlyIncomeSpendStats/MonthlyIncomeSpendStats.component';
 export * from './PopularCategories/PopularCategories.component';
 export * from './PrivateRoute/PrivateRoute.component';
 export * from './RecurringTransactionsTable/RecurringTransactionsTable.component';
