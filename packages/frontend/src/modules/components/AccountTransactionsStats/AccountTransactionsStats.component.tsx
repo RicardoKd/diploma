@@ -28,9 +28,9 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
 
   const { isSuccess, data: account } = useQuery({
-    queryKey: [QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS, accountId],
     keepPreviousData: true,
     refetchOnMount: 'always',
+    queryKey: [QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS, accountId],
     queryFn: () => statsService.getAccountTransactionsStatsById({ accountId }),
   });
 
