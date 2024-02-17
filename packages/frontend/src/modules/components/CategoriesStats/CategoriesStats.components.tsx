@@ -34,8 +34,9 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
         labels={stats.income.map((stat) => stat.category)}
         preDatasets={[
           {
-            backgroundColor: COLORS.purple,
+            label: 'Percentage',
             data: stats.income,
+            backgroundColor: COLORS.purple,
           },
         ]}
       />
@@ -44,8 +45,9 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
         labels={stats.spend.map((stat) => stat.category)}
         preDatasets={[
           {
-            backgroundColor: COLORS.purple,
+            label: 'Percentage',
             data: stats.spend,
+            backgroundColor: COLORS.purple,
           },
         ]}
       />
