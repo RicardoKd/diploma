@@ -38,7 +38,7 @@ export const BarChart: React.FC<BarChartProps> = ({
 }) => {
   const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
 
-  const data1 = {
+  const data = {
     labels,
     datasets: preDatasets.map((pds) => ({
       ...pds,
@@ -53,7 +53,7 @@ export const BarChart: React.FC<BarChartProps> = ({
     <Card sx={{ margin: SPACES.l, width: '530px' }}>
       <CardContent>
         <Box>
-          <Bar options={options} data={data1} />
+          <Bar options={options} data={data} />
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
       </CardContent>
