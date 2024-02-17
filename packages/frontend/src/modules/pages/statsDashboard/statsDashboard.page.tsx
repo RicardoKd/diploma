@@ -33,7 +33,6 @@ export const StatsDashboardPage = () => {
             queryKey={[QUERY_KEYS.CATEGORIES_STATS]}
             queryMethod={() => statsService.getCategoriesStats()}
           />
-
           <BarChart
             options={OPTIONS.USERS_STATS}
             labels={userStats.map((stat) => stat.username)}
