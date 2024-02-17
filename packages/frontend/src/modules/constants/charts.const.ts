@@ -10,6 +10,14 @@ export const OPTIONS = Object.freeze({
         text: 'Incomes and spends by user',
       },
     },
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: 'Amount of money $',
+        },
+      },
+    }
   },
   ACCOUNT_TRANSACTION_STATS: {
     responsive: true,
