@@ -1,12 +1,12 @@
 import { Application, Response } from 'express';
 
-import connectDB from './db';
-import { ILoginRequest, IQueryRequest } from './types';
+import { connectUserToDB } from '../db';
+import { ILoginRequest, IQueryRequest } from '../types';
 
 const appRouter = (app: Application) => {
   app.post('/login', async ({ body }: ILoginRequest, res: Response) => {
     try {
-      const client = await connectDB(body.user, body.password);
+      const client = await connectUserToDB(body.user, body.password);
 
       let result = await client.query('select get_my_role()');
 
@@ -24,7 +24,7 @@ const appRouter = (app: Application) => {
 
   app.post('/query', async ({ body }: IQueryRequest, res: Response) => {
     try {
-      const client = await connectDB(body.user, body.password);
+      const client = await connectUserToDB(body.user, body.password);
 
       const result = await client.query(body.query, body.variables);
 

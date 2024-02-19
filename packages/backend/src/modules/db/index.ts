@@ -1,7 +1,10 @@
 import { Client } from 'pg';
-import { PG_CONF, ROLES } from './const';
+import { PG_CONF, ROLES } from '../constants';
 
-async function connectDB(user: string, password: string): Promise<Client> {
+export async function connectUserToDB(
+  user: string,
+  password: string
+): Promise<Client> {
   if (!user || !password) {
     throw new Error('User and password must be provided');
   }
@@ -26,4 +29,15 @@ async function connectDB(user: string, password: string): Promise<Client> {
   return client;
 }
 
-export default connectDB;
+export async function connectServiceToDB(): Promise<Client> {
+  const client = new Client({ user: 'test', password: 'test', ...PG_CONF });
+
+  client.on('error', (error) => {
+    console.error(error);
+    process.exit(-1);
+  });
+
+  await client.connect();
+
+  return client;
+}
