@@ -11,18 +11,9 @@ import {
   DialogActions,
 } from '@mui/material';
 
+import { MUI } from '../../theme';
 import { AppButton } from '../../UI';
-import { COLORS, MUI } from '../../theme';
 import { formatLabel, showError, showSuccess } from '../../utils';
-
-const dialogFormButtonStyle = {
-  ':hover': {
-    borderWidth: '2px',
-    padding: '4.6px 11px',
-    borderColor: COLORS.black,
-    backgroundColor: COLORS.black,
-  },
-};
 
 interface FormProps {
   isOpen: boolean;
@@ -30,17 +21,17 @@ interface FormProps {
   errorMessage: string;
   serviceMethodArgs?: {};
   successMessage: string;
+  handleClose: () => void;
   initialValues: FormikValues;
   validationSchema: Yup.Schema;
   errorCallback?: (error: any) => void;
   successCallback?: (data: unknown) => void;
-  handleClose: () => void;
+  serviceMethod(data: FormikValues): Promise<unknown>;
   fields: {
     type?: string;
     formItem: string;
     options?: { label: string; value: string | number }[];
   }[];
-  serviceMethod(data: FormikValues): Promise<unknown>;
 }
 
 export const DialogForm: React.FC<FormProps> = ({
@@ -98,15 +89,13 @@ export const DialogForm: React.FC<FormProps> = ({
       PaperProps={{
         component: 'form',
         onSubmit: formik.handleSubmit,
-        sx: { backgroundColor: COLORS.lightPurple, color: COLORS.white },
       }}
     >
       <DialogTitle>{formName}</DialogTitle>
 
-      <DialogContent>
+      <DialogContent sx={{ width: '600px' }}>
         {fields.map(({ formItem, type, options }, i) => (
           <TextField
-            InputLabelProps={type === 'date' ? { shrink: true } : {}}
             key={i}
             fullWidth
             type={type}
@@ -119,6 +108,7 @@ export const DialogForm: React.FC<FormProps> = ({
             label={formatLabel(formItem)}
             onChange={formik.handleChange}
             value={formik.values[formItem]}
+            InputLabelProps={type === 'date' ? { shrink: true } : {}}
             error={formik.touched[formItem] && !!formik.errors[formItem]}
             helperText={
               (formik.touched[formItem] &&
@@ -135,8 +125,8 @@ export const DialogForm: React.FC<FormProps> = ({
         ))}
       </DialogContent>
       <DialogActions>
-        <AppButton sx={dialogFormButtonStyle} onClick={onClose} text="Cancel" />
-        <AppButton sx={dialogFormButtonStyle} text="Submit" type="submit" />
+        <AppButton onClick={onClose} text="Cancel" />
+        <AppButton text="Submit" type="submit" />
       </DialogActions>
     </Dialog>
   );
