@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
+import { FlexContainer } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
 import { statsService } from '../../services';
-import { MainStyled, StatsContainer } from '../../UI';
 import {
   Header,
   CategoriesStats,
@@ -17,18 +17,16 @@ export const AccountStatsPage = () => {
   return (
     <>
       <Header title="Account Statistics" />
-      <MainStyled>
-        <StatsContainer>
-          <CategoriesStats
-            queryKey={[QUERY_KEYS.CATEGORIES_BY_ACCOUNT_ID_STATS, accountId]}
-            queryMethod={() =>
-              statsService.getCategoriesStatsByAccountId({ accountId })
-            }
-          />
-          <MonthlyIncomeSpendStats accountId={accountId} />
-          <AccountTransactionsStats accountId={accountId} />
-        </StatsContainer>
-      </MainStyled>
+      <FlexContainer sx={{ flexWrap: 'wrap' }}>
+        <CategoriesStats
+          queryKey={[QUERY_KEYS.CATEGORIES_BY_ACCOUNT_ID_STATS, accountId]}
+          queryMethod={() =>
+            statsService.getCategoriesStatsByAccountId({ accountId })
+          }
+        />
+        <MonthlyIncomeSpendStats accountId={accountId} />
+        <AccountTransactionsStats accountId={accountId} />
+      </FlexContainer>
     </>
   );
 };

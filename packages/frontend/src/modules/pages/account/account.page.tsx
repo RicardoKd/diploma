@@ -1,10 +1,11 @@
 import React from 'react';
-import { Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { Typography, Container } from '@mui/material';
 
+import { SPACES } from '../../theme';
+import { FlexContainer } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
-import { MainStyled, TableActionsContainer, TableContainer } from '../../UI';
 import {
   Header,
   TransactionsTable,
@@ -20,8 +21,17 @@ export const AccountPage = () => {
   return (
     <>
       <Header title="Account Details" />
-      <MainStyled>
-        <TableActionsContainer>
+      <FlexContainer sx={{ flexDirection: 'column' }}>
+        <FlexContainer
+          sx={{
+            width: '100%',
+            marginBottom: SPACES.s,
+            justifyContent: 'space-between',
+            '> div > *': {
+              marginLeft: SPACES.m,
+            },
+          }}
+        >
           <Typography variant="h6" component="h4">
             Transactions
           </Typography>
@@ -29,12 +39,24 @@ export const AccountPage = () => {
             <CreateTransactionForm type="income" />
             <CreateTransactionForm type="spend" />
           </div>
-        </TableActionsContainer>
-        <TableContainer>
+        </FlexContainer>
+        <Container
+          disableGutters
+          sx={{ height: 454, width: '100%', marginBottom: SPACES.xxl }}
+        >
           <TransactionsTable />
-        </TableContainer>
+        </Container>
 
-        <TableActionsContainer>
+        <FlexContainer
+          sx={{
+            width: '100%',
+            marginBottom: SPACES.s,
+            justifyContent: 'space-between',
+            '> div > *': {
+              marginLeft: SPACES.m,
+            },
+          }}
+        >
           <Typography variant="h6" component="h4">
             Recurring Transactions
           </Typography>
@@ -42,11 +64,14 @@ export const AccountPage = () => {
             <CreateRecurringTransactionForm type="income" />
             <CreateRecurringTransactionForm type="spend" />
           </div>
-        </TableActionsContainer>
-        <TableContainer>
+        </FlexContainer>
+        <Container
+          disableGutters
+          sx={{ height: 454, width: '100%', marginBottom: SPACES.xxl }}
+        >
           <RecurringTransactionsTable />
-        </TableContainer>
-      </MainStyled>
+        </Container>
+      </FlexContainer>
     </>
   );
 };
