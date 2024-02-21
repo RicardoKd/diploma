@@ -32,7 +32,7 @@ export const ROUTER_KEYS = Object.freeze({
   LOGIN: '/login',
   PROFILE: '/profile',
   ACCOUNT: '/account',
-  USER_STATS: '/statistics',
+  STATS_DASHBOARD: '/statistics',
   ACCOUNT_STATS: '/account/statistics',
 });
 
