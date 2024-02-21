@@ -5,7 +5,6 @@ export const COLORS = Object.freeze({
   greyishwhite: '#E9E9EA',
   blue: '#1976d2',
   white: '#ffffff',
-  lightgrey: '#d3d3d3',
   success: '#65C466',
   red: '#f95976',
   yellow: '#D18C19',
