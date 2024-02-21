@@ -54,12 +54,12 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
         <Typography variant="h5" component="div">
           {title}
         </Typography>
-        <Divider color="primary" sx={{ marginBottom: SPACES.m }} />
+        <Divider
+          sx={{ borderColor: 'secondary.main', marginBottom: SPACES.m }}
+        />
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="body1">Balance:</Typography>
-          <Typography variant="body1">
-            {currencyFormatter.format(balance)}
-          </Typography>
+          <Typography>Balance:</Typography>
+          <Typography>{currencyFormatter.format(balance)}</Typography>
         </Box>
       </CardContent>
       <CardActions>
