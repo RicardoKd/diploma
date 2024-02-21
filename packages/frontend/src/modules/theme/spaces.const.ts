@@ -5,5 +5,7 @@ export const SPACES = Object.freeze({
   m: '1rem',
   sm: '0.75rem',
   s: '0.5rem',
-  xs: '0.35rem'
+  xs: '0.35rem',
 });
+
+export const BORDER_RADIUS = '16px';

@@ -1,7 +1,7 @@
 import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 
-import { COLORS, MUI, SPACES } from '../../theme';
+import { BORDER_RADIUS, MUI, SPACES } from '../../theme';
 
 interface AppButtonProps extends ButtonProps {
   text?: string;
@@ -15,16 +15,12 @@ export const AppButton: React.FC<AppButtonProps> = ({
 }) => (
   <Button
     sx={{
-      color: COLORS.white,
-      borderRadius: '5px',
-      borderColor: COLORS.white,
+      borderRadius: BORDER_RADIUS,
       textTransform: 'capitalize',
       padding: `${SPACES.xs} ${SPACES.sm}`,
       ':hover': {
         borderWidth: '2px',
         padding: '4.6px 11px',
-        color: COLORS.lightPurple,
-        borderColor: COLORS.lightPurple,
       },
       ...sx,
     }}
