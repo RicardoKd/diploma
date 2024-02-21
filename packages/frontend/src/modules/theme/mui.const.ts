@@ -18,11 +18,11 @@ export const THEME = createTheme({
     },
     primary: {
       main: COLORS.blue,
-      contrastText: COLORS.lightPurple,
+      contrastText: COLORS.white,
     },
     secondary: {
       main: COLORS.lightPurple,
-      contrastText: COLORS.lightPurple,
+      contrastText: COLORS.yellow,
     },
   },
   typography: {
