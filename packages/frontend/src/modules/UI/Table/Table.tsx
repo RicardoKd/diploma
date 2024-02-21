@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { MUI, COLORS } from '../../theme';
+import { MUI } from '../../theme';
 
 interface TableProps {
   rows: any[];
@@ -37,13 +37,13 @@ export const Table: React.FC<TableProps> = ({
       }}
       sx={{
         '.MuiDataGrid-columnHeaders': {
-          backgroundColor: COLORS.lightgrey,
+          backgroundColor: 'secondary.contrastText',
         },
         '.MuiDataGrid-row': {
-          backgroundColor: COLORS.white,
+          backgroundColor: 'primary.contrastText',
         },
         '.MuiDataGrid-row:hover': {
-          backgroundColor: 'unset',
+          backgroundColor: 'background.default',
         },
         '.actionCell': {
           justifyContent: 'space-between',
