@@ -3,8 +3,8 @@ import { useQuery } from 'react-query';
 import { Box, Card, CardContent, SelectChangeEvent } from '@mui/material';
 
 import { Range } from '../../types';
-import { SPACES } from '../../theme';
 import { statsService } from '../../services';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 import { AppLoader, RangeSelect, Table } from '../../UI';
 import {
   QUERY_KEYS,
@@ -37,7 +37,7 @@ export const PopularCategories = () => {
   }));
 
   return (
-    <Card sx={{ width: 530, margin: SPACES.l }}>
+    <Card sx={{ width: 530, margin: SPACES.m, borderRadius: BORDER_RADIUS }}>
       <CardContent>
         <Box sx={{ height: 249 }}>
           <Table

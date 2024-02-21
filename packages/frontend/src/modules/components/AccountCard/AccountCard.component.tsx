@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
@@ -10,11 +11,11 @@ import {
   CardActions,
 } from '@mui/material';
 
+import { AppButton } from '../../UI';
 import { IAccount } from '../../types';
-import { COLORS, SPACES } from '../../theme';
 import queryClient from '../../app/queryClient';
 import { accountService } from '../../services';
-import { AppButton, RouterLink } from '../../UI';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 import { QUERY_KEYS, ROUTER_KEYS } from '../../constants';
 import { currencyFormatter, showError, showSuccess } from '../../utils';
 
@@ -23,6 +24,7 @@ interface AccountsCardProps {
 }
 
 export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
+  const navigate = useNavigate();
   const { id, title, balance } = account;
 
   const onChangeSuccess = () => {
@@ -45,15 +47,14 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
         minWidth: 320,
         margin: SPACES.m,
         padding: SPACES.sm,
-        color: COLORS.white,
-        background: COLORS.black,
+        borderRadius: BORDER_RADIUS,
       }}
     >
       <CardContent>
         <Typography variant="h5" component="div">
           {title}
         </Typography>
-        <Divider sx={{ borderColor: COLORS.purple, marginBottom: SPACES.m }} />
+        <Divider color="primary" sx={{ marginBottom: SPACES.m }} />
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="body1">Balance:</Typography>
           <Typography variant="body1">
@@ -62,17 +63,19 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
         </Box>
       </CardContent>
       <CardActions>
-        <RouterLink
-          text="View"
-          to={`${ROUTER_KEYS.ACCOUNT}/${id}`}
-          onClick={() =>
-            queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, id)
-          }
-        />
-        <RouterLink
-          text="Statistics"
-          to={`${ROUTER_KEYS.ACCOUNT_STATS}/${id}`}
-        />
+        <AppButton
+          onClick={() => {
+            queryClient.setQueryData(QUERY_KEYS.CURRENT_ACCOUNT, id);
+            navigate(`${ROUTER_KEYS.ACCOUNT}/${id}`);
+          }}
+        >
+          View
+        </AppButton>
+        <AppButton
+          onClick={() => navigate(`${ROUTER_KEYS.ACCOUNT_STATS}/${id}`)}
+        >
+          Statistics
+        </AppButton>
         <AppButton onClick={() => deleteMutation.mutate({ id })}>
           <DeleteIcon />
         </AppButton>

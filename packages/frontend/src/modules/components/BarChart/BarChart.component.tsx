@@ -11,18 +11,18 @@ import {
   Legend,
 } from 'chart.js';
 
-import { SPACES } from '../../theme';
 import { Range } from '../../types';
 import { RangeSelect } from '../../UI';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 import { RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  Title,
   Tooltip,
-  Legend
+  Legend,
+  Title
 );
 
 interface BarChartProps {
@@ -50,7 +50,7 @@ export const BarChart: React.FC<BarChartProps> = ({
     setRange(event.target.value as Range);
 
   return (
-    <Card sx={{ margin: SPACES.l, width: 530 }}>
+    <Card sx={{ margin: SPACES.m, width: 530, borderRadius: BORDER_RADIUS }}>
       <CardContent>
         <Box>
           <Bar options={options} data={data} />

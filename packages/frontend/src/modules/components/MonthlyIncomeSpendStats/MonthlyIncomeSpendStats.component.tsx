@@ -1,31 +1,31 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
+import { Box, Card, CardContent } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  Title,
   Tooltip,
   Legend,
+  Title,
 } from 'chart.js';
-import { Box, Card, CardContent } from '@mui/material';
 
 import { AppLoader } from '../../UI';
-import { COLORS, SPACES } from '../../theme';
 import { statsService } from '../../services';
 import { OPTIONS, QUERY_KEYS } from '../../constants';
+import { BORDER_RADIUS, COLORS, SPACES } from '../../theme';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
-  Title,
   Tooltip,
-  Legend
+  Legend,
+  Title
 );
 
 interface MonthlyIncomeSpendStatsProps {
@@ -63,7 +63,7 @@ export const MonthlyIncomeSpendStats: React.FC<
   };
 
   return (
-    <Card sx={{ width: 630, margin: SPACES.l }}>
+    <Card sx={{ width: 630, margin: SPACES.l, borderRadius: BORDER_RADIUS }}>
       <CardContent>
         <Box>
           <Line options={OPTIONS.MONTHLY_INCOME_SPEND_STATS} data={data} />

@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 
 import { Range } from '../../types';
-import { COLORS, SPACES } from '../../theme';
+import { BORDER_RADIUS, COLORS, SPACES } from '../../theme';
 import { statsService } from '../../services';
 import { AppLoader, RangeSelect } from '../../UI';
 import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
@@ -52,7 +52,14 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     setRange(event.target.value as Range);
 
   return (
-    <Card sx={{ maxWidth: 400, minWidth: 300, margin: SPACES.l }}>
+    <Card
+      sx={{
+        maxWidth: 400,
+        minWidth: 300,
+        margin: SPACES.l,
+        borderRadius: BORDER_RADIUS,
+      }}
+    >
       <CardContent>
         <Box>
           <Pie data={data} options={OPTIONS.ACCOUNT_TRANSACTION_STATS} />
