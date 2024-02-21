@@ -1,36 +1,23 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { ThemeProvider } from 'styled-components';
 import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { App } from './app';
-// import * as theme from '../theme';
-import * as Styled from './app.styled';
+import { THEME } from '../theme';
 import queryClient from './queryClient';
-import { createTheme } from '@mui/system';
-
-const theme = createTheme({
-  palette: {
-    ochre: {
-      main: '#E3D026',
-      light: '#E9DB5D',
-      dark: '#A29415',
-      contrastText: '#242105',
-    },
-  },
-});
 
 const AppContainer = () => (
-  <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      <Styled.GlobalStyles />
-      <QueryClientProvider client={queryClient}>
+  <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={THEME}>
+        <CssBaseline />
         <App />
         <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </BrowserRouter>
-  </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </BrowserRouter>
 );
 
 export default AppContainer;
