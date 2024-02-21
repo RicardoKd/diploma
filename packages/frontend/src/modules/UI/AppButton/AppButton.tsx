@@ -15,6 +15,7 @@ export const AppButton: React.FC<AppButtonProps> = ({
 }) => (
   <Button
     sx={{
+      fontWeight: 600,
       borderRadius: BORDER_RADIUS,
       textTransform: 'capitalize',
       padding: `${SPACES.xs} ${SPACES.sm}`,
