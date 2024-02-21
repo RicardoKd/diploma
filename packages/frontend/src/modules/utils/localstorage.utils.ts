@@ -1,5 +1,5 @@
-import { QUERY_KEYS, STORAGE_KEYS } from '../constants';
 import queryClient from '../app/queryClient';
+import { QUERY_KEYS, STORAGE_KEYS } from '../constants';
 
 const { USER, ROLE, PASSWORD } = STORAGE_KEYS;
 
@@ -23,6 +23,8 @@ export const getUserData = () => ({
   user: localStorage.getItem(USER),
   password: localStorage.getItem(PASSWORD),
 });
+
+export const getUserName = () => localStorage.getItem(USER);
 
 export const getIsLoggedIn = () =>
   !!(localStorage.getItem(USER) && localStorage.getItem(PASSWORD));
