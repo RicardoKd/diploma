@@ -7,7 +7,6 @@ import {
   HomePage,
   LoginPage,
   WelcomePage,
-  ProfilePage,
   AccountPage,
   AccountStatsPage,
   StatsDashboardPage,
@@ -22,12 +21,8 @@ export const MainRouter = () => (
       path={ROUTER_KEYS.HOME}
     />
     <Route
-      element={<PrivateRoute Component={ProfilePage} />}
-      path={ROUTER_KEYS.PROFILE}
-    />
-    <Route
       element={<PrivateRoute Component={StatsDashboardPage} />}
-      path={ROUTER_KEYS.USER_STATS}
+      path={ROUTER_KEYS.STATS_DASHBOARD}
     />
     <Route
       element={<PrivateRoute Component={AccountPage} />}
