@@ -164,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             )}
           </Box>
 
-          <Typography>{userName}</Typography>
+          <Typography variant='h6'>{userName}</Typography>
           <Box sx={{ flexGrow: 0, ml: SPACES.s }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
