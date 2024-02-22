@@ -1,6 +1,9 @@
 import React from 'react';
+import { MUI, SPACES } from '../../theme';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import {
   Box,
@@ -11,13 +14,14 @@ import {
   Toolbar,
   Tooltip,
   MenuItem,
+  useTheme,
   Container,
   IconButton,
   Typography,
 } from '@mui/material';
 
-import { MUI, SPACES } from '../../theme';
 import { ROUTER_KEYS } from '../../constants';
+import { ColorModeContext } from '../../contexts';
 import { getRole, getUserName } from '../../utils';
 import { AddParentForm, AddChildForm, CreateAccountForm } from '..';
 
@@ -26,20 +30,23 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
+  const theme = useTheme();
   const location = useLocation();
+  const colorMode = React.useContext(ColorModeContext);
+
   const [isAddChildFormOpen, setAddChildFormOpen] = React.useState(false);
   const [isAddParentFormOpen, setAddParentFormOpen] = React.useState(false);
   const [isAddAccountFormOpen, setAddAccountFormOpen] = React.useState(false);
-
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
   const role = getRole();
-  const userName = getUserName()!;
   const navigate = useNavigate();
+  const userName = getUserName()!;
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -157,8 +164,8 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             </Button>
             {role?.includes('parent') && (
               <Button
-                onClick={() => navigate(ROUTER_KEYS.STATS_DASHBOARD)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                onClick={() => navigate(ROUTER_KEYS.STATS_DASHBOARD)}
               >
                 Statistics Dashboard
               </Button>
@@ -172,8 +179,19 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
               </Button>
             )}
           </Box>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="mode"
+            onClick={colorMode.toggleColorMode}
+          >
+            {theme.palette.mode === 'dark' ? (
+              <Brightness7Icon />
+            ) : (
+              <Brightness4Icon />
+            )}
+          </IconButton>
 
-          <Typography variant="h6">{userName}</Typography>
           <Box sx={{ flexGrow: 0, ml: SPACES.s }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -196,6 +214,11 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
                 horizontal: 'right',
               }}
             >
+              <MenuItem>
+                <Typography textAlign="center">
+                  Logged in as {userName}
+                </Typography>
+              </MenuItem>
               <MenuItem onClick={() => navigate(ROUTER_KEYS.LOGIN)}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
