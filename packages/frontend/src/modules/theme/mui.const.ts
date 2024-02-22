@@ -22,22 +22,8 @@ export const THEME = {
         contrastText: COLORS.white,
       },
       secondary: {
-        main: COLORS.lightPurple,
-        contrastText: COLORS.yellow,
-      },
-    },
-    typography: {
-      fontWeightBold: 700,
-    },
-    transitions: {
-      duration: {
-        shortest: 150,
-        shorter: 200,
-        short: 250,
-        standard: 300,
-        complex: 375,
-        enteringScreen: 225,
-        leavingScreen: 195,
+        main: COLORS.yellow,
+        contrastText: COLORS.purple,
       },
     },
   }),
@@ -46,10 +32,10 @@ export const THEME = {
       mode: 'dark',
       primary: {
         main: COLORS.black,
-        contrastText: COLORS.grey,
+        contrastText: COLORS.white,
       },
       secondary: {
-        main: COLORS.purple,
+        main: COLORS.black,
         contrastText: COLORS.purple,
       },
     },
