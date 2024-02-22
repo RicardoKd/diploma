@@ -9,8 +9,8 @@ import { ALERT_INITIAL_STATE, QUERY_KEYS } from '../../constants';
 
 export const AlertStack = () => {
   const { isSuccess, data: state } = useQuery<IAlertState>({
-    queryKey: [QUERY_KEYS.ALERT_STACK],
     initialData: ALERT_INITIAL_STATE,
+    queryKey: [QUERY_KEYS.ALERT_STACK],
   });
 
   if (!isSuccess) {
@@ -33,14 +33,14 @@ export const AlertStack = () => {
     <Stack spacing={SPACES.xl} sx={{ width: '100%' }}>
       <Snackbar
         open={state.isOpen}
-        autoHideDuration={6000}
         onClose={handleClose}
+        autoHideDuration={6000}
       >
         <Alert
           onClose={handleClose}
           variant={MUI.variant}
-          severity={state.severity}
           sx={{ width: '100%' }}
+          severity={state.severity}
         >
           {state.message}
         </Alert>
