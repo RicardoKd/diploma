@@ -6,7 +6,6 @@ import { PrivateRoute } from '../components';
 import {
   HomePage,
   LoginPage,
-  WelcomePage,
   AccountPage,
   AccountStatsPage,
   StatsDashboardPage,
@@ -14,8 +13,7 @@ import {
 
 export const MainRouter = () => (
   <Routes>
-    <Route element={<WelcomePage />} path={ROUTER_KEYS.START} />
-    <Route element={<LoginPage />} path={ROUTER_KEYS.LOGIN} />
+    <Route element={<LoginPage />} path={ROUTER_KEYS.START} />
     <Route
       element={<PrivateRoute Component={HomePage} />}
       path={ROUTER_KEYS.HOME}
