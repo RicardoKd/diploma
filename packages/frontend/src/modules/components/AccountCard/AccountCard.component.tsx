@@ -51,11 +51,11 @@ export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
       }}
     >
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography variant="h5">
           {title}
         </Typography>
         <Divider
-          sx={{ borderColor: 'secondary.main', marginBottom: SPACES.m }}
+          sx={{ borderColor: 'secondary.contrastText', marginBottom: SPACES.m }}
         />
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography>Balance:</Typography>
