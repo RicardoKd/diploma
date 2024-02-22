@@ -1,7 +1,7 @@
 import queryClient from '../app/queryClient';
 import { QUERY_KEYS, STORAGE_KEYS } from '../constants';
 
-const { USER, ROLE, PASSWORD } = STORAGE_KEYS;
+const { USER, ROLE, PASSWORD, COLOR_MODE } = STORAGE_KEYS;
 
 // USER
 export const logOut = () => {
@@ -30,3 +30,8 @@ export const getIsLoggedIn = () =>
   !!(localStorage.getItem(USER) && localStorage.getItem(PASSWORD));
 
 export const getRole = () => localStorage.getItem(ROLE);
+
+export const getIsDarkMode = () => localStorage.getItem(COLOR_MODE) === 'true';
+
+export const setIsDarkMode = (isDark: boolean) =>
+  localStorage.setItem(COLOR_MODE, `${isDark}`);

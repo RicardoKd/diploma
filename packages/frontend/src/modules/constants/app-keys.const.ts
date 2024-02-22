@@ -3,6 +3,7 @@ export const STORAGE_KEYS = Object.freeze({
   USER: 'user',
   ROLE: 'role',
   PASSWORD: 'password',
+  COLOR_MODE: 'colorMode',
 });
 
 // React-query keys
