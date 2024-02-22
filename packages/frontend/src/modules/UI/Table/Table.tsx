@@ -33,7 +33,7 @@ export const Table: React.FC<TableProps> = ({
       getRowHeight={getRowHeight}
       processRowUpdate={handleUpdate}
       onProcessRowUpdateError={(error) => {
-        throw new Error(error);
+        // throw new Error(error);
       }}
       sx={{
         '.MuiDataGrid-columnHeaders': {
