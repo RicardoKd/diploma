@@ -32,9 +32,7 @@ export const LoginPage = () => {
         validationSchema={validationSchema}
         initialValues={new FormikLoginForm()}
         successMessage="Succesfully logged in"
-        successCallback={() => {
-          navigate(ROUTER_KEYS.HOME);
-        }}
+        successCallback={() => navigate(ROUTER_KEYS.HOME)}
         serviceMethod={userService.login.bind(userService)}
         fields={[
           { formItem: LoginFormItems.USER },
