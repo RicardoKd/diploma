@@ -192,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             )}
           </IconButton>
 
-          <Box sx={{ flexGrow: 0, ml: SPACES.s }}>
+          <Box sx={{ flexGrow: 0, ml: SPACES.m }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt={userName} src="/static/images/avatar/.jpg" />
