@@ -110,6 +110,9 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
+              <MenuItem onClick={() => navigate(ROUTER_KEYS.HOME)}>
+                <Typography textAlign="center">Home</Typography>
+              </MenuItem>
               {role?.includes('parent') && (
                 <MenuItem onClick={() => navigate(ROUTER_KEYS.STATS_DASHBOARD)}>
                   <Typography textAlign="center">
@@ -146,6 +149,12 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Button
+              onClick={() => navigate(ROUTER_KEYS.HOME)}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Home
+            </Button>
             {role?.includes('parent') && (
               <Button
                 onClick={() => navigate(ROUTER_KEYS.STATS_DASHBOARD)}
@@ -164,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             )}
           </Box>
 
-          <Typography variant='h6'>{userName}</Typography>
+          <Typography variant="h6">{userName}</Typography>
           <Box sx={{ flexGrow: 0, ml: SPACES.s }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
