@@ -81,6 +81,9 @@ export const TransactionsTable = () => {
         spendCategories,
         incomeCategories,
       })}
+      sx={{
+        minWidth: 1000,
+      }}
       isLoading={isLoading}
       handleUpdate={handleUpdate}
     />

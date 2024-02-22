@@ -1,9 +1,9 @@
 import React from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, DataGridProps } from '@mui/x-data-grid';
 
 import { MUI } from '../../theme';
 
-interface TableProps {
+interface TableProps extends DataGridProps {
   rows: any[];
   isLoading: boolean;
   columns: GridColDef[];
@@ -11,10 +11,12 @@ interface TableProps {
 }
 
 export const Table: React.FC<TableProps> = ({
+  sx,
   rows,
   columns,
   isLoading,
   handleUpdate,
+  ...props
 }) => {
   const getRowHeight = React.useCallback(() => 'auto', []);
 
@@ -36,9 +38,6 @@ export const Table: React.FC<TableProps> = ({
         // throw new Error(error);
       }}
       sx={{
-        '&': {
-          minWidth: '1000px',
-        },
         '.MuiDataGrid-columnHeaders': {
           backgroundColor: 'secondary.contrastText',
         },
@@ -54,7 +53,9 @@ export const Table: React.FC<TableProps> = ({
         '.MuiDataGrid-cell': {
           minHeight: '36px !important',
         },
+        ...sx,
       }}
+      {...props}
     />
   );
 };
