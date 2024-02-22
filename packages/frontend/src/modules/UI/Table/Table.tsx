@@ -36,6 +36,9 @@ export const Table: React.FC<TableProps> = ({
         // throw new Error(error);
       }}
       sx={{
+        '&': {
+          minWidth: '1000px',
+        },
         '.MuiDataGrid-columnHeaders': {
           backgroundColor: 'secondary.contrastText',
         },

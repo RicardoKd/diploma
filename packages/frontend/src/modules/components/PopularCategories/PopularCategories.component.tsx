@@ -39,7 +39,7 @@ export const PopularCategories = () => {
   return (
     <Card sx={{ width: 530, margin: SPACES.m, borderRadius: BORDER_RADIUS }}>
       <CardContent>
-        <Box sx={{ height: 249 }}>
+        <Box sx={{ height: 249, overflowX: 'auto' }}>
           <Table
             rows={rows}
             isLoading={false}

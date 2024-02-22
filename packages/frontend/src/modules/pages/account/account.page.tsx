@@ -42,7 +42,12 @@ export const AccountPage = () => {
         </FlexContainer>
         <Container
           disableGutters
-          sx={{ height: 454, width: '100%', marginBottom: SPACES.xxl }}
+          sx={{
+            height: 454,
+            width: '100%',
+            overflowX: 'auto',
+            marginBottom: SPACES.xxl,
+          }}
         >
           <TransactionsTable />
         </Container>
@@ -67,7 +72,12 @@ export const AccountPage = () => {
         </FlexContainer>
         <Container
           disableGutters
-          sx={{ height: 454, width: '100%', marginBottom: SPACES.xxl }}
+          sx={{
+            height: 454,
+            width: '100%',
+            overflowX: 'auto',
+            marginBottom: SPACES.xxl,
+          }}
         >
           <RecurringTransactionsTable />
         </Container>
