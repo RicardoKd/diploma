@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Box, Card, CardContent, SelectChangeEvent } from '@mui/material';
+import { Card, CardContent, SelectChangeEvent } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -52,9 +52,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   return (
     <Card sx={{ margin: SPACES.m, width: 530, borderRadius: BORDER_RADIUS }}>
       <CardContent>
-        <Box>
-          <Bar options={options} data={data} />
-        </Box>
+        <Bar options={options} data={data} />
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
       </CardContent>
     </Card>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { Container } from '@mui/system';
+import { Container, CircularProgress } from '@mui/material';
 
 import { IAccount } from '../../types';
+import { FlexContainer } from '../../UI';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
-import { AppLoader, FlexContainer } from '../../UI';
 import { Header, AccountCard } from '../../components';
 
 export const HomePage = () => {
@@ -16,18 +16,18 @@ export const HomePage = () => {
     queryFn: () => accountService.getAccounts(),
   });
 
-  if (!isSuccess) {
-    return <AppLoader />;
-  }
-
   return (
     <>
       <Header title="Accounts" />
-      <Container component='main'>
+      <Container component="main">
         <FlexContainer sx={{ flexWrap: 'wrap' }}>
-          {accounts.map((account) => (
-            <AccountCard key={account.id} account={account} />
-          ))}
+          {isSuccess ? (
+            accounts.map((account) => (
+              <AccountCard key={account.id} account={account} />
+            ))
+          ) : (
+            <CircularProgress />
+          )}
         </FlexContainer>
       </Container>
     </>

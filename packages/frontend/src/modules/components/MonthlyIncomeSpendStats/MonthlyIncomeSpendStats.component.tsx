@@ -1,8 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
-import { useQuery } from 'react-query';
 import { useTheme } from '@mui/material/styles';
-import { Box, Card, CardContent } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,10 +13,9 @@ import {
   Title,
 } from 'chart.js';
 
-import { AppLoader } from '../../UI';
-import { statsService } from '../../services';
+import { OPTIONS } from '../../constants';
 import { BORDER_RADIUS, SPACES } from '../../theme';
-import { OPTIONS, QUERY_KEYS } from '../../constants';
+import { IMonthlyIncomeSpendStats } from '../../types';
 
 ChartJS.register(
   CategoryScale,
@@ -30,23 +28,13 @@ ChartJS.register(
 );
 
 interface MonthlyIncomeSpendStatsProps {
-  accountId: string;
+  stats: IMonthlyIncomeSpendStats[];
 }
 
 export const MonthlyIncomeSpendStats: React.FC<
   MonthlyIncomeSpendStatsProps
-> = ({ accountId }) => {
+> = ({ stats }) => {
   const theme = useTheme();
-  const { isSuccess, data: stats } = useQuery({
-    keepPreviousData: true,
-    refetchOnMount: 'always',
-    queryKey: [QUERY_KEYS.MONTHLY_INCOME_SPEND_STATS, accountId],
-    queryFn: () => statsService.getMonthlyIncomeSpendStats({ accountId }),
-  });
-
-  if (!isSuccess) {
-    return <AppLoader />;
-  }
 
   const data = {
     labels: stats.map((st) => st.month_year),
@@ -69,14 +57,12 @@ export const MonthlyIncomeSpendStats: React.FC<
   return (
     <Card sx={{ width: 630, margin: SPACES.l, borderRadius: BORDER_RADIUS }}>
       <CardContent>
-        <Box>
-          <Line
-            data={data}
-            options={OPTIONS.MONTHLY_INCOME_SPEND_STATS(
-              theme.palette.secondary.main
-            )}
-          />
-        </Box>
+        <Line
+          data={data}
+          options={OPTIONS.MONTHLY_INCOME_SPEND_STATS(
+            theme.palette.secondary.main
+          )}
+        />
       </CardContent>
     </Card>
   );

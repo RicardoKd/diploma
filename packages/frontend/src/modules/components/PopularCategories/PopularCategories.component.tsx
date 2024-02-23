@@ -1,30 +1,22 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import { Box, Card, CardContent, SelectChangeEvent } from '@mui/material';
 
-import { Range } from '../../types';
-import { statsService } from '../../services';
+import { RangeSelect, Table } from '../../UI';
 import { BORDER_RADIUS, SPACES } from '../../theme';
-import { AppLoader, RangeSelect, Table } from '../../UI';
+import { IUserPopularCategoriesRangeStats, Range } from '../../types';
 import {
-  QUERY_KEYS,
   RANGE_INITIAL_STATE,
   GET_POPULAR_CATEGORIES_COLUMN_DEFINITIONS,
 } from '../../constants';
 
-export const PopularCategories = () => {
+interface PopularCategoriesProps {
+  stats: IUserPopularCategoriesRangeStats[];
+}
+
+export const PopularCategories: React.FC<PopularCategoriesProps> = ({
+  stats,
+}) => {
   const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
-
-  const { isSuccess, data: stats } = useQuery({
-    keepPreviousData: true,
-    refetchOnMount: 'always',
-    queryKey: [QUERY_KEYS.POPULAR_CATEGORIES],
-    queryFn: () => statsService.getPopularCategoriesStats(),
-  });
-
-  if (!isSuccess) {
-    return <AppLoader />;
-  }
 
   const handleRangeChange = (event: SelectChangeEvent) =>
     setRange(event.target.value as Range);
@@ -39,7 +31,7 @@ export const PopularCategories = () => {
   return (
     <Card sx={{ width: 530, margin: SPACES.m, borderRadius: BORDER_RADIUS }}>
       <CardContent>
-        <Box sx={{ height: 249, overflowX: 'auto' }}>
+        <Box sx={{ height: 241, overflowX: 'auto', mb: 1 }}>
           <Table
             rows={rows}
             isLoading={false}

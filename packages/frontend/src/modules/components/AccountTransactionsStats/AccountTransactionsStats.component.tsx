@@ -1,6 +1,5 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { useQuery } from 'react-query';
 import { useTheme } from '@mui/material/styles';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import {
@@ -11,39 +10,28 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-import { Range } from '../../types';
-import { statsService } from '../../services';
-import { AppLoader, RangeSelect } from '../../UI';
+import { RangeSelect } from '../../UI';
 import { BORDER_RADIUS, SPACES } from '../../theme';
-import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
+import { IIncomeSpendRangeStats, Range } from '../../types';
+import { OPTIONS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface AccountsCardProps {
-  accountId: string;
+  stats: IIncomeSpendRangeStats;
 }
 
 export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
-  accountId,
+  stats,
 }) => {
   const theme = useTheme();
   const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
-  const { isSuccess, data: account } = useQuery({
-    keepPreviousData: true,
-    refetchOnMount: 'always',
-    queryKey: [QUERY_KEYS.ACCOUNT_TRANSACTIONS_STATS, accountId],
-    queryFn: () => statsService.getAccountTransactionsStatsById({ accountId }),
-  });
-
-  if (!isSuccess) {
-    return <AppLoader />;
-  }
 
   const data = {
     labels: ['Spends', 'Incomes'],
     datasets: [
       {
-        data: [account.spend[range], account.income[range]],
+        data: [stats.spend[range], stats.income[range]],
         backgroundColor: [
           theme.palette.error.light,
           theme.palette.success.light,
@@ -65,24 +53,21 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
       }}
     >
       <CardContent>
-        <Box>
-          <Pie
-            data={data}
-            options={OPTIONS.ACCOUNT_TRANSACTION_STATS(
-              theme.palette.secondary.main
-            )}
-          />
-        </Box>
-
+        <Pie
+          data={data}
+          options={OPTIONS.ACCOUNT_TRANSACTION_STATS(
+            theme.palette.secondary.main
+          )}
+        />
         <Box
           mb={1}
           display="flex"
           alignItems="center"
           justifyContent="space-evenly"
         >
-          <Typography variant="body1">Spend: {account.spend[range]}</Typography>
+          <Typography variant="body1">Spend: {stats.spend[range]}</Typography>
           <Typography variant="body1">
-            Income: {account.income[range]}
+            Income: {stats.income[range]}
           </Typography>
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
