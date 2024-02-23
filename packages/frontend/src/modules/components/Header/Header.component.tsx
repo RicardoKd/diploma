@@ -150,6 +150,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
+              variant="text"
               onClick={() => navigate(ROUTER_KEYS.HOME)}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
@@ -157,6 +158,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             </Button>
             {role?.includes('parent') && (
               <Button
+                variant="text"
                 sx={{ my: 2, color: 'white', display: 'block' }}
                 onClick={() => navigate(ROUTER_KEYS.STATS_DASHBOARD)}
               >
@@ -165,6 +167,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             )}
             {location.pathname === ROUTER_KEYS.HOME && (
               <Button
+                variant="text"
                 onClick={() => setAddAccountFormOpen(true)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
@@ -196,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
                 horizontal: 'right',
               }}
             >
-              <MenuItem>
+              <MenuItem sx={{ bgcolor: 'secondary.contrastText' }}>
                 <Typography textAlign="center">
                   Logged in as {userName}
                 </Typography>
