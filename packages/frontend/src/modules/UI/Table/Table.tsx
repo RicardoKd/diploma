@@ -39,7 +39,7 @@ export const Table: React.FC<TableProps> = ({
       }}
       sx={{
         '.MuiDataGrid-columnHeaders': {
-          backgroundColor: 'secondary.main',
+          backgroundColor: 'secondary.contrastText',
         },
         '.MuiDataGrid-row': {
           // backgroundColor: 'primary.contrastText',
