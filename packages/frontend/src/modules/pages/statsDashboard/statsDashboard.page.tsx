@@ -28,7 +28,7 @@ export const StatsDashboardPage = () => {
   return (
     <>
       <Header title="Statistics Dashboard" />
-      <FlexContainer sx={{ flexWrap: 'wrap' }}>
+      <FlexContainer sx={{ flexWrap: 'wrap' }} component='main'>
         <CategoriesStats
           queryKey={[QUERY_KEYS.CATEGORIES_STATS]}
           queryMethod={() => statsService.getCategoriesStats()}

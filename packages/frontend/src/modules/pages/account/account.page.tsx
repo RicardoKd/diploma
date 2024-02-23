@@ -21,7 +21,7 @@ export const AccountPage = () => {
   return (
     <>
       <Header title="Account Details" />
-      <FlexContainer sx={{ flexDirection: 'column' }}>
+      <FlexContainer sx={{ flexDirection: 'column' }} component="main">
         <FlexContainer
           sx={{
             width: '100%',

@@ -40,7 +40,7 @@ export const LoginPage = () => {
   ];
 
   return (
-    <FlexContainer sx={{ height: '100vh' }}>
+    <FlexContainer sx={{ height: '100vh' }} component='main'>
       <Paper
         sx={{
           display: 'flex',

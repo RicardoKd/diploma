@@ -17,7 +17,7 @@ export const AccountStatsPage = () => {
   return (
     <>
       <Header title="Account Statistics" />
-      <FlexContainer sx={{ flexWrap: 'wrap' }}>
+      <FlexContainer sx={{ flexWrap: 'wrap' }} component="main">
         <CategoriesStats
           queryKey={[QUERY_KEYS.CATEGORIES_BY_ACCOUNT_ID_STATS, accountId]}
           queryMethod={() =>

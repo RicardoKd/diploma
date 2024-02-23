@@ -23,7 +23,7 @@ export const HomePage = () => {
   return (
     <>
       <Header title="Accounts" />
-      <Container>
+      <Container component='main'>
         <FlexContainer sx={{ flexWrap: 'wrap' }}>
           {accounts.map((account) => (
             <AccountCard key={account.id} account={account} />
