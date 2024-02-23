@@ -76,11 +76,11 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
               color: 'inherit',
               letterSpacing: '.3rem',
               textDecoration: 'none',
-              fontFamily: 'monospace',
+              fontFamily: 'Anta, monospace',
               display: { xs: 'none', md: 'flex' },
             }}
           >
-            LOGO
+            Budgeting App
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -146,7 +146,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
               display: { xs: 'flex', md: 'none' },
             }}
           >
-            LOGO
+            BA
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button
