@@ -1,12 +1,15 @@
 export const OPTIONS = Object.freeze({
-  USERS_STATS: {
+  USERS_STATS: (labelColor: string) => ({
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        labels: {
+          color: labelColor,
+        },
       },
       title: {
         display: true,
+        color: labelColor,
         text: 'Incomes and spends by user',
       },
     },
@@ -14,31 +17,46 @@ export const OPTIONS = Object.freeze({
       y: {
         title: {
           display: true,
+          color: labelColor,
           text: 'Amount of money $',
+        },
+        ticks: {
+          color: labelColor,
+        },
+      },
+      x: {
+        ticks: {
+          color: labelColor,
         },
       },
     },
-  },
-  ACCOUNT_TRANSACTION_STATS: {
+  }),
+  ACCOUNT_TRANSACTION_STATS: (labelColor: string) => ({
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        labels: {
+          color: labelColor,
+        },
       },
       title: {
         display: true,
+        color: labelColor,
         text: 'Spends to incomes ratio',
       },
     },
-  },
-  MONTHLY_INCOME_SPEND_STATS: {
+  }),
+  MONTHLY_INCOME_SPEND_STATS: (labelColor: string) => ({
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        labels: {
+          color: labelColor,
+        },
       },
       title: {
         display: true,
+        color: labelColor,
         text: 'Incomes and spends fro the last 12 months',
       },
     },
@@ -46,16 +64,26 @@ export const OPTIONS = Object.freeze({
       y: {
         title: {
           display: true,
+          color: labelColor,
           text: 'Amount of money $',
+        },
+        ticks: {
+          color: labelColor,
+        },
+      },
+      x: {
+        ticks: {
+          color: labelColor,
         },
       },
     },
-  },
+  }),
   CATEGORIES_STATS: {
-    income: {
+    income: (labelColor: string) => ({
       plugins: {
         title: {
           display: true,
+          color: labelColor,
           text: 'Income categories statistics',
         },
         legend: {
@@ -66,15 +94,25 @@ export const OPTIONS = Object.freeze({
         y: {
           title: {
             display: true,
+            color: labelColor,
             text: 'Percentage %',
+          },
+          ticks: {
+            color: labelColor,
+          },
+        },
+        x: {
+          ticks: {
+            color: labelColor,
           },
         },
       },
-    },
-    spend: {
+    }),
+    spend: (labelColor: string) => ({
       plugins: {
         title: {
           display: true,
+          color: labelColor,
           text: 'Spend categories statistics',
         },
         legend: {
@@ -86,9 +124,18 @@ export const OPTIONS = Object.freeze({
           title: {
             display: true,
             text: 'Percentage %',
+            color: labelColor,
+          },
+          ticks: {
+            color: labelColor,
+          },
+        },
+        x: {
+          ticks: {
+            color: labelColor,
           },
         },
       },
-    },
+    }),
   },
 });

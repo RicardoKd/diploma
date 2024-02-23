@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
+import { useTheme } from '@mui/material/styles';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import {
   Box,
@@ -11,9 +12,9 @@ import {
 } from '@mui/material';
 
 import { Range } from '../../types';
-import { BORDER_RADIUS, COLORS, SPACES } from '../../theme';
 import { statsService } from '../../services';
 import { AppLoader, RangeSelect } from '../../UI';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 import { OPTIONS, QUERY_KEYS, RANGE_INITIAL_STATE } from '../../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -25,8 +26,8 @@ interface AccountsCardProps {
 export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   accountId,
 }) => {
+  const theme = useTheme();
   const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
-
   const { isSuccess, data: account } = useQuery({
     keepPreviousData: true,
     refetchOnMount: 'always',
@@ -43,7 +44,10 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     datasets: [
       {
         data: [account.spend[range], account.income[range]],
-        backgroundColor: [COLORS.red, COLORS.success],
+        backgroundColor: [
+          theme.palette.error.light,
+          theme.palette.success.light,
+        ],
       },
     ],
   };
@@ -62,14 +66,19 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     >
       <CardContent>
         <Box>
-          <Pie data={data} options={OPTIONS.ACCOUNT_TRANSACTION_STATS} />
+          <Pie
+            data={data}
+            options={OPTIONS.ACCOUNT_TRANSACTION_STATS(
+              theme.palette.secondary.main
+            )}
+          />
         </Box>
 
         <Box
-          display="flex"
-          justifyContent="space-evenly"
-          alignItems="center"
           mb={1}
+          display="flex"
+          alignItems="center"
+          justifyContent="space-evenly"
         >
           <Typography variant="body1">Spend: {account.spend[range]}</Typography>
           <Typography variant="body1">

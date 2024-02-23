@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useTheme } from '@mui/material/styles';
 
 import { BarChart } from '../';
 import { COLORS } from '../../theme';
@@ -16,6 +17,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
   queryKey,
   queryMethod,
 }) => {
+  const theme = useTheme();
   const { isSuccess, data: stats } = useQuery({
     queryKey,
     keepPreviousData: true,
@@ -30,7 +32,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
   return (
     <>
       <BarChart
-        options={OPTIONS.CATEGORIES_STATS.income}
+        options={OPTIONS.CATEGORIES_STATS.income(theme.palette.secondary.main)}
         labels={stats.income.map((stat) => stat.category)}
         preDatasets={[
           {
@@ -41,7 +43,7 @@ export const CategoriesStats: React.FC<CategoriesStatsProps> = ({
         ]}
       />
       <BarChart
-        options={OPTIONS.CATEGORIES_STATS.spend}
+        options={OPTIONS.CATEGORIES_STATS.spend(theme.palette.secondary.main)}
         labels={stats.spend.map((stat) => stat.category)}
         preDatasets={[
           {

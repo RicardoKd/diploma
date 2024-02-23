@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useTheme } from '@mui/material/styles';
 
-import { COLORS } from '../../theme';
 import { statsService } from '../../services';
-import { OPTIONS, QUERY_KEYS } from '../../constants';
 import { AppLoader, FlexContainer } from '../../UI';
+import { OPTIONS, QUERY_KEYS } from '../../constants';
 import {
   Header,
   BarChart,
@@ -13,6 +13,7 @@ import {
 } from '../../components';
 
 export const StatsDashboardPage = () => {
+  const theme = useTheme();
   const { isSuccess, data: userStats } = useQuery({
     keepPreviousData: true,
     refetchOnMount: 'always',
@@ -33,18 +34,18 @@ export const StatsDashboardPage = () => {
           queryMethod={() => statsService.getCategoriesStats()}
         />
         <BarChart
-          options={OPTIONS.USERS_STATS}
+          options={OPTIONS.USERS_STATS(theme.palette.secondary.main)}
           labels={userStats.map((stat) => stat.username)}
           preDatasets={[
             {
               label: 'Incomes',
               data: userStats.map((stat) => stat.income),
-              backgroundColor: COLORS.success,
+              backgroundColor: theme.palette.success.light,
             },
             {
               label: 'Spends',
               data: userStats.map((stat) => stat.spend),
-              backgroundColor: COLORS.red,
+              backgroundColor: theme.palette.error.light,
             },
           ]}
         />

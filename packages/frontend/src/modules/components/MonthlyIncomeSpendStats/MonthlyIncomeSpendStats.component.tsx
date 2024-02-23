@@ -1,6 +1,7 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useQuery } from 'react-query';
+import { useTheme } from '@mui/material/styles';
 import { Box, Card, CardContent } from '@mui/material';
 import {
   Chart as ChartJS,
@@ -15,8 +16,8 @@ import {
 
 import { AppLoader } from '../../UI';
 import { statsService } from '../../services';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 import { OPTIONS, QUERY_KEYS } from '../../constants';
-import { BORDER_RADIUS, COLORS, SPACES } from '../../theme';
 
 ChartJS.register(
   CategoryScale,
@@ -35,6 +36,7 @@ interface MonthlyIncomeSpendStatsProps {
 export const MonthlyIncomeSpendStats: React.FC<
   MonthlyIncomeSpendStatsProps
 > = ({ accountId }) => {
+  const theme = useTheme();
   const { isSuccess, data: stats } = useQuery({
     keepPreviousData: true,
     refetchOnMount: 'always',
@@ -52,12 +54,14 @@ export const MonthlyIncomeSpendStats: React.FC<
       {
         label: 'Incomes',
         data: stats.map((st) => st.income),
-        backgroundColor: COLORS.success,
+        borderColor: theme.palette.success.main,
+        backgroundColor: theme.palette.success.main,
       },
       {
         label: 'Spends',
         data: stats.map((st) => st.spend),
-        backgroundColor: COLORS.red,
+        borderColor: theme.palette.error.main,
+        backgroundColor: theme.palette.error.main,
       },
     ],
   };
@@ -66,7 +70,12 @@ export const MonthlyIncomeSpendStats: React.FC<
     <Card sx={{ width: 630, margin: SPACES.l, borderRadius: BORDER_RADIUS }}>
       <CardContent>
         <Box>
-          <Line options={OPTIONS.MONTHLY_INCOME_SPEND_STATS} data={data} />
+          <Line
+            data={data}
+            options={OPTIONS.MONTHLY_INCOME_SPEND_STATS(
+              theme.palette.secondary.main
+            )}
+          />
         </Box>
       </CardContent>
     </Card>
