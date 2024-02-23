@@ -21,7 +21,6 @@ export const RangeSelect: React.FC<RangeSelectProps> = ({
 }) => {
   return (
     <Box
-      mt={1}
       display="flex"
       alignItems="center"
       justifyContent="space-between"
