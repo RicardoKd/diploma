@@ -7,10 +7,10 @@ import { Box, Paper, Typography, TextField } from '@mui/material';
 import { userService } from '../../services';
 import { ROUTER_KEYS } from '../../constants';
 import { LoginFormItems } from './LoginFormItems';
-import { AppButton, FlexContainer, ThemeToggle } from '../../UI';
 import { FormikLoginForm } from './FormikLoginForm';
 import { validationSchema } from './validationSchema';
 import { BORDER_RADIUS, MUI, SPACES } from '../../theme';
+import { AppButton, FlexContainer, ThemeToggle } from '../../UI';
 import { formatLabel, logOut, showError, showSuccess } from '../../utils';
 
 export const LoginPage = () => {
@@ -43,32 +43,47 @@ export const LoginPage = () => {
     <FlexContainer sx={{ height: '100vh' }}>
       <Paper
         sx={{
-          height: 350,
-          maxWidth: 700,
           display: 'flex',
           overflow: 'hidden',
           alignItems: 'stretch',
           justifyContent: 'stretch',
           borderRadius: BORDER_RADIUS,
+          height: { xs: 600, md: 480 },
+          flexDirection: { xs: 'column', md: 'row' },
         }}
       >
         <Box
-          width="50%"
+          sx={{
+            width: { xs: '100%', md: '50%' },
+            height: { xs: '45%', md: 'unset' },
+            padding: { xs: SPACES.m, md: SPACES.xxl },
+          }}
           display="flex"
           alignItems="center"
           bgcolor="primary.main"
           justifyContent="center"
           color="primary.contrastText"
         >
-          <Typography textAlign="center" variant="h2">
+          <Typography
+            textAlign="center"
+            variant="h2"
+            sx={{
+              fontWeight: 400,
+              fontFamily: 'Anta, monospace',
+              fontSize: { xs: '3rem', md: '5rem' },
+            }}
+          >
             Budgeting App
           </Typography>
         </Box>
         <Box
-          width="50%"
           display="flex"
-          padding={SPACES.m}
           flexDirection="column"
+          sx={{
+            width: { xs: '100%', md: '50%' },
+            height: { xs: '55%', md: 'unset' },
+            padding: { xs: SPACES.m, md: SPACES.xxl },
+          }}
         >
           <Box display="flex" justifyContent="end">
             <ThemeToggle />
