@@ -2,8 +2,6 @@ import React from 'react';
 import { MUI, SPACES } from '../../theme';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import {
   Box,
@@ -14,26 +12,22 @@ import {
   Toolbar,
   Tooltip,
   MenuItem,
-  useTheme,
   Container,
   IconButton,
   Typography,
 } from '@mui/material';
 
+import { ThemeToggle } from '../../UI';
 import { ROUTER_KEYS } from '../../constants';
-import { ColorModeContext } from '../../contexts';
 import { getRole, getUserName } from '../../utils';
 import { AddParentForm, AddChildForm, CreateAccountForm } from '..';
-import { ThemeToggle } from '../../UI';
 
 interface HeaderProps {
   title: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
-  const theme = useTheme();
   const location = useLocation();
-  const colorMode = React.useContext(ColorModeContext);
 
   const [isAddChildFormOpen, setAddChildFormOpen] = React.useState(false);
   const [isAddParentFormOpen, setAddParentFormOpen] = React.useState(false);
@@ -72,8 +66,8 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
           />
           <Typography
-            variant="h6"
             noWrap
+            variant="h6"
             component="a"
             href="#app-bar-with-responsive-menu"
             sx={{
@@ -106,6 +100,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
               anchorEl={anchorElNav}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
+              sx={{ display: { xs: 'block', md: 'none' } }}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -113,9 +108,6 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
               transformOrigin={{
                 vertical: 'top',
                 horizontal: 'left',
-              }}
-              sx={{
-                display: { xs: 'block', md: 'none' },
               }}
             >
               <MenuItem onClick={() => navigate(ROUTER_KEYS.HOME)}>
