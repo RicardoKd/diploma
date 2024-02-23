@@ -1,15 +1,10 @@
 import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 
-import { BORDER_RADIUS, MUI, SPACES } from '../../theme';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 
-interface AppButtonProps extends ButtonProps {
-  text?: string;
-}
-
-export const AppButton: React.FC<AppButtonProps> = ({
+export const AppButton: React.FC<ButtonProps> = ({
   sx,
-  text,
   children,
   ...props
 }) => (
@@ -25,9 +20,8 @@ export const AppButton: React.FC<AppButtonProps> = ({
       },
       ...sx,
     }}
-    variant={MUI.variant}
     {...props}
   >
-    {text || children}
+    {children}
   </Button>
 );

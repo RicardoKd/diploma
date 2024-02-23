@@ -51,14 +51,15 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
   return (
     <>
       <AppButton
-        text={`Create ${type}`}
         onClick={() => setOpen(true)}
         disabled={
           type === 'income'
             ? !isIncomeCategoriesLoaded
             : !isSpendCategoriesLoaded
         }
-      />
+      >
+        Create {type}
+      </AppButton>
       <DialogForm
         isOpen={isOpen}
         fields={fields}

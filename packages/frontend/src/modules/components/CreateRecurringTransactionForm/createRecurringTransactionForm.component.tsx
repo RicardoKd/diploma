@@ -64,14 +64,13 @@ export const CreateRecurringTransactionForm: React.FC<
   return (
     <>
       <AppButton
-        text={`Create recurring ${type}`}
         onClick={() => setOpen(true)}
         disabled={
           type === 'income'
             ? !isIncomeCategoriesLoaded
             : !isSpendCategoriesLoaded
         }
-      />
+      >{`Create recurring ${type}`}</AppButton>
       <DialogForm
         isOpen={isOpen}
         fields={fields}

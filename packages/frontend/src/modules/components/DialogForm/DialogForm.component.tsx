@@ -125,8 +125,8 @@ export const DialogForm: React.FC<FormProps> = ({
         ))}
       </DialogContent>
       <DialogActions>
-        <AppButton onClick={onClose} text="Cancel" />
-        <AppButton text="Submit" type="submit" />
+        <AppButton onClick={onClose}>Cancel</AppButton>
+        <AppButton type="submit">Submit</AppButton>
       </DialogActions>
     </Dialog>
   );
