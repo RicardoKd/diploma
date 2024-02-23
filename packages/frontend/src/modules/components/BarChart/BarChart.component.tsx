@@ -32,8 +32,8 @@ interface BarChartProps {
 }
 
 export const BarChart: React.FC<BarChartProps> = ({
-  options,
   labels,
+  options,
   preDatasets,
 }) => {
   const [range, setRange] = React.useState<Range>(RANGE_INITIAL_STATE);
