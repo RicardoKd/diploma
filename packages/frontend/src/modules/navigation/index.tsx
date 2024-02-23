@@ -31,7 +31,7 @@ export const MainRouter = () => (
       path={`${ROUTER_KEYS.ACCOUNT_STATS}/:accountId`}
     />
     <Route
-      path={`${ROUTER_KEYS.HOME}/${ROUTER_KEYS.ANY}`}
+      path={`${ROUTER_KEYS.HOME}${ROUTER_KEYS.START}${ROUTER_KEYS.ANY}`}
       element={<Navigate to={ROUTER_KEYS.HOME} replace={true} />}
     />
     <Route
