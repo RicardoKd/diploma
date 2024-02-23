@@ -22,8 +22,8 @@ export const THEME = {
         contrastText: COLORS.white,
       },
       secondary: {
-        main: COLORS.yellow,
-        contrastText: COLORS.purple,
+        main: COLORS.black,
+        contrastText: COLORS.yellow,
       },
     },
   }),
@@ -31,11 +31,11 @@ export const THEME = {
     palette: {
       mode: 'dark',
       primary: {
-        main: COLORS.black,
+        main: COLORS.blue,
         contrastText: COLORS.white,
       },
       secondary: {
-        main: COLORS.black,
+        main: COLORS.white,
         contrastText: COLORS.purple,
       },
     },

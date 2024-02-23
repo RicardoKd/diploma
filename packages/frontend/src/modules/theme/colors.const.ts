@@ -8,6 +8,6 @@ export const COLORS = Object.freeze({
   success: '#65C466',
   red: '#f95976',
   yellow: '#D18C19',
-  black: '#1976d2',
+  black: '#000000',
   grey: '#5b5b5b',
 });
