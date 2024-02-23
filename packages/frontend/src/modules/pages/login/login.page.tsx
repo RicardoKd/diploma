@@ -7,7 +7,7 @@ import { Box, Paper, Typography, TextField } from '@mui/material';
 import { userService } from '../../services';
 import { ROUTER_KEYS } from '../../constants';
 import { LoginFormItems } from './LoginFormItems';
-import { AppButton, FlexContainer } from '../../UI';
+import { AppButton, FlexContainer, ThemeToggle } from '../../UI';
 import { FormikLoginForm } from './FormikLoginForm';
 import { validationSchema } from './validationSchema';
 import { BORDER_RADIUS, MUI, SPACES } from '../../theme';
@@ -64,38 +64,46 @@ export const LoginPage = () => {
             Budgeting App
           </Typography>
         </Box>
-
         <Box
           width="50%"
           display="flex"
-          component="form"
           padding={SPACES.m}
-          alignItems="center"
           flexDirection="column"
-          justifyContent="space-evenly"
-          onSubmit={formik.handleSubmit}
         >
-          <Typography variant="h4">Log In</Typography>
-          {fields.map(({ formItem, type }, i) => (
-            <TextField
-              key={i}
-              fullWidth
-              type={type}
-              id={formItem}
-              name={formItem}
-              size={MUI.size}
-              variant={MUI.variant}
-              label={formatLabel(formItem)}
-              onChange={formik.handleChange}
-              value={formik.values[formItem]}
-              error={formik.touched[formItem] && !!formik.errors[formItem]}
-              helperText={
-                (formik.touched[formItem] &&
-                  formik.errors[formItem]) as React.ReactNode
-              }
-            />
-          ))}
-          <AppButton text="Submit" type="submit" />
+          <Box display="flex" justifyContent="end">
+            <ThemeToggle />
+          </Box>
+          <Box
+            flexGrow="1"
+            display="flex"
+            component="form"
+            alignItems="center"
+            flexDirection="column"
+            justifyContent="space-around"
+            onSubmit={formik.handleSubmit}
+          >
+            <Typography variant="h4">Log In</Typography>
+            {fields.map(({ formItem, type }, i) => (
+              <TextField
+                key={i}
+                fullWidth
+                type={type}
+                id={formItem}
+                name={formItem}
+                size={MUI.size}
+                variant={MUI.variant}
+                label={formatLabel(formItem)}
+                onChange={formik.handleChange}
+                value={formik.values[formItem]}
+                error={formik.touched[formItem] && !!formik.errors[formItem]}
+                helperText={
+                  (formik.touched[formItem] &&
+                    formik.errors[formItem]) as React.ReactNode
+                }
+              />
+            ))}
+            <AppButton text="Log in" type="submit" />
+          </Box>
         </Box>
       </Paper>
     </FlexContainer>
