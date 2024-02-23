@@ -2,12 +2,9 @@ import { createTheme } from '@mui/material';
 
 import { COLORS } from './colors.const';
 
-export const MUI = Object.freeze({
-  variant: 'outlined',
-  density: 'compact',
-  margin: 'dense',
+const MUI = Object.freeze({
   size: 'small',
-  containerWidth: 'lg',
+  variant: 'outlined',
 });
 
 export const THEME = {
@@ -26,6 +23,36 @@ export const THEME = {
         contrastText: COLORS.yellow,
       },
     },
+    components: {
+      MuiButton: {
+        defaultProps: {
+          variant: MUI.variant,
+        },
+      },
+      MuiAlert: {
+        defaultProps: {
+          variant: MUI.variant,
+        },
+      },
+      MuiTextField: {
+        defaultProps: {
+          size: MUI.size,
+          fullWidth: true,
+          margin: 'dense',
+        },
+      },
+      MuiSelect: {
+        defaultProps: {
+          size: MUI.size,
+          variant: MUI.variant,
+        },
+      },
+      MuiContainer: {
+        defaultProps: {
+          maxWidth: 'lg',
+        },
+      },
+    },
   }),
   DARK: createTheme({
     palette: {
@@ -37,6 +64,36 @@ export const THEME = {
       secondary: {
         main: COLORS.white,
         contrastText: COLORS.purple,
+      },
+    },
+    components: {
+      MuiButton: {
+        defaultProps: {
+          variant: MUI.variant,
+        },
+      },
+      MuiAlert: {
+        defaultProps: {
+          variant: MUI.variant,
+        },
+      },
+      MuiTextField: {
+        defaultProps: {
+          size: MUI.size,
+          fullWidth: true,
+          margin: 'dense',
+        },
+      },
+      MuiSelect: {
+        defaultProps: {
+          size: MUI.size,
+          variant: MUI.variant,
+        },
+      },
+      MuiContainer: {
+        defaultProps: {
+          maxWidth: 'lg',
+        },
       },
     },
   }),

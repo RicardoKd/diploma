@@ -1,5 +1,5 @@
 import React from 'react';
-import { MUI, SPACES } from '../../theme';
+import { SPACES } from '../../theme';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
 
   return (
     <AppBar position="static" sx={{ marginBottom: SPACES.l }}>
-      <Container maxWidth={MUI.containerWidth}>
+      <Container>
         <Toolbar disableGutters>
           <CreditCardOutlinedIcon
             sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}

@@ -11,7 +11,6 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import { MUI } from '../../theme';
 import { AppButton } from '../../UI';
 import { formatLabel, showError, showSuccess } from '../../utils';
 
@@ -97,14 +96,10 @@ export const DialogForm: React.FC<FormProps> = ({
         {fields.map(({ formItem, type, options }, i) => (
           <TextField
             key={i}
-            fullWidth
             type={type}
             id={formItem}
             name={formItem}
-            size={MUI.size}
-            margin={MUI.margin}
             select={!!options}
-            variant={MUI.variant}
             label={formatLabel(formItem)}
             onChange={formik.handleChange}
             value={formik.values[formItem]}

@@ -2,7 +2,6 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Container } from '@mui/system';
 
-import { MUI } from '../../theme';
 import { IAccount } from '../../types';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
@@ -24,7 +23,7 @@ export const HomePage = () => {
   return (
     <>
       <Header title="Accounts" />
-      <Container maxWidth={MUI.containerWidth}>
+      <Container>
         <FlexContainer sx={{ flexWrap: 'wrap' }}>
           {accounts.map((account) => (
             <AccountCard key={account.id} account={account} />

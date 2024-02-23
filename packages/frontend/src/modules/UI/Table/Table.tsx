@@ -1,8 +1,6 @@
 import React from 'react';
 import { DataGrid, GridColDef, DataGridProps } from '@mui/x-data-grid';
 
-import { MUI } from '../../theme';
-
 interface TableProps extends DataGridProps {
   rows: any[];
   isLoading: boolean;
@@ -27,7 +25,7 @@ export const Table: React.FC<TableProps> = ({
       logLevel="error"
       columns={columns}
       loading={isLoading}
-      density={MUI.density}
+      density={'compact'}
       disableColumnSelector
       hideFooterSelectedRowCount
       disableRowSelectionOnClick

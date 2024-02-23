@@ -8,8 +8,8 @@ import { userService } from '../../services';
 import { ROUTER_KEYS } from '../../constants';
 import { LoginFormItems } from './LoginFormItems';
 import { FormikLoginForm } from './FormikLoginForm';
+import { BORDER_RADIUS, SPACES } from '../../theme';
 import { validationSchema } from './validationSchema';
-import { BORDER_RADIUS, MUI, SPACES } from '../../theme';
 import { AppButton, FlexContainer, ThemeToggle } from '../../UI';
 import { formatLabel, logOut, showError, showSuccess } from '../../utils';
 
@@ -101,12 +101,9 @@ export const LoginPage = () => {
             {fields.map(({ formItem, type }, i) => (
               <TextField
                 key={i}
-                fullWidth
                 type={type}
                 id={formItem}
                 name={formItem}
-                size={MUI.size}
-                variant={MUI.variant}
                 label={formatLabel(formItem)}
                 onChange={formik.handleChange}
                 value={formik.values[formItem]}
@@ -117,7 +114,7 @@ export const LoginPage = () => {
                 }
               />
             ))}
-            <AppButton text="Log in" type="submit" />
+            <AppButton type="submit">Log in</AppButton>
           </Box>
         </Box>
       </Paper>

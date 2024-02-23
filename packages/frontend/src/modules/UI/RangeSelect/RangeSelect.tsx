@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Box,
   Select,
@@ -9,7 +8,6 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 
-import { MUI } from '../../theme';
 import { Range } from '../../types';
 
 interface RangeSelectProps {
@@ -23,20 +21,18 @@ export const RangeSelect: React.FC<RangeSelectProps> = ({
 }) => {
   return (
     <Box
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
       mt={1}
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
     >
       <FormControl>
         <InputLabel id="range-select2-label">Range</InputLabel>
         <Select
-          value={rangeValue}
           label="Range"
-          size={MUI.size}
-          variant={MUI.variant}
-          labelId="range-select2-label"
+          value={rangeValue}
           onChange={handleChange}
+          labelId="range-select2-label"
         >
           <MenuItem value="month">Month</MenuItem>
           <MenuItem value="quarter">Quarter</MenuItem>
