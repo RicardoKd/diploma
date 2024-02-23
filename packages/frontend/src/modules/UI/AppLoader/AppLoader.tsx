@@ -1,11 +1,15 @@
 import React from 'react';
-import { AppLoaderStyled, AppLoaderWrapper } from './AppLoader.styled';
+import { Box, CircularProgress } from '@mui/material';
 
-export const AppLoader: React.FC = () => (
-  <AppLoaderWrapper>
-    <AppLoaderStyled>
-      <div />
-      <div />
-    </AppLoaderStyled>
-  </AppLoaderWrapper>
+export const AppLoader = () => (
+  <Box
+    sx={{
+      height: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <CircularProgress />
+  </Box>
 );
