@@ -24,6 +24,7 @@ import { ROUTER_KEYS } from '../../constants';
 import { ColorModeContext } from '../../contexts';
 import { getRole, getUserName } from '../../utils';
 import { AddParentForm, AddChildForm, CreateAccountForm } from '..';
+import { ThemeToggle } from '../../UI';
 
 interface HeaderProps {
   title: string;
@@ -179,18 +180,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
               </Button>
             )}
           </Box>
-          <IconButton
-            edge="end"
-            color="inherit"
-            aria-label="mode"
-            onClick={colorMode.toggleColorMode}
-          >
-            {theme.palette.mode === 'dark' ? (
-              <Brightness7Icon />
-            ) : (
-              <Brightness4Icon />
-            )}
-          </IconButton>
+          <ThemeToggle />
 
           <Box sx={{ flexGrow: 0, ml: SPACES.m }}>
             <Tooltip title="Open settings">
