@@ -29,25 +29,33 @@ class TransactionService extends HttpService {
     return rows;
   }
 
-  async createTransaction(tr: any): Promise<void> {
-    await this.post(API_KEYS.QUERY, {
+  /* 
+    FIXME:
+    tr is any, thought it should be ITransaction 
+    because the field category is not an object as in ITransaction,
+    but a string which is category_id
+  */
+  async createTransaction(tr: any): Promise<boolean> {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `INSERT INTO ${tr.type} 
-        (notes, record_date, amount_of_money, account_id, category_id) VALUES 
-        ($1, $2, $3::MONEY, $4, $5)
+        (notes, record_date, amount_of_money, account_id, category_id)
+        VALUES ($1, $2, $3::MONEY, $4, $5)
       `,
       variables: [
         tr.notes,
         tr.record_date,
         Math.abs(tr.amount_of_money),
-        tr.accountId,
+        tr.account_id,
         tr.category,
       ],
     });
+
+    return result.rowCount >= 1;
   }
 
   async updateTransaction(tr: ITransaction): Promise<boolean> {
-    const result = await this.post<{ rowCount: number }>(API_KEYS.QUERY, {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `UPDATE ${tr.type} 
         SET 
@@ -66,38 +74,7 @@ class TransactionService extends HttpService {
       ],
     });
 
-    return !!result.rowCount;
-  }
-
-  async updateRecurringTransaction(
-    tr: IRecurringTransaction
-  ): Promise<boolean> {
-    const result = await this.post<{ rowCount: number }>(API_KEYS.QUERY, {
-      ...getUserData(),
-      query: `UPDATE recurring_${tr.type}
-        SET
-          notes = $1,
-          end_date = $2,
-          start_date = $3,
-          amount_of_money = $4,
-          time_gap_type_value = $5,
-          time_gap_type_id = $6,
-          category_id = $7
-        WHERE id = $8;
-      `,
-      variables: [
-        tr.notes,
-        getPostgresDate(tr.end_date),
-        getPostgresDate(tr.start_date),
-        Math.abs(tr.amount_of_money),
-        tr.time_gap_type_value,
-        tr.time_gap_type.id,
-        tr.category.id,
-        tr.id,
-      ],
-    });
-
-    return !!result.rowCount;
+    return result.rowCount >= 1;
   }
 
   async getRecurringTransactions(
@@ -122,8 +99,17 @@ class TransactionService extends HttpService {
     return rows;
   }
 
-  async createRecurringTransaction(tr: any): Promise<void> {
-    await this.post(API_KEYS.QUERY, {
+  /* 
+    FIXME:
+    tr is any, thought it should be IRecurringTransaction 
+    because the field category is not an object as in IRecurringTransaction,
+    but a string which is category_id
+    AND
+    because the field time_gap_type is not an object as in IRecurringTransaction,
+    but a string which is time_gap_type_id
+  */
+  async createRecurringTransaction(tr: any): Promise<boolean> {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `INSERT INTO recurring_${tr.type} 
         (notes, end_date, start_date, amount_of_money, time_gap_type_value, time_gap_type_id, category_id, account_id)
@@ -140,32 +126,64 @@ class TransactionService extends HttpService {
         tr.accountId,
       ],
     });
+
+    return result.rowCount >= 1;
+  }
+
+  async updateRecurringTransaction(
+    tr: IRecurringTransaction
+  ): Promise<boolean> {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
+      ...getUserData(),
+      query: `UPDATE recurring_${tr.type}
+        SET
+          notes = $1,
+          end_date = $2,
+          start_date = $3,
+          amount_of_money = $4,
+          time_gap_type_value = $5,
+          time_gap_type_id = $6,
+          category_id = $7
+        WHERE id = $8;
+      `,
+      variables: [
+        tr.notes,
+        getPostgresDate(tr.end_date),
+        getPostgresDate(tr.start_date),
+        Math.abs(tr.amount_of_money),
+        tr.time_gap_type_value,
+        tr.time_gap_type.id,
+        tr.category.id,
+        tr.id,
+      ],
+    });
+
+    return result.rowCount >= 1;
   }
 
   async deleteById({
-    table,
     id,
+    table,
   }: {
-    table: string;
     id: string;
+    table: string;
   }): Promise<void> {
-    await this.post(API_KEYS.QUERY, {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `DELETE FROM ${table} WHERE id = $1;`,
       variables: [id],
     });
+
+    console.log('deleteById :>> result :>> ', result);
   }
 
   async getCategories(type: TransactionType): Promise<ICategory[]> {
-    const { rows } = await this.post<IQueryResponse<ICategory>>(
-      API_KEYS.QUERY,
-      {
-        ...getUserData(),
-        query: `SELECT id AS value, title AS label FROM ${type}_category`,
-      }
-    );
+    const result = await this.post<IQueryResponse<ICategory>>(API_KEYS.QUERY, {
+      ...getUserData(),
+      query: `SELECT id AS value, title AS label FROM ${type}_category`,
+    });
 
-    return rows;
+    return result.rows;
   }
 }
 
