@@ -1,4 +1,5 @@
 import React from 'react';
+import { AxiosError } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
 import { Table } from '../../UI';
@@ -34,30 +35,32 @@ export const TransactionsTable = () => {
     queryFn: () => transactionService.getTransactions(accountId),
   });
 
-  const onChangeSuccess = (message: string) => {
-    showSuccess(message);
-    queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
-  };
-
   const updateMutation = useMutation(
     transactionService.updateTransaction.bind(transactionService),
     {
-      onSuccess: () => onChangeSuccess('Transaction succesfully updated'),
-      onError: () => showError('Failed to update transaction'),
+      onSuccess: () => showSuccess('Transaction succesfully updated'),
+      onError: (err: AxiosError<{ error: string }>) => {
+        const errText = err.response?.data.error;
+        let message =
+          'Failed to update transaction. Please contact the administrator';
+        if (
+          errText?.includes('Spend amount exceeds income for this account.')
+        ) {
+          message = errText;
+        }
+        showError(message);
+      },
     }
   );
 
-  React.useEffect(() => {
-    if (updateMutation.isError) {
-      showError((updateMutation.error as any).response.data.error);
-    }
-  }, [updateMutation.isError]);
-
   const handleUpdate = React.useCallback(
     async (newRow: ITransaction, oldRow: ITransaction) => {
-      const isSuccess = await updateMutation.mutateAsync(newRow);
+      let row = newRow;
+      await updateMutation.mutateAsync(newRow).catch(() => {
+        row = oldRow;
+      });
 
-      return isSuccess ? newRow : oldRow;
+      return row;
     },
     []
   );
@@ -65,7 +68,10 @@ export const TransactionsTable = () => {
   const deleteMutation = useMutation(
     transactionService.deleteById.bind(transactionService),
     {
-      onSuccess: () => onChangeSuccess('Transaction succesfully deleted'),
+      onSuccess: () => {
+        showSuccess('Transaction succesfully deleted');
+        queryClient.refetchQueries([QUERY_KEYS.TRANSACTIONS, accountId]);
+      },
       onError: () => showError('Failed to delete transaction'),
     }
   );
@@ -77,17 +83,15 @@ export const TransactionsTable = () => {
 
   return (
     <Table
+      isLoading={isLoading}
+      sx={{ minWidth: 1000 }}
+      handleUpdate={handleUpdate}
       rows={transactionsLoaded ? transactions : []}
       columns={GET_TRANSACTIONS_TABLE_COLUMN_DEFINITIONS({
         handleDelete,
         spendCategories,
         incomeCategories,
       })}
-      sx={{
-        minWidth: 1000,
-      }}
-      isLoading={isLoading}
-      handleUpdate={handleUpdate}
     />
   );
 };

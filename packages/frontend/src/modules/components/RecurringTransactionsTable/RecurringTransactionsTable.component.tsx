@@ -1,10 +1,11 @@
 import React from 'react';
+import { AxiosError } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
 import { Table } from '../../UI';
+import { useAppSnackbar } from '../../utils';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
-import { showError, showSuccess } from '../../utils';
 import { ICategory, IRecurringTransaction } from '../../types';
 import {
   QUERY_KEYS,
@@ -12,6 +13,8 @@ import {
 } from '../../constants';
 
 export const RecurringTransactionsTable = () => {
+  const { showError, showSuccess } = useAppSnackbar();
+
   const accountId = queryClient.getQueryData<string>(
     QUERY_KEYS.CURRENT_ACCOUNT
   )!;
@@ -32,28 +35,31 @@ export const RecurringTransactionsTable = () => {
     queryFn: () => transactionService.getRecurringTransactions(accountId),
   });
 
-  const onChangeSuccess = (message: string) => {
-    showSuccess(message);
-    queryClient.invalidateQueries([
-      QUERY_KEYS.RECURRING_TRANSACTIONS,
-      accountId,
-    ]);
-  };
-
   const updateMutation = useMutation(
     transactionService.updateRecurringTransaction.bind(transactionService),
     {
-      onSuccess: () =>
-        onChangeSuccess('Recurring transaction succesfully updated'),
-      onError: () => showError('Failed to update recurring transaction'),
+      onSuccess: () => showSuccess('Recurring transaction succesfully updated'),
+      onError: (err: AxiosError<{ error: string }>) => {
+        const errText = err.response?.data.error;
+        let message =
+          'Failed to update recurring transaction. Please contact the administrator';
+        if (errText?.includes('recurring_spend_end_date_check')) {
+          message =
+            'The end date must be greater than today to update the transaction';
+        }
+        showError(message);
+      },
     }
   );
 
   const handleUpdate = React.useCallback(
     async (newRow: IRecurringTransaction, oldRow: IRecurringTransaction) => {
-      const isSuccess = await updateMutation.mutateAsync(newRow);
+      let row = newRow;
+      await updateMutation.mutateAsync(newRow).catch(() => {
+        row = oldRow;
+      });
 
-      return isSuccess ? newRow : oldRow;
+      return row;
     },
     []
   );
@@ -61,8 +67,13 @@ export const RecurringTransactionsTable = () => {
   const deleteMutation = useMutation(
     transactionService.deleteById.bind(transactionService),
     {
-      onSuccess: () =>
-        onChangeSuccess('Recurring transaction succesfully deleted'),
+      onSuccess: () => {
+        showSuccess('Recurring transaction succesfully deleted');
+        queryClient.invalidateQueries([
+          QUERY_KEYS.RECURRING_TRANSACTIONS,
+          accountId,
+        ]);
+      },
       onError: () => showError('Failed to delete recurring income'),
     }
   );
@@ -73,30 +84,17 @@ export const RecurringTransactionsTable = () => {
     []
   );
 
-  React.useEffect(() => {
-    if (updateMutation.isError) {
-      const errMessage: string = (updateMutation.error as any).response.data
-        .error;
-      if (
-        errMessage.includes(
-          'violates check constraint "recurring_income_end_date_check"'
-        )
-      ) {
-        showError('End date must be greater ');
-      }
-    }
-  }, [updateMutation.isError]);
-
   return (
     <Table
-      rows={transactionsLoaded ? transactions : []}
       isLoading={isLoading}
+      sx={{ minWidth: 1000 }}
+      handleUpdate={handleUpdate}
+      rows={transactionsLoaded ? transactions : []}
       columns={GET_RECURRING_TRANSACTIONS_TABLE_COLUMN_DEFINITIONS({
         handleDelete,
         spendCategories,
         incomeCategories,
       })}
-      handleUpdate={handleUpdate}
     />
   );
 };
