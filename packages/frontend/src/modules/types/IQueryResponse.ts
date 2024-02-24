@@ -1,4 +1,4 @@
-export interface IQueryResponse<T> {
+export interface IQueryResponse<T = any> {
   rows: T[];
   rowCount: number;
   command: string;
