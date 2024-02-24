@@ -10,6 +10,8 @@ import { transactionService } from '../../services';
 import { ICategory, IRecurringTransaction } from '../../types';
 import { currencyFormatter, useAppSnackbar } from '../../utils';
 import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
+import { validationSchema } from './validationSchema';
+import { FormItems } from './FormItems';
 
 export const RecurringTransactionsTable = () => {
   const { showError, showSuccess } = useAppSnackbar();
@@ -83,6 +85,19 @@ export const RecurringTransactionsTable = () => {
     []
   );
 
+  const validateCellUpdate = async (cellName: string, cellValue: any) => {
+    let isError = false;
+    console.log({ [cellName]: cellValue });
+    await validationSchema
+      .validateAt(cellName, { [cellName]: cellValue })
+      .catch((error) => {
+        showError(error.message);
+        isError = true;
+      });
+
+    return isError;
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'type',
@@ -95,6 +110,16 @@ export const RecurringTransactionsTable = () => {
       field: 'amount_of_money',
       headerName: 'Amount of money',
       valueFormatter: ({ value }) => currencyFormatter.format(value),
+      preProcessEditCellProps: async ({ props, row }) => {
+        if (row.type === 'income') {
+          props.error = await validateCellUpdate(
+            FormItems.amountOfMoney,
+            props.value
+          );
+        }
+
+        return props;
+      },
     },
     {
       flex: 0.5,
@@ -109,6 +134,14 @@ export const RecurringTransactionsTable = () => {
       editable: true,
       field: 'end_date',
       headerName: 'End date',
+      preProcessEditCellProps: async ({ props }) => {
+        props.error = await validateCellUpdate(
+          FormItems.endDate,
+          props.value
+        );
+
+        return props;
+      },
     },
     {
       flex: 0.5,
@@ -135,9 +168,18 @@ export const RecurringTransactionsTable = () => {
     },
     {
       flex: 0.7,
+      type: 'number',
       editable: true,
       field: 'time_gap_type_value',
       headerName: 'Time gap type value',
+      preProcessEditCellProps: async ({ props }) => {
+        props.error = await validateCellUpdate(
+          FormItems.timeGapTypeValue,
+          props.value
+        );
+
+        return props;
+      },
     },
     {
       flex: 0.5,
