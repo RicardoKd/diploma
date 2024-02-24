@@ -50,6 +50,7 @@ export const LoginPage = () => {
           justifyContent: 'stretch',
           borderRadius: BORDER_RADIUS,
           height: { xs: 600, md: 480 },
+          width: { xs: 360, md: 1000 },
           flexDirection: { xs: 'column', md: 'row' },
         }}
       >
