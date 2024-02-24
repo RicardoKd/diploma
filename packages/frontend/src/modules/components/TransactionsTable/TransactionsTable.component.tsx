@@ -10,7 +10,7 @@ import { QUERY_KEYS } from '../../constants';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, ITransaction } from '../../types';
-import { validationSchema } from './validationSchema';
+import { ValidationSchema } from './ValidationSchema';
 import { currencyFormatter, useAppSnackbar } from '../../utils';
 
 export const TransactionsTable = () => {
@@ -85,12 +85,12 @@ export const TransactionsTable = () => {
   const validateCellUpdate = async (cellName: string, cellValue: any) => {
     let isError = false;
     console.log({ [cellName]: cellValue });
-    await validationSchema
-      .validateAt(cellName, { [cellName]: cellValue })
-      .catch((error) => {
-        showError(error.message);
-        isError = true;
-      });
+    await ValidationSchema.validateAt(cellName, {
+      [cellName]: cellValue,
+    }).catch((error) => {
+      showError(error.message);
+      isError = true;
+    });
 
     return isError;
   };

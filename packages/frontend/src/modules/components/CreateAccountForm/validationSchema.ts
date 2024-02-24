@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
-import { CreateAccountFormItems } from './CreateAccountFormItems';
+import { FormItems } from './FormItems';
 
-export const validationSchema = Yup.object({
-  [CreateAccountFormItems.TITLE]: Yup.string().required('Required')
+export const ValidationSchema = Yup.object({
+  [FormItems.TITLE]: Yup.string().required('Required'),
 });

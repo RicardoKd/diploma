@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { DialogForm } from '../';
+import { FormItems } from './FormItems';
+import { FormikForm } from './FormikForm';
 import { userService } from '../../services';
-import { validationSchema } from './validationSchema';
-import { AddParentFormItems } from './AddParentFormItems';
-import { FormikAddParentForm } from './FormikAddParentForm';
+import { ValidationSchema } from './ValidationSchema';
 
 interface AddParentFormProps {
   isOpen: boolean;
@@ -20,14 +20,14 @@ export const AddParentForm: React.FC<AddParentFormProps> = ({
     formName="Add parent"
     handleClose={() => setOpen(false)}
     errorMessage="Failed to add parent"
-    validationSchema={validationSchema}
+    validationSchema={ValidationSchema}
     successMessage="Parent added successfully"
-    initialValues={new FormikAddParentForm()}
+    initialValues={new FormikForm()}
     serviceMethod={userService.createParent.bind(userService)}
     fields={[
-      { formItem: AddParentFormItems.USER },
-      { formItem: AddParentFormItems.PASSWORD },
-      { formItem: AddParentFormItems.CONFIRM_PASSWORD },
+      { formItem: FormItems.USER },
+      { formItem: FormItems.PASSWORD },
+      { formItem: FormItems.CONFIRM_PASSWORD },
     ]}
   />
 );

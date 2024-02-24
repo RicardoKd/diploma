@@ -5,13 +5,13 @@ import { useMutation, useQuery } from 'react-query';
 import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 
 import { Table } from '../../UI';
+import { FormItems } from './FormItems';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
+import { ValidationSchema } from './ValidationSchema';
 import { ICategory, IRecurringTransaction } from '../../types';
 import { currencyFormatter, useAppSnackbar } from '../../utils';
 import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
-import { validationSchema } from './validationSchema';
-import { FormItems } from './FormItems';
 
 export const RecurringTransactionsTable = () => {
   const { showError, showSuccess } = useAppSnackbar();
@@ -88,12 +88,12 @@ export const RecurringTransactionsTable = () => {
   const validateCellUpdate = async (cellName: string, cellValue: any) => {
     let isError = false;
     console.log({ [cellName]: cellValue });
-    await validationSchema
-      .validateAt(cellName, { [cellName]: cellValue })
-      .catch((error) => {
-        showError(error.message);
-        isError = true;
-      });
+    await ValidationSchema.validateAt(cellName, {
+      [cellName]: cellValue,
+    }).catch((error) => {
+      showError(error.message);
+      isError = true;
+    });
 
     return isError;
   };
@@ -135,10 +135,7 @@ export const RecurringTransactionsTable = () => {
       field: 'end_date',
       headerName: 'End date',
       preProcessEditCellProps: async ({ props }) => {
-        props.error = await validateCellUpdate(
-          FormItems.endDate,
-          props.value
-        );
+        props.error = await validateCellUpdate(FormItems.endDate, props.value);
 
         return props;
       },

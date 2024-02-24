@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { DialogForm } from '../';
+import { FormItems } from './FormItems';
+import { FormikForm } from './FormikForm';
 import { QUERY_KEYS } from '../../constants';
 import { accountService } from '../../services';
 import queryClient from '../../app/queryClient';
-import { validationSchema } from './validationSchema';
-import { CreateAccountFormItems } from './CreateAccountFormItems';
-import { FormikCreateAccountForm } from './FormikCreateAccountForm';
+import { ValidationSchema } from './ValidationSchema';
 
 interface CreateAccountFormProps {
   isOpen: boolean;
@@ -21,11 +21,11 @@ export const CreateAccountForm: React.FC<CreateAccountFormProps> = ({
     isOpen={isOpen}
     formName="Create account"
     handleClose={() => setOpen(false)}
-    validationSchema={validationSchema}
+    validationSchema={ValidationSchema}
     errorMessage="Failed to create account"
     successMessage="Account created successfully"
-    initialValues={new FormikCreateAccountForm()}
-    fields={[{ formItem: CreateAccountFormItems.TITLE }]}
+    initialValues={new FormikForm()}
+    fields={[{ formItem: FormItems.TITLE }]}
     serviceMethod={accountService.createAccount.bind(accountService)}
     successCallback={() => {
       queryClient.refetchQueries([QUERY_KEYS.ACCOUNTS]);

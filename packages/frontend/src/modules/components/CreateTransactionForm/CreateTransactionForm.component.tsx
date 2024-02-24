@@ -3,14 +3,14 @@ import { useQuery } from 'react-query';
 
 import { DialogForm } from '../';
 import { AppButton } from '../../UI';
+import { FormItems } from './FormItems';
+import { FormikForm } from './FormikForm';
 import { formatLabel } from '../../utils';
 import { QUERY_KEYS } from '../../constants';
 import { TransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
-import { validationSchema } from './validationSchema';
-import { CreateTransactionFormItems } from './CreateTransactionFormItems';
-import { FormikCreateTransactionForm } from './FormikCreateTransactionForm';
+import { ValidationSchema } from './ValidationSchema';
 
 interface CreateTransactionFormProps {
   type: TransactionType;
@@ -38,11 +38,11 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
     QUERY_KEYS.CURRENT_ACCOUNT
   );
   const fields = [
-    { formItem: CreateTransactionFormItems.NOTES },
-    { formItem: CreateTransactionFormItems.RECORD_DATE, type: 'date' },
-    { formItem: CreateTransactionFormItems.AMOUNT_OF_MONEY, type: 'number' },
+    { formItem: FormItems.NOTES },
+    { formItem: FormItems.RECORD_DATE, type: 'date' },
+    { formItem: FormItems.AMOUNT_OF_MONEY, type: 'number' },
     {
-      formItem: CreateTransactionFormItems.CATEGORY,
+      formItem: FormItems.CATEGORY,
       options:
         type === 'income' ? incomeCategories || [] : spendCategories || [],
     },
@@ -65,9 +65,9 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
         fields={fields}
         formName={`Create ${type}`}
         handleClose={() => setOpen(false)}
-        validationSchema={validationSchema}
+        validationSchema={ValidationSchema}
         errorMessage={`Failed to create ${type}`}
-        initialValues={new FormikCreateTransactionForm()}
+        initialValues={new FormikForm()}
         serviceMethodArgs={{ account_id: accountId, type }}
         successMessage={`${formatLabel(type)} created successfully`}
         serviceMethod={transactionService.createTransaction.bind(

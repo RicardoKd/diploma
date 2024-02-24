@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
 
-import { CreateTransactionFormItems } from './CreateTransactionFormItems';
+import { FormItems } from './FormItems';
 
-export const validationSchema = Yup.object({
-  [CreateTransactionFormItems.NOTES]: Yup.string(),
-  [CreateTransactionFormItems.CATEGORY]: Yup.string().required('Required'),
-  [CreateTransactionFormItems.RECORD_DATE]: Yup.date()
+export const ValidationSchema = Yup.object({
+  [FormItems.NOTES]: Yup.string(),
+  [FormItems.CATEGORY]: Yup.string().required('Required'),
+  [FormItems.RECORD_DATE]: Yup.date()
     .max(new Date(Date.now()), 'Date cannot be in the future')
     .required('Required'),
-  [CreateTransactionFormItems.AMOUNT_OF_MONEY]: Yup.number()
+  [FormItems.AMOUNT_OF_MONEY]: Yup.number()
     .positive('Must be greater than 0')
     .required('Required'),
 });

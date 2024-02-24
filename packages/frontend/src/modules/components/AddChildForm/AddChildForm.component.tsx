@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { DialogForm } from '../';
+import { FormItems } from './FormItems';
+import { FormikForm } from './FormikForm';
 import { userService } from '../../services';
-import { validationSchema } from './validationSchema';
-import { AddChildFormItems } from './AddChildFormItems';
-import { FormikAddChildForm } from './FormikAddChildForm';
+import { ValidationSchema } from './ValidationSchema';
 
 interface AddChildFormProps {
   isOpen: boolean;
@@ -20,14 +20,14 @@ export const AddChildForm: React.FC<AddChildFormProps> = ({
     formName="Add child"
     errorMessage="Failed to add child"
     handleClose={() => setOpen(false)}
-    validationSchema={validationSchema}
+    validationSchema={ValidationSchema}
     successMessage="Child added successfully"
-    initialValues={new FormikAddChildForm()}
+    initialValues={new FormikForm()}
     serviceMethod={userService.createChild.bind(userService)}
     fields={[
-      { formItem: AddChildFormItems.USER },
-      { formItem: AddChildFormItems.PASSWORD },
-      { formItem: AddChildFormItems.CONFIRM_PASSWORD },
+      { formItem: FormItems.USER },
+      { formItem: FormItems.PASSWORD },
+      { formItem: FormItems.CONFIRM_PASSWORD },
     ]}
   />
 );

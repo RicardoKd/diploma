@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 import { FormItems } from './FormItems';
 
-export const validationSchema = Yup.object().shape({
+export const ValidationSchema = Yup.object().shape({
   [FormItems.endDate]: Yup.date()
     .min(new Date(), 'End date must be in the future or today')
     .required('End date is a required field'),

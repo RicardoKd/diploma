@@ -3,14 +3,14 @@ import { useQuery } from 'react-query';
 
 import { DialogForm } from '../';
 import { AppButton } from '../../UI';
+import { FormItems } from './FormItems';
+import { FormikForm } from './FormikForm';
 import { formatLabel } from '../../utils';
 import { TransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
-import { validationSchema } from './validationSchema';
+import { ValidationSchema } from './ValidationSchema';
 import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
-import { CreateRecurringIncomeFormItems } from './CreateRecurringTransactionFormItems';
-import { FormikCreateRecurringTransactionForm } from './FormikCreateRecurringTransactionForm';
 
 interface CreateRecurringTransactionFormPageProps {
   type: TransactionType;
@@ -39,23 +39,23 @@ export const CreateRecurringTransactionForm: React.FC<
   );
 
   const fields = [
-    { formItem: CreateRecurringIncomeFormItems.NOTES },
-    { formItem: CreateRecurringIncomeFormItems.START_DATE, type: 'date' },
-    { formItem: CreateRecurringIncomeFormItems.END_DATE, type: 'date' },
+    { formItem: FormItems.NOTES },
+    { formItem: FormItems.START_DATE, type: 'date' },
+    { formItem: FormItems.END_DATE, type: 'date' },
     {
-      formItem: CreateRecurringIncomeFormItems.AMOUNT_OF_MONEY,
+      formItem: FormItems.AMOUNT_OF_MONEY,
       type: 'number',
     },
     {
-      formItem: CreateRecurringIncomeFormItems.TIME_GAP_TYPE_VALUE,
+      formItem: FormItems.TIME_GAP_TYPE_VALUE,
       type: 'number',
     },
     {
-      formItem: CreateRecurringIncomeFormItems.TIME_GAP_TYPE,
+      formItem: FormItems.TIME_GAP_TYPE,
       options: TIME_GAP_TYPES_OPTIONS,
     },
     {
-      formItem: CreateRecurringIncomeFormItems.CATEGORY,
+      formItem: FormItems.CATEGORY,
       options:
         type === 'income' ? incomeCategories || [] : spendCategories || [],
     },
@@ -75,12 +75,12 @@ export const CreateRecurringTransactionForm: React.FC<
         isOpen={isOpen}
         fields={fields}
         handleClose={() => setOpen(false)}
-        validationSchema={validationSchema}
+        validationSchema={ValidationSchema}
         formName={`Create recurring ${type}`}
         serviceMethodArgs={{ accountId, type }}
         errorMessage={`Failed to create recurring ${type}`}
         successMessage={`Recurring ${formatLabel(type)} created successfully`}
-        initialValues={new FormikCreateRecurringTransactionForm()}
+        initialValues={new FormikForm()}
         serviceMethod={transactionService.createRecurringTransaction.bind(
           transactionService
         )}
