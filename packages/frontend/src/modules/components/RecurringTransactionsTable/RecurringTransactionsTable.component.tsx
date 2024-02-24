@@ -1,16 +1,15 @@
 import React from 'react';
 import { AxiosError } from 'axios';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQuery } from 'react-query';
+import { GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 
 import { Table } from '../../UI';
-import { useAppSnackbar } from '../../utils';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ICategory, IRecurringTransaction } from '../../types';
-import {
-  QUERY_KEYS,
-  GET_RECURRING_TRANSACTIONS_TABLE_COLUMN_DEFINITIONS,
-} from '../../constants';
+import { currencyFormatter, useAppSnackbar } from '../../utils';
+import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
 
 export const RecurringTransactionsTable = () => {
   const { showError, showSuccess } = useAppSnackbar();
@@ -84,17 +83,96 @@ export const RecurringTransactionsTable = () => {
     []
   );
 
+  const columns: GridColDef[] = [
+    {
+      field: 'type',
+      headerName: 'Type',
+    },
+    {
+      flex: 0.6,
+      type: 'number',
+      editable: true,
+      field: 'amount_of_money',
+      headerName: 'Amount of money',
+      valueFormatter: ({ value }) => currencyFormatter.format(value),
+    },
+    {
+      flex: 0.5,
+      type: 'date',
+      editable: true,
+      field: 'start_date',
+      headerName: 'Start date',
+    },
+    {
+      flex: 0.5,
+      type: 'date',
+      editable: true,
+      field: 'end_date',
+      headerName: 'End date',
+    },
+    {
+      flex: 0.5,
+      editable: true,
+      field: 'category',
+      type: 'singleSelect',
+      headerName: 'Category',
+      valueGetter: ({ row }) => row.category.id,
+      valueSetter: ({ row, value }) => {
+        row.category.id = value;
+
+        return row;
+      },
+      valueOptions: ({ row }) =>
+        row && row.type === 'income'
+          ? incomeCategories || []
+          : spendCategories || [],
+    },
+    {
+      flex: 1,
+      editable: true,
+      field: 'notes',
+      headerName: 'Notes',
+    },
+    {
+      flex: 0.7,
+      editable: true,
+      field: 'time_gap_type_value',
+      headerName: 'Time gap type value',
+    },
+    {
+      flex: 0.5,
+      editable: true,
+      type: 'singleSelect',
+      field: 'time_gap_type',
+      headerName: 'Time gap type',
+      valueOptions: TIME_GAP_TYPES_OPTIONS,
+      valueGetter: ({ row }) => row.time_gap_type.id,
+      valueSetter: ({ row, value }) => {
+        row.time_gap_type.id = value;
+
+        return row;
+      },
+    },
+    {
+      type: 'actions',
+      field: 'actions',
+      getActions: (params) => [
+        <GridActionsCellItem
+          label="Delete"
+          icon={<DeleteIcon />}
+          onClick={() => handleDelete(params.row)}
+        />,
+      ],
+    },
+  ];
+
   return (
     <Table
       isLoading={isLoading}
       sx={{ minWidth: 1000 }}
       handleUpdate={handleUpdate}
       rows={transactionsLoaded ? transactions : []}
-      columns={GET_RECURRING_TRANSACTIONS_TABLE_COLUMN_DEFINITIONS({
-        handleDelete,
-        spendCategories,
-        incomeCategories,
-      })}
+      columns={columns}
     />
   );
 };
