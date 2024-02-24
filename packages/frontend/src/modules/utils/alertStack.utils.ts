@@ -5,10 +5,10 @@ export const useAppSnackbar = () => {
 
   return {
     showError: (message: string) => {
-      enqueueSnackbar(message, { variant: 'error', SnackbarProps: {} });
+      enqueueSnackbar(message, { variant: 'error', severity: 'error' });
     },
     showSuccess: (message: string) => {
-      enqueueSnackbar(message, { variant: 'success' });
+      enqueueSnackbar(message, { variant: 'success', severity: 'success' });
     },
   };
 };

@@ -1,50 +1,32 @@
-import React from 'react';
-import { Alert, Snackbar, Stack } from '@mui/material';
+import { forwardRef, useCallback } from 'react';
+import { Alert, AlertColor } from '@mui/material';
 
-import { useQuery } from 'react-query';
-import { MUI, SPACES } from '../../theme';
-import { IAlertState } from '../../types';
-import queryClient from '../../app/queryClient';
-import { ALERT_INITIAL_STATE, QUERY_KEYS } from '../../constants';
+import { useSnackbar, SnackbarContent, CustomContentProps } from 'notistack';
 
-export const AlertStack = () => {
-  const { isSuccess, data: state } = useQuery<IAlertState>({
-    initialData: ALERT_INITIAL_STATE,
-    queryKey: [QUERY_KEYS.ALERT_STACK],
-  });
+interface ReportCompleteProps extends CustomContentProps {
+  severity: AlertColor;
+}
 
-  if (!isSuccess) {
-    throw new Error('AlertStack is not initialized');
-  }
+export const AlertStack = forwardRef<HTMLDivElement, ReportCompleteProps>(
+  ({ id, style, message, severity }, ref) => {
+    const { closeSnackbar } = useSnackbar();
 
-  const handleClose = (
-    _event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason !== 'clickaway') {
-      queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-        ...state,
-        isOpen: false,
-      });
-    }
-  };
+    const handleClose = useCallback(() => {
+      closeSnackbar(id);
+    }, [id, closeSnackbar]);
 
-  return (
-    <Stack spacing={SPACES.xl} sx={{ width: '100%' }}>
-      <Snackbar
-        open={state.isOpen}
-        onClose={handleClose}
-        autoHideDuration={6000}
-      >
+    return (
+      <SnackbarContent ref={ref} style={style}>
         <Alert
+          severity={severity}
           onClose={handleClose}
-          variant={MUI.variant}
           sx={{ width: '100%' }}
-          severity={state.severity}
         >
-          {state.message}
+          {message}
         </Alert>
-      </Snackbar>
-    </Stack>
-  );
-};
+      </SnackbarContent>
+    );
+  }
+);
+
+AlertStack.displayName = 'AlertStack';

@@ -6,8 +6,10 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { THEME } from '../theme';
+import { AlertStack } from '../UI';
 import queryClient from './queryClient';
 import { MainRouter } from '../navigation';
+import { SNACKBAR_CONF } from '../constants';
 import { ColorModeContext } from '../contexts';
 import { getIsDarkMode, setIsDarkMode } from '../utils';
 
@@ -33,7 +35,16 @@ export const App = () => {
         <ColorModeContext.Provider value={colorMode}>
           <ThemeProvider theme={isDark ? THEME.DARK : THEME.LIGHT}>
             <CssBaseline />
-            <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
+            <SnackbarProvider
+            
+            Components={{
+              error: AlertStack,
+              success: AlertStack
+            }}
+            
+              maxSnack={SNACKBAR_CONF.maxSnack}
+              autoHideDuration={SNACKBAR_CONF.autoHideDuration}
+            >
               <MainRouter />
             </SnackbarProvider>
             <ReactQueryDevtools initialIsOpen={false} />

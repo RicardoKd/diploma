@@ -30,3 +30,8 @@ export const TIME_GAP_TYPES_OPTIONS = [
   { label: 'Month', value: 3 },
   { label: 'Year', value: 4 },
 ];
+
+export const SNACKBAR_CONF = Object.freeze({
+  maxSnack: 3,
+  autoHideDuration: 5000
+})
