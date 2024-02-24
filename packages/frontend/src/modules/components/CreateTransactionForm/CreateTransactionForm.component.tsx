@@ -66,9 +66,9 @@ export const CreateTransactionForm: React.FC<CreateTransactionFormProps> = ({
         formName={`Create ${type}`}
         handleClose={() => setOpen(false)}
         validationSchema={validationSchema}
-        serviceMethodArgs={{ accountId, type }}
         errorMessage={`Failed to create ${type}`}
         initialValues={new FormikCreateTransactionForm()}
+        serviceMethodArgs={{ account_id: accountId, type }}
         successMessage={`${formatLabel(type)} created successfully`}
         serviceMethod={transactionService.createTransaction.bind(
           transactionService
