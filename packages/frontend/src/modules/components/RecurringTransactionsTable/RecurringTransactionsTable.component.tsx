@@ -87,7 +87,6 @@ export const RecurringTransactionsTable = () => {
 
   const validateCellUpdate = async (cellName: string, cellValue: any) => {
     let isError = false;
-    console.log({ [cellName]: cellValue });
     await ValidationSchema.validateAt(cellName, {
       [cellName]: cellValue,
     }).catch((error) => {
