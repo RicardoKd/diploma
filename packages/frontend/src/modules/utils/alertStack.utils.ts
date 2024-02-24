@@ -1,19 +1,14 @@
-import { IAlertState } from '../types';
-import { QUERY_KEYS } from '../constants';
-import queryClient from '../app/queryClient';
+import { useSnackbar } from 'notistack';
 
-export const showError = (message: string) => {
-  queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-    isOpen: true,
-    message: message,
-    severity: 'error',
-  });
-};
+export const useAppSnackbar = () => {
+  const { enqueueSnackbar } = useSnackbar();
 
-export const showSuccess = (message: string) => {
-  queryClient.setQueryData<IAlertState>(QUERY_KEYS.ALERT_STACK, {
-    isOpen: true,
-    message: message,
-    severity: 'success',
-  });
+  return {
+    showError: (message: string) => {
+      enqueueSnackbar(message, { variant: 'error', SnackbarProps: {} });
+    },
+    showSuccess: (message: string) => {
+      enqueueSnackbar(message, { variant: 'success' });
+    },
+  };
 };

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 import { AppButton } from '../../UI';
-import { formatLabel, showError, showSuccess } from '../../utils';
+import { formatLabel, useAppSnackbar } from '../../utils';
 
 interface FormProps {
   isOpen: boolean;
@@ -47,6 +47,8 @@ export const DialogForm: React.FC<FormProps> = ({
   successMessage = 'Success',
   errorMessage = 'Unknown error occurred',
 }) => {
+  const { showError, showSuccess } = useAppSnackbar();
+
   let formik: FormikProps<typeof initialValues>;
 
   const createMutation = useMutation(serviceMethod, {

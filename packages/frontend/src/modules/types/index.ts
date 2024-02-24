@@ -4,7 +4,6 @@ export * from './Range';
 export * from './IRange';
 export * from './IAccount';
 export * from './ICategory';
-export * from './IAlertState';
 export * from './ITimeGapType';
 export * from './ITransaction';
 export * from './IQueryResponse';

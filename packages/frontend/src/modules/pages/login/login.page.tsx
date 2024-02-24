@@ -11,11 +11,12 @@ import { FormikLoginForm } from './FormikLoginForm';
 import { BORDER_RADIUS, SPACES } from '../../theme';
 import { validationSchema } from './validationSchema';
 import { AppButton, FlexContainer, ThemeToggle } from '../../UI';
-import { formatLabel, logOut, showError, showSuccess } from '../../utils';
+import { formatLabel, logOut, useAppSnackbar } from '../../utils';
 
 export const LoginPage = () => {
   logOut();
 
+  const { showError, showSuccess } = useAppSnackbar();
   const navigate = useNavigate();
   const formik = useFormik({
     validationSchema,
@@ -25,10 +26,10 @@ export const LoginPage = () => {
   const createMutation = useMutation(
     userService.login.bind(userService).bind(userService),
     {
-      onSuccess: (data) => {
-        showSuccess('Succesfully logged in');
-        navigate(ROUTER_KEYS.HOME);
+      onSuccess: () => {
         formik.resetForm();
+        navigate(ROUTER_KEYS.HOME);
+        showSuccess('Succesfully logged in');
       },
       onError: () => showError('Failed to log in'),
     }
@@ -40,7 +41,7 @@ export const LoginPage = () => {
   ];
 
   return (
-    <FlexContainer sx={{ height: '100vh' }} component='main'>
+    <FlexContainer sx={{ height: '100vh' }} component="main">
       <Paper
         sx={{
           display: 'flex',
@@ -114,7 +115,7 @@ export const LoginPage = () => {
                 }
               />
             ))}
-            <AppButton type="submit">Log in</AppButton>
+            <AppButton type="submit">Log In</AppButton>
           </Box>
         </Box>
       </Paper>

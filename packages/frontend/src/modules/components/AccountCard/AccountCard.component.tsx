@@ -17,7 +17,7 @@ import queryClient from '../../app/queryClient';
 import { accountService } from '../../services';
 import { BORDER_RADIUS, SPACES } from '../../theme';
 import { QUERY_KEYS, ROUTER_KEYS } from '../../constants';
-import { currencyFormatter, showError, showSuccess } from '../../utils';
+import { currencyFormatter, useAppSnackbar } from '../../utils';
 
 interface AccountsCardProps {
   account: IAccount;
@@ -25,6 +25,8 @@ interface AccountsCardProps {
 
 export const AccountCard: React.FC<AccountsCardProps> = ({ account }) => {
   const navigate = useNavigate();
+  const { showError, showSuccess } = useAppSnackbar();
+  
   const { id, title, balance } = account;
 
   const onChangeSuccess = () => {

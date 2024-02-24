@@ -1,4 +1,4 @@
-import { IAlertState, Range } from '../types';
+import { Range } from '../types';
 
 export * from './charts.const';
 export * from './app-keys.const';
@@ -23,12 +23,6 @@ export const QUERY_CLIENT_CONFIG = Object.freeze({
 });
 
 export const RANGE_INITIAL_STATE: Range = 'month';
-
-export const ALERT_INITIAL_STATE: IAlertState = Object.freeze({
-  message: '',
-  isOpen: false,
-  severity: 'error',
-});
 
 export const TIME_GAP_TYPES_OPTIONS = [
   { label: 'Day', value: 1 },

@@ -2,9 +2,9 @@ import React from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import { Table } from '../../UI';
+import { useAppSnackbar } from '../../utils';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
-import { showError, showSuccess } from '../../utils';
 import { ICategory, ITransaction } from '../../types';
 import {
   QUERY_KEYS,
@@ -12,6 +12,8 @@ import {
 } from '../../constants';
 
 export const TransactionsTable = () => {
+  const { showError, showSuccess } = useAppSnackbar();
+
   const accountId = queryClient.getQueryData<string>(
     QUERY_KEYS.CURRENT_ACCOUNT
   )!;
