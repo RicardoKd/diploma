@@ -2,8 +2,11 @@ import React from 'react';
 import * as Yup from 'yup';
 import { useMutation } from 'react-query';
 import { FormikProps, FormikValues, useFormik } from 'formik';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {
+  Box,
   Dialog,
+  Tooltip,
   MenuItem,
   TextField,
   DialogTitle,
@@ -12,25 +15,22 @@ import {
 } from '@mui/material';
 
 import { AppButton } from '../../UI';
+import { IFormField } from '../../types';
 import { formatLabel, useAppSnackbar } from '../../utils';
 
 interface FormProps {
   isOpen: boolean;
   formName: string;
   errorMessage: string;
-  serviceMethodArgs?: {};
+  fields: IFormField[];
   successMessage: string;
+  serviceMethodArgs?: {};
   handleClose: () => void;
   initialValues: FormikValues;
   validationSchema: Yup.Schema;
   errorCallback?: (error: any) => void;
   successCallback?: (data: unknown) => void;
   serviceMethod(data: FormikValues): Promise<unknown>;
-  fields: {
-    type?: string;
-    formItem: string;
-    options?: { label: string; value: string | number }[];
-  }[];
 }
 
 export const DialogForm: React.FC<FormProps> = ({
@@ -95,30 +95,37 @@ export const DialogForm: React.FC<FormProps> = ({
       <DialogTitle>{formName}</DialogTitle>
 
       <DialogContent sx={{ width: '600px' }}>
-        {fields.map(({ formItem, type, options }, i) => (
-          <TextField
-            key={i}
-            type={type}
-            id={formItem}
-            name={formItem}
-            select={!!options}
-            label={formatLabel(formItem)}
-            onChange={formik.handleChange}
-            value={formik.values[formItem]}
-            InputLabelProps={type === 'date' ? { shrink: true } : {}}
-            error={formik.touched[formItem] && !!formik.errors[formItem]}
-            helperText={
-              (formik.touched[formItem] &&
-                formik.errors[formItem]) as React.ReactNode
-            }
-          >
-            {options &&
-              options.map(({ label, value }, key) => (
-                <MenuItem value={value} key={key}>
-                  {label}
-                </MenuItem>
-              ))}
-          </TextField>
+        {fields.map(({ formItem, type, options, tooltipText }, i) => (
+          <Box key={i} display="flex" alignItems="center">
+            <TextField
+              // key={i}
+              type={type}
+              id={formItem}
+              name={formItem}
+              select={!!options}
+              label={formatLabel(formItem)}
+              onChange={formik.handleChange}
+              value={formik.values[formItem]}
+              InputLabelProps={type === 'date' ? { shrink: true } : {}}
+              error={formik.touched[formItem] && !!formik.errors[formItem]}
+              helperText={
+                (formik.touched[formItem] &&
+                  formik.errors[formItem]) as React.ReactNode
+              }
+            >
+              {options &&
+                options.map(({ label, value }, key) => (
+                  <MenuItem value={value} key={key}>
+                    {label}
+                  </MenuItem>
+                ))}
+            </TextField>
+            {tooltipText ? (
+              <Tooltip title={tooltipText} arrow>
+                <HelpOutlineIcon />
+              </Tooltip>
+            ) : null}
+          </Box>
         ))}
       </DialogContent>
       <DialogActions>
