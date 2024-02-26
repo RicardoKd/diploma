@@ -6,6 +6,7 @@ import {
   differenceInCalendarYears,
 } from 'date-fns';
 
+import { IRecurringTransaction } from '../../types';
 
 export class RecurringTransactionService {
   constructor(private db: Client) {}
@@ -13,67 +14,36 @@ export class RecurringTransactionService {
   async processRecurringTransactions() {
     console.log('processRecurringTransactions fired');
 
-    // Fetch all active recurring transactions
-    const recurringSpends = await this.db.query(
-      'SELECT * FROM recurring_spend WHERE start_date <= now() AND end_date >= now()'
-    );
-    const recurringIncomes = await this.db.query(
-      'SELECT * FROM recurring_income WHERE start_date <= now() AND end_date >= now()'
+    const recurringTransactions = await this.db.query(
+      'SELECT * FROM all_recurring_transactions_view'
     );
 
-    console.log('recurringIncomes.rows :>> ', recurringIncomes.rows.length);
-    console.log('recurringSpends.rows :>> ', recurringSpends.rows.length);
+    console.log(
+      'recurringTransactions.rows.length :>> ',
+      recurringTransactions.rows.length
+    );
 
-    // Process each recurring transaction
-    for (const rs of recurringSpends.rows) {
-      await this.processRecurringSpend(rs);
-    }
-    for (const ri of recurringIncomes.rows) {
-      await this.processRecurringIncome(ri);
+    for (const tr of recurringTransactions.rows) {
+      await this.processRecurringSpend(tr);
     }
   }
 
-  async processRecurringSpend(rs: any) {
-    // If today is the right day to process this recurring spend
+  async processRecurringSpend(tr: IRecurringTransaction) {
     if (
       this.isRightDay(
-        rs.start_date,
-        rs.time_gap_type_value,
-        rs.time_gap_type_id
+        tr.start_date,
+        tr.time_gap_type_value,
+        tr.time_gap_type_id
       )
     ) {
-      // Insert into spend table
       await this.db.query(
-        'INSERT INTO spend (notes, record_date, amount_of_money, account_id, category_id) VALUES ($1, $2, $3, $4, $5)',
+        `INSERT INTO ${tr.type} (notes, record_date, amount_of_money, account_id, category_id) VALUES ($1, $2, $3, $4, $5)`,
         [
-          rs.notes,
+          tr.notes,
           new Date(),
-          rs.amount_of_money,
-          rs.account_id,
-          rs.category_id,
-        ]
-      );
-    }
-  }
-
-  async processRecurringIncome(ri: any) {
-    // If today is the right day to process this recurring income
-    if (
-      this.isRightDay(
-        ri.start_date,
-        ri.time_gap_type_value,
-        ri.time_gap_type_id
-      )
-    ) {
-      // Insert into income table
-      await this.db.query(
-        'INSERT INTO income (notes, record_date, amount_of_money, account_id, category_id) VALUES ($1, $2, $3, $4, $5)',
-        [
-          ri.notes,
-          new Date(),
-          ri.amount_of_money,
-          ri.account_id,
-          ri.category_id,
+          tr.amount_of_money,
+          tr.account_id,
+          tr.category_id,
         ]
       );
     }

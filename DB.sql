@@ -177,6 +177,38 @@ CREATE OR REPLACE VIEW recurring_transactions_view AS
 
 
 
+CREATE OR REPLACE VIEW all_recurring_transactions_view AS
+	WITH transactions AS (
+		SELECT
+			id,
+			notes,
+			end_date::timestamp without time zone AT TIME ZONE 'UTC' AS end_date,
+			start_date::timestamp without time zone AT TIME ZONE 'UTC' AS start_date,
+			amount_of_money,
+			time_gap_type_value,
+			time_gap_type_id,
+			account_id,
+			category_id,
+			'income' AS type
+		FROM recurring_income
+		UNION
+		SELECT
+			id,
+			notes,
+			end_date::timestamp without time zone AT TIME ZONE 'UTC' AS end_date,
+			start_date::timestamp without time zone AT TIME ZONE 'UTC' AS start_date,
+			amount_of_money,
+			time_gap_type_value,
+			time_gap_type_id,
+			account_id,
+			category_id,
+			'spend' AS type
+		FROM recurring_spend
+	) SELECT * FROM transactions
+	WHERE start_date <= now() AND end_date >= now();
+
+
+
 --
 -- FUNCTIONS AND TRIGGERS
 --
@@ -194,7 +226,7 @@ CREATE OR REPLACE FUNCTION check_spend_limit_on_insert()
       FROM spend s WHERE s.account_id = NEW.account_id;
 
       IF total_income < total_spend + NEW.amount_of_money THEN
-          RAISE EXCEPTION 'Spend amount exceeds income for this account.';
+          RAISE EXCEPTION 'Spend amount exceeds income for this account';
       END IF;
 
       RETURN NEW;
@@ -222,7 +254,7 @@ CREATE OR REPLACE FUNCTION check_spend_limit_on_update()
       FROM spend s WHERE s.account_id = NEW.account_id AND s.id <> NEW.id;
 
       IF total_income < total_spend + NEW.amount_of_money THEN
-          RAISE EXCEPTION 'Spend amount exceeds income for this account.';
+          RAISE EXCEPTION 'Spend amount exceeds income for this account';
       END IF;
 
       RETURN NEW;
