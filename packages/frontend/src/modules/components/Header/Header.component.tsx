@@ -178,9 +178,17 @@ export const Header = () => {
                 horizontal: 'right',
               }}
             >
-              <MenuItem sx={{ bgcolor: 'secondary.contrastText' }}>
+              <MenuItem
+                sx={{
+                  bgcolor: 'secondary.contrastText',
+                  cursor: 'default',
+                  ':hover': {
+                    bgcolor: 'secondary.contrastText',
+                  },
+                }}
+              >
                 <Typography textAlign="center">
-                  Logged in as {userName}
+                  Logged in as: {userName}
                 </Typography>
               </MenuItem>
               <MenuItem onClick={() => navigate(ROUTER_KEYS.LOGIN)}>
