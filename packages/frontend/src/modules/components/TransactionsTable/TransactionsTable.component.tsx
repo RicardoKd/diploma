@@ -45,7 +45,7 @@ export const TransactionsTable = () => {
         let message =
           'Failed to update transaction. Please contact the administrator';
         if (
-          errText?.includes('Spend amount exceeds income for this account.')
+          errText?.includes('Spend amount exceeds income for this account')
         ) {
           message = errText;
         }
