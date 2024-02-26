@@ -1,7 +1,7 @@
 import React from 'react';
 import { SPACES } from '../../theme';
+import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation, useNavigate } from 'react-router-dom';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
 import {
   Box,
@@ -19,19 +19,16 @@ import {
 
 import { ThemeToggle } from '../../UI';
 import { ROUTER_KEYS } from '../../constants';
+import { AddParentForm, AddChildForm } from '..';
 import { getRole, getUserName } from '../../utils';
-import { AddParentForm, AddChildForm, CreateAccountForm } from '..';
 
 interface HeaderProps {
   title: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({ title }) => {
-  const location = useLocation();
-
   const [isAddChildFormOpen, setAddChildFormOpen] = React.useState(false);
   const [isAddParentFormOpen, setAddParentFormOpen] = React.useState(false);
-  const [isAddAccountFormOpen, setAddAccountFormOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -120,11 +117,6 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
                   </Typography>
                 </MenuItem>
               )}
-              {location.pathname === ROUTER_KEYS.HOME && (
-                <MenuItem onClick={() => setAddAccountFormOpen(true)}>
-                  <Typography textAlign="center">Create account</Typography>
-                </MenuItem>
-              )}
             </Menu>
           </Box>
           <CreditCardOutlinedIcon
@@ -163,15 +155,6 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
                 onClick={() => navigate(ROUTER_KEYS.STATS_DASHBOARD)}
               >
                 Statistics Dashboard
-              </Button>
-            )}
-            {location.pathname === ROUTER_KEYS.HOME && (
-              <Button
-                variant="text"
-                onClick={() => setAddAccountFormOpen(true)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Create account
               </Button>
             )}
           </Box>
@@ -223,10 +206,6 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
         <AddParentForm
           isOpen={isAddParentFormOpen}
           setOpen={setAddParentFormOpen}
-        />
-        <CreateAccountForm
-          isOpen={isAddAccountFormOpen}
-          setOpen={setAddAccountFormOpen}
         />
       </Container>
     </AppBar>
