@@ -46,7 +46,7 @@ export const AccountStatsPage = () => {
 
   return (
     <>
-      <Header title="Account Statistics" />
+      <Header />
       <FlexContainer sx={{ flexWrap: 'wrap' }} component="main">
         {isCategoriesStatsSuccess &&
         isMonthlyIncomeSpendStatsSuccess &&

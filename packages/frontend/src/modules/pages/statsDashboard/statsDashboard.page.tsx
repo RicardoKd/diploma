@@ -35,7 +35,7 @@ export const StatsDashboardPage = () => {
 
   return (
     <>
-      <Header title="Statistics Dashboard" />
+      <Header />
       <FlexContainer sx={{ flexWrap: 'wrap' }} component="main">
         {isUserStatsSuccess &&
         isCategoriesStatsSuccess &&

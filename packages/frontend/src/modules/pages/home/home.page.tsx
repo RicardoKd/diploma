@@ -22,7 +22,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <Header title="Accounts" />
+      <Header />
       <Container component="main">
         <FlexContainer sx={{ flexWrap: 'wrap' }}>
           {isSuccess ? (

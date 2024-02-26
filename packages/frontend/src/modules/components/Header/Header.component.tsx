@@ -22,11 +22,7 @@ import { ROUTER_KEYS } from '../../constants';
 import { AddParentForm, AddChildForm } from '..';
 import { getRole, getUserName } from '../../utils';
 
-interface HeaderProps {
-  title: string;
-}
-
-export const Header: React.FC<HeaderProps> = ({ title }) => {
+export const Header = () => {
   const [isAddChildFormOpen, setAddChildFormOpen] = React.useState(false);
   const [isAddParentFormOpen, setAddParentFormOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
