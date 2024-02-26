@@ -6,11 +6,15 @@ import { AppButton } from '../../UI';
 import { FormItems } from './FormItems';
 import { FormikForm } from './FormikForm';
 import { formatLabel } from '../../utils';
-import { TransactionType } from '../../types';
 import queryClient from '../../app/queryClient';
 import { transactionService } from '../../services';
 import { ValidationSchema } from './ValidationSchema';
-import { QUERY_KEYS, TIME_GAP_TYPES_OPTIONS } from '../../constants';
+import { IFormField, TransactionType } from '../../types';
+import {
+  QUERY_KEYS,
+  TIME_GAP_TYPES_OPTIONS,
+  TOOLTIP_TEXT,
+} from '../../constants';
 
 interface CreateRecurringTransactionFormPageProps {
   type: TransactionType;
@@ -38,7 +42,7 @@ export const CreateRecurringTransactionForm: React.FC<
     QUERY_KEYS.CURRENT_ACCOUNT
   );
 
-  const fields = [
+  const fields: IFormField[] = [
     { formItem: FormItems.NOTES },
     { formItem: FormItems.START_DATE, type: 'date' },
     { formItem: FormItems.END_DATE, type: 'date' },
@@ -49,10 +53,12 @@ export const CreateRecurringTransactionForm: React.FC<
     {
       formItem: FormItems.TIME_GAP_TYPE_VALUE,
       type: 'number',
+      tooltipText: TOOLTIP_TEXT.timeGapTypeValue,
     },
     {
       formItem: FormItems.TIME_GAP_TYPE,
       options: TIME_GAP_TYPES_OPTIONS,
+      tooltipText: TOOLTIP_TEXT.timeGapType,
     },
     {
       formItem: FormItems.CATEGORY,

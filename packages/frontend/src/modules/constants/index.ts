@@ -32,5 +32,12 @@ export const TIME_GAP_TYPES_OPTIONS = [
 
 export const SNACKBAR_CONF = Object.freeze({
   maxSnack: 3,
-  autoHideDuration: 5000
-})
+  autoHideDuration: 5000,
+});
+
+export const TOOLTIP_TEXT = Object.freeze({
+  timeGapType:
+    'This field specifies the type of time gap between 2 occurances of this reccuring transaction. F.e. if time gap type is "week" and time gap type value is "month", the transaction will occur every 3 months.',
+  timeGapTypeValue:
+    'This field specifies the number of time gap types between 2 occurances of this reccuring transaction. F.e. if time gap type is "week" and time gap type value is "month", the transaction will occur every 3 months.',
+});
