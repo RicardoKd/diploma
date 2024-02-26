@@ -5,10 +5,10 @@ import {
   IQueryResponse,
   ICategoryRangeStats,
   IIncomeSpendRangeStats,
+  IMonthlyIncomeSpendStats,
   IUserTransactionsRangeStats,
   IIncomeSpendCategoriesRangeStats,
   IUserPopularCategoriesRangeStats,
-  IMonthlyIncomeSpendStats,
 } from '../../types';
 
 class StatsService extends HttpService {
