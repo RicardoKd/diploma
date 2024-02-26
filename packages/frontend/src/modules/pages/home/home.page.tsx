@@ -1,7 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import AddIcon from '@mui/icons-material/Add';
-
 import { Container, CircularProgress, Fab } from '@mui/material';
 
 import { IAccount } from '../../types';
@@ -32,15 +31,19 @@ export const HomePage = () => {
           ) : (
             <CircularProgress />
           )}
-      <Fab color="primary" aria-label="add" onClick={() => setAddAccountFormOpen(true)}>
-        <AddIcon />
-      </Fab>
+          <Fab
+            color="primary"
+            aria-label="add"
+            onClick={() => setAddAccountFormOpen(true)}
+          >
+            <AddIcon />
+          </Fab>
         </FlexContainer>
       </Container>
       <CreateAccountForm
-          isOpen={isAddAccountFormOpen}
-          setOpen={setAddAccountFormOpen}
-        />
+        isOpen={isAddAccountFormOpen}
+        setOpen={setAddAccountFormOpen}
+      />
     </>
   );
 };
