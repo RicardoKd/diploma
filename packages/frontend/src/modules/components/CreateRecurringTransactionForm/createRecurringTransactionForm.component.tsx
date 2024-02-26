@@ -27,14 +27,14 @@ export const CreateRecurringTransactionForm: React.FC<
     useQuery({
       keepPreviousData: true,
       queryKey: [QUERY_KEYS.INCOME_CATEGORIES],
-      queryFn: () => transactionService.getCategories('income'),
+      queryFn: () => transactionService.getCategories({ type: 'income' }),
     });
 
   const { data: spendCategories, isSuccess: isSpendCategoriesLoaded } =
     useQuery({
       keepPreviousData: true,
       queryKey: [QUERY_KEYS.SPEND_CATEGORIES],
-      queryFn: () => transactionService.getCategories('spend'),
+      queryFn: () => transactionService.getCategories({ type: 'spend' }),
     });
 
   const [isOpen, setOpen] = React.useState(false);

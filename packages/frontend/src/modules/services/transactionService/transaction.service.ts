@@ -10,12 +10,16 @@ import {
 } from '../../types';
 
 class TransactionService extends HttpService {
-  async getTransactions(accountId: string): Promise<ITransaction[]> {
+  async getTransactions({
+    accountId,
+  }: {
+    accountId: string;
+  }): Promise<ITransaction[]> {
     const result = await this.post<IQueryResponse<ITransaction>>(
       API_KEYS.QUERY,
       {
         ...getUserData(),
-        query: `select * from transactions_by_account_id($1)`,
+        query: `SELECT * FROM transactions_by_account_id($1)`,
         variables: [accountId],
       }
     );
@@ -77,9 +81,11 @@ class TransactionService extends HttpService {
     return result.rowCount >= 1;
   }
 
-  async getRecurringTransactions(
-    accountId: string
-  ): Promise<IRecurringTransaction[]> {
+  async getRecurringTransactions({
+    accountId,
+  }: {
+    accountId: string;
+  }): Promise<IRecurringTransaction[]> {
     const result = await this.post<IQueryResponse<IRecurringTransaction>>(
       API_KEYS.QUERY,
       {
@@ -130,9 +136,7 @@ class TransactionService extends HttpService {
     return result.rowCount >= 1;
   }
 
-  async updateRecurringTransaction(
-    tr: IRecurringTransaction
-  ): Promise<boolean> {
+  async updateRecurringTransaction(tr: IRecurringTransaction): Promise<boolean> {
     const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `UPDATE recurring_${tr.type}
@@ -167,17 +171,21 @@ class TransactionService extends HttpService {
   }: {
     id: string;
     table: string;
-  }): Promise<void> {
+  }): Promise<boolean> {
     const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `DELETE FROM ${table} WHERE id = $1;`,
       variables: [id],
     });
 
-    console.log('deleteById :>> result :>> ', result);
+    return result.rowCount >= 1;
   }
 
-  async getCategories(type: TransactionType): Promise<ICategory[]> {
+  async getCategories({
+    type,
+  }: {
+    type: TransactionType;
+  }): Promise<ICategory[]> {
     const result = await this.post<IQueryResponse<ICategory>>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `SELECT id AS value, title AS label FROM ${type}_category`,

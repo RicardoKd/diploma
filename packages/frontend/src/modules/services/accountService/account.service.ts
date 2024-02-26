@@ -13,20 +13,24 @@ class AccountService extends HttpService {
     return result.rows;
   }
 
-  async createAccount({ title }: { title: string }) {
-    await this.post(API_KEYS.QUERY, {
+  async createAccount({ title }: { title: string }): Promise<boolean> {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `SELECT create_account($1);`,
       variables: [title],
     });
+
+    return result.rowCount >= 1;
   }
 
-  async deleteById({ id }: { id: string }): Promise<void> {
-    await this.post(API_KEYS.QUERY, {
+  async deleteById({ id }: { id: string }): Promise<boolean> {
+    const result = await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
       query: `DELETE FROM account WHERE id = $1;`,
       variables: [id],
     });
+
+    return result.rowCount >= 1;
   }
 }
 

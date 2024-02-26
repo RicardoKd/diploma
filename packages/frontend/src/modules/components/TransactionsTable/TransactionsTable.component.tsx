@@ -33,7 +33,7 @@ export const TransactionsTable = () => {
   } = useQuery<ITransaction[]>({
     keepPreviousData: true,
     queryKey: [QUERY_KEYS.TRANSACTIONS, accountId],
-    queryFn: () => transactionService.getTransactions(accountId),
+    queryFn: () => transactionService.getTransactions({ accountId }),
   });
 
   const updateMutation = useMutation(

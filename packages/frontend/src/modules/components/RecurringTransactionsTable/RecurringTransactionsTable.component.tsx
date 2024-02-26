@@ -33,7 +33,7 @@ export const RecurringTransactionsTable = () => {
   } = useQuery<IRecurringTransaction[]>({
     keepPreviousData: true,
     queryKey: [QUERY_KEYS.RECURRING_TRANSACTIONS, accountId],
-    queryFn: () => transactionService.getRecurringTransactions(accountId),
+    queryFn: () => transactionService.getRecurringTransactions({ accountId }),
   });
 
   const updateMutation = useMutation(

@@ -1,8 +1,8 @@
-import { IRole } from '../../types';
 import HttpService from '../http.service';
 import { API_KEYS } from '../../constants';
 import { IUserDataBody } from './IUserDataBody';
 import { getUserData, logIn } from '../../utils';
+import { IQueryResponse, IRole } from '../../types';
 
 class UserService extends HttpService {
   async login(data: IUserDataBody): Promise<IRole> {
@@ -13,26 +13,19 @@ class UserService extends HttpService {
     return role;
   }
 
-  async createChild({ user, password }: IUserDataBody) {
-    await this.post(API_KEYS.QUERY, {
+  async createChild({ user, password }: IUserDataBody): Promise<void> {
+    await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select create_child ($1, $2);`,
+      query: `SELECT create_child ($1, $2);`,
       variables: [user, password],
     });
   }
 
-  async createParent({ user, password }: IUserDataBody) {
-    await this.post(API_KEYS.QUERY, {
+  async createParent({ user, password }: IUserDataBody): Promise<void> {
+    await this.post<IQueryResponse>(API_KEYS.QUERY, {
       ...getUserData(),
-      query: `select create_parent ($1, $2);`,
+      query: `SELECT create_parent ($1, $2);`,
       variables: [user, password],
-    });
-  }
-
-  async getChildren() {
-    await this.post(API_KEYS.QUERY, {
-      ...getUserData(),
-      query: 'select * from get_children();',
     });
   }
 }
