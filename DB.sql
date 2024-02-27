@@ -739,7 +739,16 @@ SELECT
                 JOIN account a ON i.account_id = a.id
                 WHERE a.username = p.username AND date_trunc('month', i.record_date) = date_trunc('month', CURRENT_DATE)
                 GROUP BY i.category_id
-                ORDER BY SUM(i.amount_of_money::Numeric) DESC
+                HAVING SUM(i.amount_of_money::Numeric) = (
+                  SELECT MAX(sum_amount)
+                  FROM (
+                    SELECT SUM(i.amount_of_money::Numeric) AS sum_amount
+                    FROM income i
+                    JOIN account a ON i.account_id = a.id
+                    WHERE a.username = p.username AND date_trunc('month', i.record_date) = date_trunc('month', CURRENT_DATE)
+                    GROUP BY i.category_id
+                  ) AS subquery
+                )
               )),
     'quarter', (SELECT string_agg(ic.title, ', ')
                 FROM income_category ic
@@ -749,7 +758,16 @@ SELECT
                   JOIN account a ON i.account_id = a.id
                   WHERE a.username = p.username AND date_trunc('quarter', i.record_date) = date_trunc('quarter', CURRENT_DATE)
                   GROUP BY i.category_id
-                  ORDER BY SUM(i.amount_of_money::Numeric) DESC
+                  HAVING SUM(i.amount_of_money::Numeric) = (
+                    SELECT MAX(sum_amount)
+                    FROM (
+                      SELECT SUM(i.amount_of_money::Numeric) AS sum_amount
+                      FROM income i
+                      JOIN account a ON i.account_id = a.id
+                      WHERE a.username = p.username AND date_trunc('quarter', i.record_date) = date_trunc('quarter', CURRENT_DATE)
+                      GROUP BY i.category_id
+                    ) AS subquery
+                  )
                 )),
     'year', (SELECT string_agg(ic.title, ', ')
              FROM income_category ic
@@ -759,7 +777,16 @@ SELECT
                JOIN account a ON i.account_id = a.id
                WHERE a.username = p.username AND date_trunc('year', i.record_date) = date_trunc('year', CURRENT_DATE)
                GROUP BY i.category_id
-               ORDER BY SUM(i.amount_of_money::Numeric) DESC
+               HAVING SUM(i.amount_of_money::Numeric) = (
+                 SELECT MAX(sum_amount)
+                 FROM (
+                   SELECT SUM(i.amount_of_money::Numeric) AS sum_amount
+                   FROM income i
+                   JOIN account a ON i.account_id = a.id
+                   WHERE a.username = p.username AND date_trunc('year', i.record_date) = date_trunc('year', CURRENT_DATE)
+                   GROUP BY i.category_id
+                 ) AS subquery
+               )
              ))
   ) AS income,
   json_build_object(
@@ -771,7 +798,16 @@ SELECT
                 JOIN account a ON s.account_id = a.id
                 WHERE a.username = p.username AND date_trunc('month', s.record_date) = date_trunc('month', CURRENT_DATE)
                 GROUP BY s.category_id
-                ORDER BY SUM(s.amount_of_money::Numeric) DESC
+                HAVING SUM(s.amount_of_money::Numeric) = (
+                  SELECT MAX(sum_amount)
+                  FROM (
+                    SELECT SUM(s.amount_of_money::Numeric) AS sum_amount
+                    FROM spend s
+                    JOIN account a ON s.account_id = a.id
+                    WHERE a.username = p.username AND date_trunc('month', s.record_date) = date_trunc('month', CURRENT_DATE)
+                    GROUP BY s.category_id
+                  ) AS subquery
+                )
               )),
     'quarter', (SELECT string_agg(sc.title, ', ')
                 FROM spend_category sc
@@ -781,7 +817,16 @@ SELECT
                   JOIN account a ON s.account_id = a.id
                   WHERE a.username = p.username AND date_trunc('quarter', s.record_date) = date_trunc('quarter', CURRENT_DATE)
                   GROUP BY s.category_id
-                  ORDER BY SUM(s.amount_of_money::Numeric) DESC
+                  HAVING SUM(s.amount_of_money::Numeric) = (
+                    SELECT MAX(sum_amount)
+                    FROM (
+                      SELECT SUM(s.amount_of_money::Numeric) AS sum_amount
+                      FROM spend s
+                      JOIN account a ON s.account_id = a.id
+                      WHERE a.username = p.username AND date_trunc('quarter', s.record_date) = date_trunc('quarter', CURRENT_DATE)
+                      GROUP BY s.category_id
+                    ) AS subquery
+                  )
                 )),
     'year', (SELECT string_agg(sc.title, ', ')
              FROM spend_category sc
@@ -791,7 +836,16 @@ SELECT
                JOIN account a ON s.account_id = a.id
                WHERE a.username = p.username AND date_trunc('year', s.record_date) = date_trunc('year', CURRENT_DATE)
                GROUP BY s.category_id
-               ORDER BY SUM(s.amount_of_money::Numeric) DESC
+               HAVING SUM(s.amount_of_money::Numeric) = (
+                 SELECT MAX(sum_amount)
+                 FROM (
+                   SELECT SUM(s.amount_of_money::Numeric) AS sum_amount
+                   FROM spend s
+                   JOIN account a ON s.account_id = a.id
+                   WHERE a.username = p.username AND date_trunc('year', s.record_date) = date_trunc('year', CURRENT_DATE)
+                   GROUP BY s.category_id
+                 ) AS subquery
+               )
              ))
   ) AS spend
 FROM person p;
