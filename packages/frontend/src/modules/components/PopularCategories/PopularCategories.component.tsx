@@ -23,7 +23,7 @@ export const PopularCategories: React.FC<PopularCategoriesProps> = ({
     id,
     username,
     income: income[range],
-    spend: spend[range] || 'NO_DATA',
+    spend: spend[range] || 'N/A',
   }));
 
   const columns: GridColDef[] = [
