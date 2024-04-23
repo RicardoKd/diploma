@@ -57,7 +57,7 @@ export const OPTIONS = Object.freeze({
       title: {
         display: true,
         color: labelColor,
-        text: 'Incomes and spends fro the last 12 months',
+        text: 'Incomes and spends for the last 12 months',
       },
     },
     scales: {
