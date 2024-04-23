@@ -23,6 +23,8 @@ export const QUERY_CLIENT_CONFIG = Object.freeze({
 
 export const RANGE_INITIAL_STATE: Range = 'month';
 
+export const NA = 'N/A';
+
 export const TIME_GAP_TYPES_OPTIONS = [
   { label: 'Day', value: 1 },
   { label: 'Week', value: 2 },

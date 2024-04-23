@@ -3,8 +3,8 @@ import { GridColDef } from '@mui/x-data-grid';
 import { Box, Card, CardContent, SelectChangeEvent } from '@mui/material';
 
 import { RangeSelect, Table } from '../../UI';
-import { BORDER_RADIUS, SPACES } from '../../theme';
-import { RANGE_INITIAL_STATE } from '../../constants';
+import { NA, RANGE_INITIAL_STATE } from '../../constants';
+import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 import { IUserPopularCategoriesRangeStats, Range } from '../../types';
 
 interface PopularCategoriesProps {
@@ -22,8 +22,8 @@ export const PopularCategories: React.FC<PopularCategoriesProps> = ({
   const rows = stats.map(({ username, income, spend }, id) => ({
     id,
     username,
-    income: income[range],
-    spend: spend[range] || 'N/A',
+    income: income[range] || NA,
+    spend: spend[range] || NA,
   }));
 
   const columns: GridColDef[] = [
