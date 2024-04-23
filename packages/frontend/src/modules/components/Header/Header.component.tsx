@@ -62,7 +62,7 @@ export const Header = () => {
             noWrap
             variant="h6"
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href={ROUTER_KEYS.HOME}
             sx={{
               mr: 2,
               fontWeight: 700,
@@ -119,10 +119,10 @@ export const Header = () => {
             sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
           />
           <Typography
-            variant="h5"
             noWrap
+            variant="h5"
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href={ROUTER_KEYS.HOME}
             sx={{
               mr: 2,
               flexGrow: 1,
