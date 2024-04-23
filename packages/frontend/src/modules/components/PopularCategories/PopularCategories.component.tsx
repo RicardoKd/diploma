@@ -45,9 +45,15 @@ export const PopularCategories: React.FC<PopularCategoriesProps> = ({
   ];
 
   return (
-    <Card sx={{ width: 530, margin: SPACES.m, borderRadius: BORDER_RADIUS }}>
+    <Card
+      sx={{
+        width: CARD_WIDTH,
+        borderRadius: BORDER_RADIUS,
+        margin: `${SPACES.m} ${SPACES.xs}`,
+      }}
+    >
       <CardContent>
-        <Box sx={{ height: 241, overflowX: 'auto', mb: 1 }}>
+        <Box sx={{ height: 256, overflowX: 'auto', mb: 1 }}>
           <Table rows={rows} columns={columns} isLoading={false} />
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />

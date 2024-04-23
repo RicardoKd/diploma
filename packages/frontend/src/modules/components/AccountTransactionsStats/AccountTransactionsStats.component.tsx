@@ -11,9 +11,9 @@ import {
 } from '@mui/material';
 
 import { RangeSelect } from '../../UI';
-import { BORDER_RADIUS, SPACES } from '../../theme';
 import { IIncomeSpendRangeStats, Range } from '../../types';
 import { OPTIONS, RANGE_INITIAL_STATE } from '../../constants';
+import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -46,13 +46,14 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
   return (
     <Card
       sx={{
-        maxWidth: 400,
-        minWidth: 300,
-        margin: SPACES.l,
+        width: CARD_WIDTH,
         borderRadius: BORDER_RADIUS,
+        margin: `${SPACES.m} ${SPACES.xs}`,
       }}
     >
-      <CardContent>
+      <CardContent
+        sx={{ height: 344, display: 'flex', justifyContent: 'stretch' }}
+      >
         <Pie
           data={data}
           options={OPTIONS.ACCOUNT_TRANSACTION_STATS(
@@ -60,17 +61,16 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
           )}
         />
         <Box
-          mb={1}
           display="flex"
           alignItems="center"
+          flexDirection="column"
+          margin={`0 ${SPACES.xl}`}
           justifyContent="space-evenly"
         >
           <Typography variant="body1">Spend: {stats.spend[range]}</Typography>
-          <Typography variant="body1">
-            Income: {stats.income[range]}
-          </Typography>
+          <Typography variant="body1">Income: {stats.income[range]}</Typography>
+          <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
         </Box>
-        <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
       </CardContent>
     </Card>
   );

@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useTheme, CircularProgress } from '@mui/material';
 
-import { COLORS } from '../../theme';
 import { FlexContainer } from '../../UI';
 import { statsService } from '../../services';
 import { OPTIONS, QUERY_KEYS } from '../../constants';
@@ -47,7 +46,13 @@ export const AccountStatsPage = () => {
   return (
     <>
       <Header />
-      <FlexContainer sx={{ flexWrap: 'wrap' }} component="main">
+      <FlexContainer
+        component="main"
+        sx={{
+          flexWrap: 'wrap',
+          justifyContent: { xs: 'center', lg: 'space-between' },
+        }}
+      >
         {isCategoriesStatsSuccess &&
         isMonthlyIncomeSpendStatsSuccess &&
         isAccountTransactionsStatsSuccess ? (
@@ -61,7 +66,7 @@ export const AccountStatsPage = () => {
                 {
                   label: 'Percentage',
                   data: categoriesStats.income,
-                  backgroundColor: COLORS.purple,
+                  backgroundColor: theme.palette.success.light,
                 },
               ]}
             />
@@ -74,7 +79,7 @@ export const AccountStatsPage = () => {
                 {
                   label: 'Percentage',
                   data: categoriesStats.spend,
-                  backgroundColor: COLORS.purple,
+                  backgroundColor: theme.palette.error.light,
                 },
               ]}
             />

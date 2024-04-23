@@ -14,8 +14,8 @@ import {
 } from 'chart.js';
 
 import { OPTIONS } from '../../constants';
-import { BORDER_RADIUS, SPACES } from '../../theme';
 import { IMonthlyIncomeSpendStats } from '../../types';
+import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 
 ChartJS.register(
   CategoryScale,
@@ -42,20 +42,27 @@ export const MonthlyIncomeSpendStats: React.FC<
       {
         label: 'Incomes',
         data: stats.map((st) => st.income),
-        borderColor: theme.palette.success.main,
+        borderColor: theme.palette.success.light,
         backgroundColor: theme.palette.success.main,
       },
       {
         label: 'Spends',
         data: stats.map((st) => st.spend),
-        borderColor: theme.palette.error.main,
+        borderColor: theme.palette.error.light,
         backgroundColor: theme.palette.error.main,
       },
     ],
   };
 
   return (
-    <Card sx={{ width: 630, margin: SPACES.l, borderRadius: BORDER_RADIUS }}>
+    <Card
+      sx={{
+        height: 344,
+        width: CARD_WIDTH,
+        borderRadius: BORDER_RADIUS,
+        margin: `${SPACES.m} ${SPACES.xs}`,
+      }}
+    >
       <CardContent>
         <Line
           data={data}

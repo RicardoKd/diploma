@@ -13,8 +13,8 @@ import {
 
 import { Range } from '../../types';
 import { RangeSelect } from '../../UI';
-import { BORDER_RADIUS, SPACES } from '../../theme';
 import { RANGE_INITIAL_STATE } from '../../constants';
+import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 
 ChartJS.register(
   CategoryScale,
@@ -50,7 +50,13 @@ export const BarChart: React.FC<BarChartProps> = ({
     setRange(event.target.value as Range);
 
   return (
-    <Card sx={{ margin: SPACES.m, width: 530, borderRadius: BORDER_RADIUS }}>
+    <Card
+      sx={{
+        width: CARD_WIDTH,
+        borderRadius: BORDER_RADIUS,
+        margin: `${SPACES.m} ${SPACES.xs}`,
+      }}
+    >
       <CardContent>
         <Bar options={options} data={data} />
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />

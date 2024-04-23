@@ -7,6 +7,8 @@ const MUI = Object.freeze({
   variant: 'outlined',
 });
 
+export const CARD_WIDTH = 560;
+
 export const THEME = {
   LIGHT: createTheme({
     palette: {
