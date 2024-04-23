@@ -37,7 +37,6 @@ export const ROUTER_KEYS = Object.freeze({
   ACCOUNT_STATS: '/account/statistics',
 });
 
-// API keys
 export const API_KEYS = Object.freeze({
   LOGIN: 'login',
   QUERY: 'query',
