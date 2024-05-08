@@ -96,12 +96,12 @@ export const TransactionsTable = () => {
 
   const columns: GridColDef[] = [
     {
-      flex: 0.35,
+      width: 100,
       field: 'type',
       headerName: 'Type',
     },
     {
-      flex: 0.5,
+      width: 180,
       type: 'number',
       editable: true,
       field: 'amount_of_money',
@@ -119,7 +119,7 @@ export const TransactionsTable = () => {
       },
     },
     {
-      flex: 0.5,
+      width: 140,
       type: 'date',
       editable: true,
       headerName: 'Date',
@@ -134,7 +134,7 @@ export const TransactionsTable = () => {
       },
     },
     {
-      flex: 0.5,
+      width: 150,
       editable: true,
       field: 'category',
       type: 'singleSelect',
@@ -151,12 +151,13 @@ export const TransactionsTable = () => {
           : spendCategories || [],
     },
     {
-      flex: 1.5,
+      flex: 1,
       field: 'notes',
       editable: true,
       headerName: 'Notes',
     },
     {
+      width: 5,
       type: 'actions',
       field: 'actions',
       getActions: (params) => [

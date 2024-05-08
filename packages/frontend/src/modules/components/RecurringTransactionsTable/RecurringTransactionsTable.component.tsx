@@ -99,11 +99,12 @@ export const RecurringTransactionsTable = () => {
 
   const columns: GridColDef[] = [
     {
+      width: 100,
       field: 'type',
       headerName: 'Type',
     },
     {
-      flex: 0.6,
+      width: 180,
       type: 'number',
       editable: true,
       field: 'amount_of_money',
@@ -121,14 +122,14 @@ export const RecurringTransactionsTable = () => {
       },
     },
     {
-      flex: 0.5,
+      width: 140,
       type: 'date',
       editable: true,
       field: 'start_date',
       headerName: 'Start date',
     },
     {
-      flex: 0.5,
+      width: 140,
       type: 'date',
       editable: true,
       field: 'end_date',
@@ -140,7 +141,7 @@ export const RecurringTransactionsTable = () => {
       },
     },
     {
-      flex: 0.5,
+      width: 150,
       editable: true,
       field: 'category',
       type: 'singleSelect',
@@ -157,13 +158,13 @@ export const RecurringTransactionsTable = () => {
           : spendCategories || [],
     },
     {
-      flex: 1,
+      width: 200,
       editable: true,
       field: 'notes',
       headerName: 'Notes',
     },
     {
-      flex: 0.7,
+      width: 200,
       type: 'number',
       editable: true,
       field: 'time_gap_type_value',
@@ -178,7 +179,7 @@ export const RecurringTransactionsTable = () => {
       },
     },
     {
-      flex: 0.5,
+      width: 160,
       editable: true,
       type: 'singleSelect',
       field: 'time_gap_type',
@@ -192,6 +193,7 @@ export const RecurringTransactionsTable = () => {
       },
     },
     {
+      width: 5,
       type: 'actions',
       field: 'actions',
       getActions: (params) => [
