@@ -194,23 +194,31 @@ export const Header = () => {
               <MenuItem onClick={() => navigate(ROUTER_KEYS.LOGIN)}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
-              <MenuItem onClick={() => setAddChildFormOpen(true)}>
-                <Typography textAlign="center">Add child</Typography>
-              </MenuItem>
-              <MenuItem onClick={() => setAddParentFormOpen(true)}>
-                <Typography textAlign="center">Add parent</Typography>
-              </MenuItem>
+              {role?.includes('parent') && (
+                <MenuItem onClick={() => setAddChildFormOpen(true)}>
+                  <Typography textAlign="center">Add child</Typography>
+                </MenuItem>
+              )}
+              {role?.includes('super_parent') && (
+                <MenuItem onClick={() => setAddParentFormOpen(true)}>
+                  <Typography textAlign="center">Add parent</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>
-        <AddChildForm
-          isOpen={isAddChildFormOpen}
-          setOpen={setAddChildFormOpen}
-        />
-        <AddParentForm
-          isOpen={isAddParentFormOpen}
-          setOpen={setAddParentFormOpen}
-        />
+        {role?.includes('parent') && (
+          <AddChildForm
+            isOpen={isAddChildFormOpen}
+            setOpen={setAddChildFormOpen}
+          />
+        )}
+        {role?.includes('super_parent') && (
+          <AddParentForm
+            isOpen={isAddParentFormOpen}
+            setOpen={setAddParentFormOpen}
+          />
+        )}
       </Container>
     </AppBar>
   );
