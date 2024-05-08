@@ -1,6 +1,12 @@
 import React from 'react';
 import { GridColDef } from '@mui/x-data-grid';
-import { Box, Card, CardContent, SelectChangeEvent } from '@mui/material';
+import {
+  Box,
+  Card,
+  Typography,
+  CardContent,
+  SelectChangeEvent,
+} from '@mui/material';
 
 import { RangeSelect, Table } from '../../UI';
 import { NA, RANGE_INITIAL_STATE } from '../../constants';
@@ -53,7 +59,18 @@ export const PopularCategories: React.FC<PopularCategoriesProps> = ({
       }}
     >
       <CardContent>
-        <Box sx={{ height: 256, overflowX: 'auto', mb: 1 }}>
+        <Typography
+          component="p"
+          sx={{
+            fontSize: '12px',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginBottom: '6px',
+          }}
+        >
+          Most popular categories by user
+        </Typography>
+        <Box sx={{ height: 232, overflowX: 'auto', mb: 1 }}>
           <Table rows={rows} columns={columns} isLoading={false} />
         </Box>
         <RangeSelect rangeValue={range} handleChange={handleRangeChange} />
