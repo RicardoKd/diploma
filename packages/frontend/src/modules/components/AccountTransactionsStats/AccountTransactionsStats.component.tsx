@@ -11,9 +11,9 @@ import {
 } from '@mui/material';
 
 import { RangeSelect } from '../../UI';
+import { SPACES, STATS_CARD_STYLES } from '../../theme';
 import { IIncomeSpendRangeStats, Range } from '../../types';
 import { OPTIONS, RANGE_INITIAL_STATE } from '../../constants';
-import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -44,15 +44,13 @@ export const AccountTransactionsStats: React.FC<AccountsCardProps> = ({
     setRange(event.target.value as Range);
 
   return (
-    <Card
-      sx={{
-        width: CARD_WIDTH,
-        borderRadius: BORDER_RADIUS,
-        margin: `${SPACES.m} ${SPACES.xs}`,
-      }}
-    >
+    <Card sx={STATS_CARD_STYLES}>
       <CardContent
-        sx={{ height: 344, display: 'flex', justifyContent: 'stretch' }}
+        sx={{
+          height: 344,
+          display: 'flex',
+          justifyContent: { xs: 'space-evenly', lg: 'center' },
+        }}
       >
         <Pie
           data={data}

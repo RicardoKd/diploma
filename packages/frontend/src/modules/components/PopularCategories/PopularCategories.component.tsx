@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 
 import { RangeSelect, Table } from '../../UI';
+import { STATS_CARD_STYLES } from '../../theme';
 import { NA, RANGE_INITIAL_STATE } from '../../constants';
-import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 import { IUserPopularCategoriesRangeStats, Range } from '../../types';
 
 interface PopularCategoriesProps {
@@ -34,7 +34,7 @@ export const PopularCategories: React.FC<PopularCategoriesProps> = ({
 
   const columns: GridColDef[] = [
     {
-      flex: 0.2,
+      flex: 0.3,
       field: 'username',
       headerName: 'User',
     },
@@ -52,11 +52,7 @@ export const PopularCategories: React.FC<PopularCategoriesProps> = ({
 
   return (
     <Card
-      sx={{
-        width: CARD_WIDTH,
-        borderRadius: BORDER_RADIUS,
-        margin: `${SPACES.m} ${SPACES.xs}`,
-      }}
+      sx={STATS_CARD_STYLES}
     >
       <CardContent>
         <Typography

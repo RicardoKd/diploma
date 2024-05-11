@@ -39,7 +39,8 @@ export const StatsDashboardPage = () => {
         component="main"
         sx={{
           flexWrap: 'wrap',
-          justifyContent: { xs: 'center', lg: 'space-between' },
+          overflowX: "scroll",
+          justifyContent: { md: 'center', lg: 'space-between' },
         }}
       >
         {isUserStatsSuccess &&

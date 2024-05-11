@@ -14,8 +14,8 @@ import {
 } from 'chart.js';
 
 import { OPTIONS } from '../../constants';
+import { STATS_CARD_STYLES } from '../../theme';
 import { IMonthlyIncomeSpendStats } from '../../types';
-import { BORDER_RADIUS, CARD_WIDTH, SPACES } from '../../theme';
 
 ChartJS.register(
   CategoryScale,
@@ -55,14 +55,7 @@ export const MonthlyIncomeSpendStats: React.FC<
   };
 
   return (
-    <Card
-      sx={{
-        height: 344,
-        width: CARD_WIDTH,
-        borderRadius: BORDER_RADIUS,
-        margin: `${SPACES.m} ${SPACES.xs}`,
-      }}
-    >
+    <Card sx={{ height: { lg: 344 }, ...STATS_CARD_STYLES }}>
       <CardContent>
         <Line
           data={data}

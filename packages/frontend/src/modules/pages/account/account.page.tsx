@@ -30,6 +30,8 @@ export const AccountPage = () => {
             '> div > *': {
               marginLeft: SPACES.m,
             },
+            flexDirection: { xs: 'column', sm: 'row' },
+            // alignItems: { xs: 'flex-start', sm: 'center' },
           }}
         >
           <Typography variant="h6" component="h4">
@@ -60,6 +62,7 @@ export const AccountPage = () => {
             '> div > *': {
               marginLeft: SPACES.m,
             },
+            flexDirection: { xs: 'column', sm: 'row' },
           }}
         >
           <Typography variant="h6" component="h4">
