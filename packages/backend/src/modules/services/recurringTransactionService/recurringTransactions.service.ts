@@ -24,11 +24,11 @@ export class RecurringTransactionService {
     );
 
     for (const tr of recurringTransactions.rows) {
-      await this.processRecurringSpend(tr);
+      await this.process(tr);
     }
   }
 
-  async processRecurringSpend(tr: IRecurringTransaction) {
+  async process(tr: IRecurringTransaction) {
     if (
       this.isRightDay(
         tr.start_date,
